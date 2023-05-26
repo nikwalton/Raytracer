@@ -13,6 +13,16 @@ float Tuple::GetZ() {
     return 0.0;
 }
 
-bool Tuple::IsVector() {
+bool Tuple::IsPoint() {
     return false;
+}
+
+Tuple Tuple::Point(float x, float y, float z) {
+    Tuple tuple;
+    return tuple;
+}
+
+Tuple Tuple::Vector(float x, float y, float z) {
+    Tuple tuple;
+    return tuple;
 }

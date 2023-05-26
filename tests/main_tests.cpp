@@ -34,9 +34,11 @@ TEST (TuplePointVectorTests, PointFactoryTest) {
 }
 
 TEST (TuplePointVectorTests, VectorFactoryTest) {
+    Tuple factory;
+    Tuple vector = factory.Vector(4, -4, 3);
 
-    EXPECT_EQ(point.GetX(), 4);
-    EXPECT_EQ(point.GetY(), -4);
-    EXPECT_EQ(point.GetZ(), 3);
-    EXPECT_EQ(point.IsPoint(), 0);
+    EXPECT_EQ(vector.GetX(), 4);
+    EXPECT_EQ(vector.GetY(), -4);
+    EXPECT_EQ(vector.GetZ(), 3);
+    EXPECT_EQ(vector.IsPoint(), 0);
 }

@@ -2,16 +2,19 @@
 
 class Tuple {
 public:
-  Tuple();
+  Tuple(){}
   Tuple(float x, float y, float z, bool isVector) {
 
   }
+  ~Tuple() {}
+
   float GetX();
   float GetY();
   float GetZ();
-  bool IsVector();
+  bool IsPoint();
 
-  ~Tuple() {}
+  Tuple Point(float x, float y, float z);
+  Tuple Vector(float x, float y, float z);
 private:
   float x, y, z;
   bool isVector;
