@@ -16,16 +16,28 @@ public:
   float GetX();
   float GetY();
   float GetZ();
+  float GetW();
 
   void SetX(float newX);
   void SetY(float newY);
   void SetZ(float newZ);
+  void SetW(float newW);
 
-  bool IsPoint();
+ 
 
   Tuple Point(float x, float y, float z);
   Tuple Vector(float x, float y, float z);
+
+  bool IsPoint();
+
+  bool operator== (const Tuple& rhs);
+  Tuple operator+ (const Tuple& rhs);
+  Tuple operator- (const Tuple& rhs);
+  Tuple operator- ();
+  Tuple operator* (const float rhs);
+  Tuple operator/ (const float rhs);
+
 private:
   float x, y, z;
-  uint8_t w; // 1 is point 0 is vector
+  float w; // 1 is point 0 is vector
 };
