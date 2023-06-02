@@ -19,10 +19,18 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+set(Headers 
+        "include/tuple.h")
+set(Sources 
+        "include/tuple.cpp")
+
+add_library(RayLib STATIC ${Sources} ${Headers})
+
 add_executable (
     main src/main.cpp
 )
 target_include_directories(main PUBLIC include)
+target_link_libraries(main PUBLIC RayLib)
 
 add_executable (
     intro_test tests/intro_test.cpp
@@ -35,12 +43,7 @@ target_link_libraries(
 add_executable( 
     main_tests tests/main_tests.cpp
 )
-set(Headers 
-        "include/tuple.h")
-set(Sources 
-        "include/tuple.cpp")
 
-add_library(RayLib STATIC ${Sources} ${Headers})
 target_link_libraries(
     main_tests PUBLIC
     GTest::gtest_main

@@ -4,22 +4,22 @@
 #include<tuple.h>
 
 TEST (TuplePointVectorTests, TupleCreationTest_IsVector) {
-    Tuple tuple(4.3, -4.2, 3.1, 0.0);
+    Tuple tuple(4.3, -4.2, 3.1, 0);
 
-    EXPECT_EQ(tuple.GetX(), 4.3);
-    EXPECT_EQ(tuple.GetY(), -4.2);
-    EXPECT_EQ(tuple.GetZ(), 3.1);
-    EXPECT_EQ(tuple.IsPoint(), 0.0);
+    EXPECT_EQ(tuple.GetX(), (float)4.3);
+    EXPECT_EQ(tuple.GetY(), (float)-4.2);
+    EXPECT_EQ(tuple.GetZ(), (float)3.1);
+    EXPECT_EQ(tuple.IsPoint(), false);
 
 }
 
 TEST (TuplePointVectorTests, TupleCreationTest_IsPoint) {
-    Tuple tuple(4.3, -4.2, 3.1, 1.0);
+    Tuple tuple(4.3, -4.2, 3.1, 1);
 
-    EXPECT_EQ(tuple.GetX(), 4.3);
-    EXPECT_EQ(tuple.GetY(), -4.2);
-    EXPECT_EQ(tuple.GetZ(), 3.1);
-    EXPECT_EQ(tuple.IsPoint(), 1.0);
+    EXPECT_EQ(tuple.GetX(), (float)4.3);
+    EXPECT_EQ(tuple.GetY(), (float)-4.2);
+    EXPECT_EQ(tuple.GetZ(), (float)3.1);
+    EXPECT_EQ(tuple.IsPoint(), true);
 
 }
 
@@ -30,7 +30,7 @@ TEST (TuplePointVectorTests, PointFactoryTest) {
     EXPECT_EQ(point.GetX(), 4);
     EXPECT_EQ(point.GetY(), -4);
     EXPECT_EQ(point.GetZ(), 3);
-    EXPECT_EQ(point.IsPoint(), 1);
+    EXPECT_EQ(point.IsPoint(), true);
 }
 
 TEST (TuplePointVectorTests, VectorFactoryTest) {
