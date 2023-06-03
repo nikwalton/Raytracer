@@ -3,11 +3,11 @@
 class Tuple {
 public:
   Tuple(){}
-  Tuple(float newX, float newY, float newZ, bool newW) {
-    x = newX;
-    y = newY;
-    z = newZ;
-    w = newW;
+  Tuple(float newX, float newY, float newZ, float newW) {
+    this->x = newX;
+    this->y = newY;
+    this->z = newZ;
+    this->w = newW;
   }
 
   ~Tuple() {

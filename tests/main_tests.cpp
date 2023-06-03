@@ -122,7 +122,7 @@ TEST(TuplePointVectorTests, SubtractOperatorTest_ZeroFromVec) {
     EXPECT_EQ(attempt.IsPoint(), false);
 }
 
-TEST(TuplePointVectorTets, NegationOperatorTest) {
+TEST(TuplePointVectorTests, NegationOperatorTest) {
     Tuple tuple(1, -2, 3, -4);
     Tuple attempt = -tuple;
 

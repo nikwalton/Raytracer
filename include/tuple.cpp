@@ -70,22 +70,62 @@ Tuple Tuple::Vector(float x, float y, float z)
 
 bool Tuple::operator==(const Tuple &rhs)
 {
+    if (this->x == rhs.x &&this->y == rhs.y &&this->z == rhs.z && this->w == rhs.w)
+    {
+        return true;
+    }
     return false;
 }
 
 Tuple Tuple::operator+(const Tuple &rhs)
 {
     Tuple tuple;
+
+    tuple.SetX(this->x + rhs.x);
+    tuple.SetY(this->y + rhs.y);
+    tuple.SetZ(this->z + rhs.z);
+    tuple.SetW(this->w + rhs.w);
+
     return tuple;
 }
 Tuple Tuple::operator-(const Tuple &rhs)
 {
     Tuple tuple;
+
+    //two points subtracted makes a vector
+    if (this->w == 1 && rhs.w == 1) 
+    {
+        tuple.SetX(this->x - rhs.x);
+        tuple.SetY(this->y - rhs.y);
+        tuple.SetZ(this->z - rhs.z);
+        tuple.SetW(0); // vector
+        return tuple;
+    }
+    //vector subtracted from a point makes a point
+    else if (this-> w == 1 && rhs.w == 0) 
+    {
+        tuple.SetX(this->x - rhs.x);
+        tuple.SetY(this->y - rhs.y);
+        tuple.SetZ(this->z - rhs.z);
+        tuple.SetW(1); // point
+        return tuple;
+    }
+
+    //if above cases arent there (w isnt 1 or 0), just subtract everything as usual
+    tuple.SetX(this->x - rhs.x);
+    tuple.SetY(this->y - rhs.y);
+    tuple.SetZ(this->z - rhs.z);
+    tuple.SetW(this->w - rhs.w);
     return tuple;
 }
 
 Tuple Tuple::operator-() {
     Tuple tuple;
+
+    tuple.SetX(-1 * this->x);
+    tuple.SetY(-1 * this->y);
+    tuple.SetZ(-1 * this->z);
+    tuple.SetW(-1 * this->w);
     return tuple;
 }
 
