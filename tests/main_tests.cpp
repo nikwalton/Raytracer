@@ -1,7 +1,11 @@
 #include <gtest/gtest.h>
 
-//Lib includes
+#include<math.h>
+
+//My Lib includes
 #include<tuple.h>
+
+
 
  
 TEST (TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -132,3 +136,79 @@ TEST(TuplePointVectorTests, NegationOperatorTest) {
     EXPECT_EQ(attempt.GetZ(), -3);
     EXPECT_EQ(attempt.GetW(), 4);
 }
+
+TEST(TuplePointVectorTests, ScalarMultiplicationTest_1) {
+    Tuple tuple(1, -2, 3, -4);
+    Tuple attempt = tuple * 3.5;
+
+    EXPECT_EQ(attempt.GetX(), 3.5);
+    EXPECT_EQ(attempt.GetY(), -7);
+    EXPECT_EQ(attempt.GetZ(), 10.5);
+    EXPECT_EQ(attempt.GetW(), -14);
+}
+
+TEST(TuplePointVectorTests, ScalarMultiplicationTest_2) {
+    Tuple tuple(1, -2, 3, -4);
+    Tuple attempt = tuple * 0.5;
+
+    EXPECT_EQ(attempt.GetX(), 0.5);
+    EXPECT_EQ(attempt.GetY(), -1);
+    EXPECT_EQ(attempt.GetZ(), 1.5);
+    EXPECT_EQ(attempt.GetW(), -2);
+}
+
+TEST(TuplePointVectorTests, ScalarDivisionTest) {
+    Tuple tuple(1, -2, 3, -4);
+    Tuple attempt = tuple / 2;
+
+    EXPECT_EQ(attempt.GetX(), 0.5);
+    EXPECT_EQ(attempt.GetY(), -1);
+    EXPECT_EQ(attempt.GetZ(), 1.5);
+    EXPECT_EQ(attempt.GetW(), -2);
+}
+
+TEST(TuplePointVectorTests, MagnitudeTest_1) {
+    Tuple factory;
+    Tuple vec = factory.Vector(1, 0, 0);
+
+    float attempt = vec.magnitude();
+    
+    EXPECT_EQ(attempt, 1);
+}
+
+TEST(TuplePointVectorTests, MagnitudeTest_2) {
+    Tuple factory;
+    Tuple vec = factory.Vector(0, 1, 0);
+
+    float attempt = vec.magnitude();
+
+    EXPECT_EQ(attempt, 1);
+}
+
+TEST(TuplePointVectorTests, MagnitudeTest_3) {
+    Tuple factory;
+    Tuple vec = factory.Vector(0, 0, 1);
+
+    float attempt = vec.magnitude();
+
+    EXPECT_EQ(attempt, 1);
+}
+
+TEST(TuplePointVectorTests, MagnitudeTest_4) {
+    Tuple factory;
+    Tuple vec = factory.Vector(1, 2, 3);
+
+    float attempt = vec.magnitude();
+
+    EXPECT_EQ(attempt, sqrt(14));
+}
+
+TEST(TuplePointVectorTests, MagnitudeTest_5) {
+    Tuple factory;
+    Tuple vec = factory.Vector(-1, -2, -3);
+
+    float attempt = vec.magnitude();
+
+    EXPECT_EQ(attempt, sqrt(14));
+}
+

@@ -30,12 +30,19 @@ public:
 
   bool IsPoint();
 
+  //operators
   bool operator== (const Tuple& rhs);
   Tuple operator+ (const Tuple& rhs);
   Tuple operator- (const Tuple& rhs);
   Tuple operator- ();
   Tuple operator* (const float rhs);
   Tuple operator/ (const float rhs);
+
+  //linear alg. operators
+  float magnitude();
+  Tuple normalize();
+  float dot(Tuple tupleB);
+  Tuple cross(Tuple tupleB);
 
 private:
   float x, y, z;

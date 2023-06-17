@@ -139,3 +139,25 @@ Tuple Tuple::operator/(const float rhs) {
     Tuple tuple;
     return tuple;
 }
+
+float Tuple::magnitude ()
+{
+    return 0.0;
+}
+
+Tuple Tuple::normalize()
+{
+    Tuple returnTuple;
+    return returnTuple;
+}
+
+float Tuple::dot(Tuple tupleB)
+{
+    return 0.0;
+}
+
+Tuple Tuple::cross(Tuple tupleB)
+{
+    Tuple returnTuple;
+    return returnTuple;
+}
