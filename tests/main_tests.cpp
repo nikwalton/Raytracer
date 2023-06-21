@@ -233,7 +233,7 @@ TEST(TuplePointVectorTests, NormalizeTest_1) {
 
 TEST(TuplePointVectorTests, NormalizeTest_2) {
     Tuple factory;
-    Tuple vec = factory.Vector(1,2,3);
+    Tuple vec = factory.Vector(1,2,3) ;
 
     Tuple attempt = vec.Normalize();
 
@@ -253,7 +253,7 @@ TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
     EXPECT_FLOAT_EQ(attempt, 1);
 }
 
-TEST(TuplePointVetorTests, DotProductTest) {
+TEST(TuplePointVectorTests, DotProductTest) {
     Tuple factory;
     Tuple vecA = factory.Vector(1, 2, 3);
     Tuple vecB = factory.Vector(2,3,4);
