@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+
 #include "tuple.h"
 
 // getters
@@ -132,32 +134,55 @@ Tuple Tuple::operator-() {
 Tuple Tuple::operator*(const float rhs)
 {
     Tuple tuple;
+
+    tuple.SetX(this->x * rhs);
+    tuple.SetY(this->y * rhs);
+    tuple.SetZ(this->z * rhs);
+    tuple.SetW(this->w * rhs);
+
     return tuple;
 }
 
 Tuple Tuple::operator/(const float rhs) {
     Tuple tuple;
+
+    tuple.SetX(this-> x /  rhs);
+    tuple.SetY(this-> y / rhs);
+    tuple.SetZ(this-> z / rhs);
+    tuple.SetW(this-> w / rhs);
+
     return tuple;
 }
 
 float Tuple::Magnitude ()
 {
-    return 0.0;
+    return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }
 
 Tuple Tuple::Normalize()
 {
-    Tuple returnTuple;
-    return returnTuple;
+    Tuple tuple;
+    float mag = this->Magnitude();
+
+    tuple.SetX(this->x / mag);
+    tuple.SetY(this->y / mag);
+    tuple.SetZ(this->z / mag);
+
+    return tuple;
 }
 
 float Tuple::Dot(Tuple tupleB)
 {
-    return 0.0;
+    return this->x * tupleB.GetX() + this->y * tupleB.GetY() + this->z * tupleB.GetZ();
 }
 
 Tuple Tuple::Cross(Tuple tupleB)
 {
-    Tuple returnTuple;
-    return returnTuple;
+    Tuple tuple;
+    
+    tuple.SetX((this->y * tupleB.GetZ()) - (this->z * tupleB.GetY()));
+    tuple.SetY((this->z * tupleB.GetX())- (this->x * tupleB.GetZ()));
+    tuple.SetZ((this->x * tupleB.GetY()) - (this->y * tupleB.GetX()));
+    
+    return tuple;
 }

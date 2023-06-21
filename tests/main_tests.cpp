@@ -203,7 +203,8 @@ TEST(TuplePointVectorTests, MagnitudeTest_4) {
 
     float attempt = vec.Magnitude();
 
-    EXPECT_EQ(attempt, sqrt(14));
+    //sqrt returns double, downcast to float
+    EXPECT_FLOAT_EQ(attempt, sqrt(14));
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_5) {
@@ -212,7 +213,8 @@ TEST(TuplePointVectorTests, MagnitudeTest_5) {
 
     float attempt = vec.Magnitude();
 
-    EXPECT_EQ(attempt, sqrt(14));
+    //sqrt returns double, downcast to flaot
+    EXPECT_FLOAT_EQ(attempt, sqrt(14));
 }
 
 // Following tests do depend on w correctly holding vector / not vector values in w
@@ -235,9 +237,9 @@ TEST(TuplePointVectorTests, NormalizeTest_2) {
 
     Tuple attempt = vec.Normalize();
 
-    EXPECT_EQ(attempt.GetX(), 1*sqrt(14));
-    EXPECT_EQ(attempt.GetY(), 2*sqrt(14));
-    EXPECT_EQ(attempt.GetZ(), 3*sqrt(14));
+    EXPECT_FLOAT_EQ(attempt.GetX(), 1/sqrt(14));
+    EXPECT_FLOAT_EQ(attempt.GetY(), 2/sqrt(14));
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 3/sqrt(14));
     EXPECT_EQ(attempt.IsPoint(), false); 
 }
 
@@ -248,7 +250,7 @@ TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
 
     float attempt = normalized.Magnitude();
 
-    EXPECT_EQ(attempt, 1);
+    EXPECT_FLOAT_EQ(attempt, 1);
 }
 
 TEST(TuplePointVetorTests, DotProductTest) {
@@ -278,9 +280,9 @@ TEST(TuplePointVectorTests, CrossProductTest) {
     // vectorB x vectorB;
     Tuple attempt2 = vecB.Cross(vecA);
 
-    EXPECT_EQ(attempt.GetX(), 1);
-    EXPECT_EQ(attempt.GetY(), -2);
-    EXPECT_EQ(attempt.GetZ(), 1);
-    EXPECT_EQ(attempt.IsPoint(), false);
+    EXPECT_EQ(attempt2.GetX(), 1);
+    EXPECT_EQ(attempt2.GetY(), -2);
+    EXPECT_EQ(attempt2.GetZ(), 1);
+    EXPECT_EQ(attempt2.IsPoint(), false);
 
 }
