@@ -39,10 +39,10 @@ public:
   Tuple operator/ (const float rhs);
 
   //linear alg. operators
-  float magnitude();
-  Tuple normalize();
-  float dot(Tuple tupleB);
-  Tuple cross(Tuple tupleB);
+  float Magnitude();
+  Tuple Normalize();
+  float Dot(Tuple tupleB);
+  Tuple Cross(Tuple tupleB);
 
 private:
   float x, y, z;

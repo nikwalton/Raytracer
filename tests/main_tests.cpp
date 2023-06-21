@@ -126,6 +126,9 @@ TEST(TuplePointVectorTests, SubtractOperatorTest_ZeroFromVec) {
     EXPECT_EQ(attempt.IsPoint(), false);
 }
 
+// following are general functions, so we dont really care what happens to w in terms of
+// if its a vector or not
+
 TEST(TuplePointVectorTests, NegationOperatorTest) {
     Tuple tuple(1, -2, 3, -4);
     Tuple attempt = -tuple;
@@ -171,7 +174,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_1) {
     Tuple factory;
     Tuple vec = factory.Vector(1, 0, 0);
 
-    float attempt = vec.magnitude();
+    float attempt = vec.Magnitude();
     
     EXPECT_EQ(attempt, 1);
 }
@@ -180,7 +183,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_2) {
     Tuple factory;
     Tuple vec = factory.Vector(0, 1, 0);
 
-    float attempt = vec.magnitude();
+    float attempt = vec.Magnitude();
 
     EXPECT_EQ(attempt, 1);
 }
@@ -189,7 +192,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_3) {
     Tuple factory;
     Tuple vec = factory.Vector(0, 0, 1);
 
-    float attempt = vec.magnitude();
+    float attempt = vec.Magnitude();
 
     EXPECT_EQ(attempt, 1);
 }
@@ -198,7 +201,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_4) {
     Tuple factory;
     Tuple vec = factory.Vector(1, 2, 3);
 
-    float attempt = vec.magnitude();
+    float attempt = vec.Magnitude();
 
     EXPECT_EQ(attempt, sqrt(14));
 }
@@ -207,8 +210,77 @@ TEST(TuplePointVectorTests, MagnitudeTest_5) {
     Tuple factory;
     Tuple vec = factory.Vector(-1, -2, -3);
 
-    float attempt = vec.magnitude();
+    float attempt = vec.Magnitude();
 
     EXPECT_EQ(attempt, sqrt(14));
 }
 
+// Following tests do depend on w correctly holding vector / not vector values in w
+
+TEST(TuplePointVectorTests, NormalizeTest_1) {
+    Tuple factory;
+    Tuple vec = factory.Vector(4, 0, 0);
+
+    Tuple attempt = vec.Normalize();
+
+    EXPECT_EQ(attempt.GetX(), 1);
+    EXPECT_EQ(attempt.GetY(), 0);
+    EXPECT_EQ(attempt.GetZ(), 0);
+    EXPECT_EQ(attempt.IsPoint(), false);
+}
+
+TEST(TuplePointVectorTests, NormalizeTest_2) {
+    Tuple factory;
+    Tuple vec = factory.Vector(1,2,3);
+
+    Tuple attempt = vec.Normalize();
+
+    EXPECT_EQ(attempt.GetX(), 1*sqrt(14));
+    EXPECT_EQ(attempt.GetY(), 2*sqrt(14));
+    EXPECT_EQ(attempt.GetZ(), 3*sqrt(14));
+    EXPECT_EQ(attempt.IsPoint(), false); 
+}
+
+TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
+    Tuple factory;
+    Tuple vec = factory.Vector(1,2,3);
+    Tuple normalized = vec.Normalize();
+
+    float attempt = normalized.Magnitude();
+
+    EXPECT_EQ(attempt, 1);
+}
+
+TEST(TuplePointVetorTests, DotProductTest) {
+    Tuple factory;
+    Tuple vecA = factory.Vector(1, 2, 3);
+    Tuple vecB = factory.Vector(2,3,4);
+    
+    // vector A * vector B
+    float attempt = vecA.Dot(vecB);
+
+    EXPECT_EQ(attempt, 20);
+}
+
+TEST(TuplePointVectorTests, CrossProductTest) {
+    Tuple factory;
+    Tuple vecA = factory.Vector(1, 2, 3);
+    Tuple vecB = factory.Vector(2, 3, 4);
+
+    //vectorA x vectorB
+    Tuple attempt = vecA.Cross(vecB);
+
+    EXPECT_EQ(attempt.GetX(), -1);
+    EXPECT_EQ(attempt.GetY(), 2);
+    EXPECT_EQ(attempt.GetZ(), -1);
+    EXPECT_EQ(attempt.IsPoint(), false);
+
+    // vectorB x vectorB;
+    Tuple attempt2 = vecB.Cross(vecA);
+
+    EXPECT_EQ(attempt.GetX(), 1);
+    EXPECT_EQ(attempt.GetY(), -2);
+    EXPECT_EQ(attempt.GetZ(), 1);
+    EXPECT_EQ(attempt.IsPoint(), false);
+
+}
