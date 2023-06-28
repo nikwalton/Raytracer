@@ -1,5 +1,8 @@
 #include <iostream>
 
+#ifndef TUPLE_H
+#define TUPLE_H
+
 class Tuple {
 public:
   Tuple(){}
@@ -48,3 +51,4 @@ private:
   float x, y, z;
   float w; // 1 is point 0 is vector
 };
+#endif

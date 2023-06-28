@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include "tuple.h"
+#include "vector.h"
+#include "point.h"
 #include "canon.h"
 
 int main(int argc, char * argv[]) 
@@ -8,12 +11,14 @@ int main(int argc, char * argv[])
 
     Tuple factory;
 
-    Tuple pos = factory.Point(0,1,0);
-    Tuple vel = factory.Vector(1,1,0).Normalize();
-    Tuple grav = factory.Vector(0,-0.1,0);
-    Tuple wind = factory.Vector(-0.01,0,0);
+    Point pos(0,1,0);
+    Vector vel(1,1,0);
+    Tuple normalizedVel = vel.Normalize();
 
-   Projectile proj(pos, vel);
+    Vector grav(0,-0.1,0);
+    Vector wind(-0.01, 0, 0);
+
+   Projectile proj(pos, normalizedVel);
    Environment environ(grav,wind);
 
    Canon canon(proj, environ);

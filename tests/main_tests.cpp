@@ -3,8 +3,10 @@
 #include<math.h>
 
 //My Lib includes
-#include<tuple.h>
-
+#include "tuple.h"
+#include "vector.h"
+#include "point.h"
+#include "color.h"
 
 
  
@@ -28,9 +30,9 @@ TEST (TuplePointVectorTests, TupleCreationTest_IsPoint) {
 
 }
 
-TEST (TuplePointVectorTests, PointFactoryTest) {
-    Tuple factory;
-    Tuple point = factory.Point(4, -4, 3);
+TEST (TuplePointVectorTests, PointTest) {
+    Point point(4, -4, 3);
+    
 
     EXPECT_EQ(point.GetX(), 4);
     EXPECT_EQ(point.GetY(), -4);
@@ -39,8 +41,7 @@ TEST (TuplePointVectorTests, PointFactoryTest) {
 }
 
 TEST (TuplePointVectorTests, VectorFactoryTest) {
-    Tuple factory;
-    Tuple vector = factory.Vector(4, -4, 3);
+    Vector vector(4, -4, 3);
 
     EXPECT_EQ(vector.GetX(), 4);
     EXPECT_EQ(vector.GetY(), -4);
@@ -71,9 +72,8 @@ TEST (TuplePointVectorTests, AddOperatorTest) {
 
 TEST (TuplePointVectorTests, SubtractOperatorTest_PointFromPoint) {
     //subtracting two points result in a vector
-    Tuple factory;
-    Tuple p1 = factory.Point(3, 2, 1);
-    Tuple p2 = factory.Point(5, 6, 7);
+    Point p1(3, 2, 1);
+    Point p2(5,6,7);
     //solution Vector (-2, -4, -6);
     Tuple attempt = p1 - p2;
 
@@ -86,9 +86,8 @@ TEST (TuplePointVectorTests, SubtractOperatorTest_PointFromPoint) {
 
 TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromPoint) {
     //subtracting a vector from a point results in a point
-    Tuple factory;
-    Tuple p = factory.Point(3, 2, 1);
-    Tuple v = factory.Vector(5 , 6, 7);
+    Point p(3,2,1); 
+    Vector v(5,6,7);
     // solution Point (-2, -4, -6);
     Tuple attempt = p - v;
 
@@ -99,9 +98,8 @@ TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromPoint) {
 }
 
 TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromVec) {
-    Tuple factory;
-    Tuple v1 = factory.Vector(3 , 2, 1);
-    Tuple v2 = factory.Vector(5, 6, 7);
+    Vector v1(3, 2, 1);
+    Vector v2(5, 6, 7);
     //solution Vector (-2, -4, -6)
     Tuple attempt = v1 - v2;
 
@@ -113,9 +111,8 @@ TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromVec) {
 }
 
 TEST(TuplePointVectorTests, SubtractOperatorTest_ZeroFromVec) {
-    Tuple factory;
-    Tuple zero = factory.Vector(0,0,0);
-    Tuple v = factory.Vector(1, -2, 3);
+    Vector zero(0, 0, 0);
+    Vector v(1, -2, 3);
     //solution Vector (-1, 2, -3);
     Tuple attempt = zero - v;
 
@@ -171,8 +168,7 @@ TEST(TuplePointVectorTests, ScalarDivisionTest) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_1) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1, 0, 0);
+    Vector vec(1, 0, 0);
 
     float attempt = vec.Magnitude();
     
@@ -180,8 +176,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_1) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_2) {
-    Tuple factory;
-    Tuple vec = factory.Vector(0, 1, 0);
+    Vector vec(0, 1, 0);
 
     float attempt = vec.Magnitude();
 
@@ -189,8 +184,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_2) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_3) {
-    Tuple factory;
-    Tuple vec = factory.Vector(0, 0, 1);
+    Vector vec(0, 0, 1);
 
     float attempt = vec.Magnitude();
 
@@ -198,8 +192,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_3) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_4) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1, 2, 3);
+    Vector vec(1, 2, 3);
 
     float attempt = vec.Magnitude();
 
@@ -208,8 +201,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_4) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_5) {
-    Tuple factory;
-    Tuple vec = factory.Vector(-1, -2, -3);
+    Vector vec(-1, -2, -3); 
 
     float attempt = vec.Magnitude();
 
@@ -220,8 +212,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_5) {
 // Following tests do depend on w correctly holding vector / not vector values in w
 
 TEST(TuplePointVectorTests, NormalizeTest_1) {
-    Tuple factory;
-    Tuple vec = factory.Vector(4, 0, 0);
+    Vector vec(4, 0, 0);
 
     Tuple attempt = vec.Normalize();
 
@@ -232,8 +223,7 @@ TEST(TuplePointVectorTests, NormalizeTest_1) {
 }
 
 TEST(TuplePointVectorTests, NormalizeTest_2) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1,2,3) ;
+    Vector vec(1, 2, 3);
 
     Tuple attempt = vec.Normalize();
 
@@ -244,8 +234,7 @@ TEST(TuplePointVectorTests, NormalizeTest_2) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1,2,3);
+    Vector vec(1, 2, 3);
     Tuple normalized = vec.Normalize();
 
     float attempt = normalized.Magnitude();
@@ -254,9 +243,8 @@ TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
 }
 
 TEST(TuplePointVectorTests, DotProductTest) {
-    Tuple factory;
-    Tuple vecA = factory.Vector(1, 2, 3);
-    Tuple vecB = factory.Vector(2,3,4);
+    Vector vecA(1, 2, 3);
+    Vector vecB(2, 3, 4);
     
     // vector A * vector B
     float attempt = vecA.Dot(vecB);
@@ -265,10 +253,8 @@ TEST(TuplePointVectorTests, DotProductTest) {
 }
 
 TEST(TuplePointVectorTests, CrossProductTest) {
-    Tuple factory;
-    Tuple vecA = factory.Vector(1, 2, 3);
-    Tuple vecB = factory.Vector(2, 3, 4);
-
+    Vector vecA(1, 2, 3);
+    Vector vecB(2, 3, 4);
     //vectorA x vectorB
     Tuple attempt = vecA.Cross(vecB);
 

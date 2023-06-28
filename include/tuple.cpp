@@ -58,18 +58,6 @@ bool Tuple::IsPoint()
     return false;
 }
 
-Tuple Tuple::Point(float x, float y, float z)
-{
-    Tuple tuple(x, y, z, 1);
-    return tuple;
-}
-
-Tuple Tuple::Vector(float x, float y, float z)
-{
-    Tuple tuple(x, y, z, 0);
-    return tuple;
-}
-
 bool Tuple::operator==(const Tuple &rhs)
 {
     if (this->x == rhs.x &&this->y == rhs.y &&this->z == rhs.z && this->w == rhs.w)
