@@ -1,7 +1,7 @@
-#include "tuple.h"
+#include "tuple.hpp"
 
-#ifndef COLOR_H
-#define COLOR_H
+#ifndef COLOR_HPP
+#define COLOR_HPP
 
 class Color : public Tuple
 {

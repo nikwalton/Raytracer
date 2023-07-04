@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "canon.h"
+#include "canon.hpp"
 /// @brief Constructor for Environment that creates the object with a given gravity and wind vector
 /// @param gravity a vector Tuple representing the gravity direction
 /// @param wind a vector Tuple representing the wind direction

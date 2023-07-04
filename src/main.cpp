@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "tuple.h"
-#include "vector.h"
-#include "point.h"
-#include "canon.h"
+#include "tuple.hpp"
+#include "vector.hpp"
+#include "point.hpp"
+#include "canon.hpp"
 
 int main(int argc, char * argv[]) 
 {

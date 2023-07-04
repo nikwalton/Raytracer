@@ -1,7 +1,7 @@
-#include "tuple.h"
+#include "tuple.hpp"
 
-#ifndef POINT_H
-#define POINT_H
+#ifndef POINT_HPP
+#define POINT_HPP
 
 class Point : public Tuple
 {

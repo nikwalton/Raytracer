@@ -1,7 +1,7 @@
 // a little fun canon to shoot vector based projectiles out, just used to test drive the tuple class
 //everything needed to run the canon is in canon.h and canon.cpp rather than splitting up all the classes needed
 //to keep the raytracer lib more lean since this shouldnt be used outside of toying around
-#include "tuple.h"
+#include "tuple.hpp"
 
 class Environment {
 public:

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "tuple.h"
+#include "tuple.hpp"
 
 // getters
 

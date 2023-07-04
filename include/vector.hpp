@@ -1,6 +1,6 @@
-#include "tuple.h"
-#ifndef VECTOR_H
-#define VECTOR_H
+#include "tuple.hpp"
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 class Vector : public Tuple
 {

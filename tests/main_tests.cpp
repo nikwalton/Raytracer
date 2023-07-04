@@ -3,10 +3,12 @@
 #include<math.h>
 
 //My Lib includes
-#include "tuple.h"
-#include "vector.h"
-#include "point.h"
-#include "color.h"
+#include "tuple.hpp"
+#include "vector.hpp"
+#include "point.hpp"
+#include "color.hpp"
+#include "canvas.hpp"
+
 
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
@@ -323,4 +325,12 @@ TEST(ColorCanvasTests, MultiplyTwoColorsTest) {
     EXPECT_FLOAT_EQ(attempt.GetX(), 0.9);
     EXPECT_FLOAT_EQ(attempt.GetY(), 0.2);
     EXPECT_FLOAT_EQ(attempt.GetZ(), 0.04);
+}
+
+TEST(ColorCanvasTests, CreateCanvasTest) {
+    Canvas canv(10, 20);
+    EXPECT_EQ(canv.GetHeight(), 10);
+    EXPECT_EQ(canv.GetWidth(), 20);
+
+    //iterate through each pixel make sure they are all rgb(0,0,0)
 }
