@@ -13,20 +13,20 @@
 TEST (TuplePointVectorTests, TupleCreationTest_IsVector) {
     Tuple tuple(4.3, -4.2, 3.1, 0);
 
-    EXPECT_EQ(tuple.GetX(), (float)4.3);
-    EXPECT_EQ(tuple.GetY(), (float)-4.2);
-    EXPECT_EQ(tuple.GetZ(), (float)3.1);
-    EXPECT_EQ(tuple.IsPoint(), false);
+    EXPECT_FLOAT_EQ(tuple.GetX(), 4.3);
+    EXPECT_FLOAT_EQ(tuple.GetY(), -4.2);
+    EXPECT_FLOAT_EQ(tuple.GetZ(), 3.1);
+    EXPECT_FLOAT_EQ(tuple.IsPoint(), false);
 
 }
 
 TEST (TuplePointVectorTests, TupleCreationTest_IsPoint) {
     Tuple tuple(4.3, -4.2, 3.1, 1);
 
-    EXPECT_EQ(tuple.GetX(), (float)4.3);
-    EXPECT_EQ(tuple.GetY(), (float)-4.2);
-    EXPECT_EQ(tuple.GetZ(), (float)3.1);
-    EXPECT_EQ(tuple.IsPoint(), true);
+    EXPECT_FLOAT_EQ(tuple.GetX(), 4.3);
+    EXPECT_FLOAT_EQ(tuple.GetY(), -4.2);
+    EXPECT_FLOAT_EQ(tuple.GetZ(), 3.1);
+    EXPECT_FLOAT_EQ(tuple.IsPoint(), true);
 
 }
 
@@ -284,7 +284,7 @@ TEST(ColorCanvasTests, ColorCreationTest) {
 
 TEST(ColorCanvasTests, AddingColorsTest) {
     Color color1(0.9, 0.6, 0.75);
-    Color color2(0.7, 0.1, 0.23);
+    Color color2(0.7, 0.1, 0.25);
 
     Tuple attempt = color1 + color2;
 
@@ -295,9 +295,9 @@ TEST(ColorCanvasTests, AddingColorsTest) {
 
 TEST(ColorCanvasTests, SubtractingColorsTest) {
     Color color1(0.9, 0.6, 0.75);
-    Color color2(0.7, 0.1, 0.23);
+    Color color2(0.7, 0.1, 0.25);
 
-    Tuple attempt = color1 - color2;
+    Color attempt = color1 - color2;
 
     EXPECT_FLOAT_EQ(attempt.GetX(), 0.2);
     EXPECT_FLOAT_EQ(attempt.GetY(), 0.5);
@@ -305,7 +305,7 @@ TEST(ColorCanvasTests, SubtractingColorsTest) {
 }
 
 TEST(ColorCanvasTests, MultplyColorScalarTest) {
-    Color color(0.2, 0.3, 0.4);
+    Color color((float)0.2, (float)0.3, (float)0.4);
 
     Tuple attempt = color * 2;
 
@@ -319,7 +319,7 @@ TEST(ColorCanvasTests, MultiplyTwoColorsTest) {
     Color color2(0.9, 1, 0.1);
 
     Color attempt = color1 * color2;
-    
+
     EXPECT_FLOAT_EQ(attempt.GetX(), 0.9);
     EXPECT_FLOAT_EQ(attempt.GetY(), 0.2);
     EXPECT_FLOAT_EQ(attempt.GetZ(), 0.04);

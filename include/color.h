@@ -17,8 +17,11 @@ public:
     void SetGreen(float newG);
     void SetBlue(float newB);
 
+    //some overrides for readibility, can just you Tuple class for most of these tbh
+    Color operator+ (Color &rhs);
+    Color operator- (Color &rhs);
     Color operator*(Color &rhs);
-    Tuple operator*(const float rhs);
+    Color operator*(const float rhs);
 };
 
 #endif
