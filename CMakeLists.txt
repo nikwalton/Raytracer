@@ -21,10 +21,12 @@ enable_testing()
 
 set(Headers 
         "include/tuple.h"
-        "include/canon.h")
+        "include/canon.h"
+        "include/color.h")
 set(Sources 
         "include/tuple.cpp"
-        "include/canon.cpp")
+        "include/canon.cpp"
+        "include/color.cpp")
 
 add_library(RayLib STATIC ${Sources} ${Headers})
 

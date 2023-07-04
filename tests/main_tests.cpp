@@ -9,7 +9,7 @@
 #include "color.h"
 
 
- 
+ //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST (TuplePointVectorTests, TupleCreationTest_IsVector) {
     Tuple tuple(4.3, -4.2, 3.1, 0);
 
@@ -271,4 +271,56 @@ TEST(TuplePointVectorTests, CrossProductTest) {
     EXPECT_EQ(attempt2.GetZ(), 1);
     EXPECT_EQ(attempt2.IsPoint(), false);
 
+}
+
+// START OF COLOR TEST SUITE
+TEST(ColorCanvasTests, ColorCreationTest) {
+    Color color(-0.5, 0.4, 1.7);
+
+    EXPECT_FLOAT_EQ(color.GetRed(), -0.5);
+    EXPECT_FLOAT_EQ(color.GetGreen(), 0.4);
+    EXPECT_FLOAT_EQ(color.GetBlue(), 1.7);
+}
+
+TEST(ColorCanvasTests, AddingColorsTest) {
+    Color color1(0.9, 0.6, 0.75);
+    Color color2(0.7, 0.1, 0.23);
+
+    Tuple attempt = color1 + color2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 1.6);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.7);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 1.0);
+}
+
+TEST(ColorCanvasTests, SubtractingColorsTest) {
+    Color color1(0.9, 0.6, 0.75);
+    Color color2(0.7, 0.1, 0.23);
+
+    Tuple attempt = color1 - color2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 0.2);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.5);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 0.5);
+}
+
+TEST(ColorCanvasTests, MultplyColorScalarTest) {
+    Color color(0.2, 0.3, 0.4);
+
+    Tuple attempt = color * 2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 0.4);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.6);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 0.8);
+}
+
+TEST(ColorCanvasTests, MultiplyTwoColorsTest) {
+    Color color1(1, 0.2, 0.4);
+    Color color2(0.9, 1, 0.1);
+
+    Color attempt = color1 * color2;
+    
+    EXPECT_FLOAT_EQ(attempt.GetX(), 0.9);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.2);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 0.04);
 }
