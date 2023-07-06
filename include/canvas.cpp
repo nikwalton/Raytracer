@@ -17,7 +17,15 @@ unsigned short int Canvas::GetWidth()
 
 std::vector<std::vector<Color>> Canvas::GetPixels()
 {
+    std::vector<std::vector<Color>> result;
 
+    return result;
+}
+
+Color Canvas::PixelAt(unsigned short int x, unsigned short int y)
+{
+    Color result;
+    return result;
 }
 
 void Canvas::SetHeight(unsigned short int newHeight)
@@ -34,7 +42,13 @@ void Canvas::SetPixels(std::vector<std::vector<Color>> newPixels)
 
 }
 
-void WritePixel(Canvas canvas, unsigned short int x, unsigned short int y)
+void Canvas::WritePixel(unsigned short int x, unsigned short int y, Color pixel)
 {
     
+}
+
+std::string Canvas::CanvasToPPM()
+{
+    std::string result;
+    return result;
 }

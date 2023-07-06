@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
 #include<math.h>
+#include<string>
+#include<sstream>
 
 //My Lib includes
 #include "tuple.hpp"
@@ -333,4 +335,78 @@ TEST(ColorCanvasTests, CreateCanvasTest) {
     EXPECT_EQ(canv.GetWidth(), 20);
 
     //iterate through each pixel make sure they are all rgb(0,0,0)
+}
+
+TEST(ColorCanvasTests, WriteToCanvas) {
+    Canvas canv(10, 20);
+    Color red(1,0,0);
+
+    canv.WritePixel(2, 3, red);
+
+    Color attempt = canv.PixelAt(2, 3);
+
+    EXPECT_EQ(red.GetRed(), attempt.GetRed());
+    EXPECT_EQ(red.GetGreen(), attempt.GetGreen());
+    EXPECT_EQ(red.GetBlue(), attempt.GetBlue());
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_HeaderTest)
+{
+    Canvas canv(5, 3);
+    
+    std::istringstream ppm_file{canv.CanvasToPPM()};
+
+    std::string line;
+
+    //first 3 lines is the header of the ppm file
+    //line 1
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "P3");
+    //line 2
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "5 3");
+    //line 3
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255");
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_BodyTest)
+{
+    Canvas canv(5,3);
+    Color c1(1.5, 0, 0);
+    Color c2(0, 0.5, 0);
+    Color c3(-0.5, 0, 1);
+
+    std::istringstream ppm_file{canv.CanvasToPPM()};
+
+    std::string line;
+    //skip first 3 lines;
+    for (int i = 0; i < 3; i++)
+    {
+        std::getline(ppm_file, line);
+    }
+    //lines 4-6 is where the body of the file begins
+    //line 4
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
+    //line 5
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
+    //line 6
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_BodyLineLengthTest) {
+    //a line should be no more than 70 chars long
+
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_EOF_NewLineTest) {
+    Canvas canv(5,3);
+    std::string ppm_file= canv.CanvasToPPM();
+
+    char attempt = ppm_file[ppm_file.length() - 1];
+
+    EXPECT_EQ(attempt, '\n');
 }

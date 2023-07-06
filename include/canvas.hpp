@@ -1,5 +1,6 @@
 #include "color.hpp"
 #include <vector>
+#include <string>
 
 #ifndef CANVAS_HPP
 #define CANVAS_HPP
@@ -14,13 +15,16 @@ public:
     unsigned short int GetWidth();
     std::vector<std::vector<Color>> GetPixels();
 
+    Color PixelAt(unsigned short int x, unsigned short int y);
+
     void SetHeight(unsigned short int newHeight);
     void SetWidth(unsigned short int newWidth);
     void SetPixels(std::vector<std::vector<Color>> newPixels);
     
 
-    void WritePixel(Canvas canvas, unsigned short int x, unsigned short int y);
-    
+    void WritePixel(unsigned short int x, unsigned short int y, Color pixel);
+
+    std::string CanvasToPPM();
 
 private:
     //if you need more than 60k pixels height and width wise idk what to tell you
