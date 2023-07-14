@@ -334,7 +334,18 @@ TEST(ColorCanvasTests, CreateCanvasTest) {
     EXPECT_EQ(canv.GetHeight(), 10);
     EXPECT_EQ(canv.GetWidth(), 20);
 
+    std::vector<std::vector<Color>> pixels = canv.GetPixels();
+
     //iterate through each pixel make sure they are all rgb(0,0,0)
+    for(auto x : pixels)
+    {
+        for (auto y : x)
+        {
+            EXPECT_EQ(y.GetRed(), 0);
+            EXPECT_EQ(y.GetGreen(), 0);
+            EXPECT_EQ(y.GetBlue(), 0);
+        }
+    }
 }
 
 TEST(ColorCanvasTests, WriteToCanvas) {
@@ -377,6 +388,10 @@ TEST(ColorCanvasTests, CanvasToPPM_BodyTest)
     Color c2(0, 0.5, 0);
     Color c3(-0.5, 0, 1);
 
+    canv.WritePixel(0,0,c1);
+    canv.WritePixel(2,1,c2);
+    canv.WritePixel(4,2,c3);
+
     std::istringstream ppm_file{canv.CanvasToPPM()};
 
     std::string line;
@@ -399,7 +414,42 @@ TEST(ColorCanvasTests, CanvasToPPM_BodyTest)
 
 TEST(ColorCanvasTests, CanvasToPPM_BodyLineLengthTest) {
     //a line should be no more than 70 chars long
+    Canvas canv(10, 2);
+    Color fillColor(1, 0.8, 0.6);
 
+    std::vector<std::vector<Color>> canvasPixels = canv.GetPixels();
+    unsigned short int rowCord, colCord = 0;
+    for (auto row: canvasPixels)
+    {
+        rowCord++;
+        for (auto col: row)
+        {
+            canv.WritePixel(rowCord, colCord, fillColor);
+            colCord++;
+        }
+    }
+
+    //need to get to rows 4-7 of the ppm file now
+    std::istringstream ppm_file{canv.CanvasToPPM()};
+
+    std::string line;
+    //skip first 3 lines;
+    for (int i = 0; i < 3; i++)
+    {
+        std::getline(ppm_file, line);
+    }
+    //line 4
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
+    //line 5
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "153 255 204 153 255 204 153 255 204 153 255 204 153");
+    //line 6
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
+    //line 7
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "153 255 204 153 255 204 153 255 204 153 255 204 153");
 }
 
 TEST(ColorCanvasTests, CanvasToPPM_EOF_NewLineTest) {
