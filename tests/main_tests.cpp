@@ -1,36 +1,42 @@
 #include <gtest/gtest.h>
 
 #include<math.h>
+#include<string>
+#include<sstream>
 
 //My Lib includes
-#include<tuple.h>
+#include "tuple.hpp"
+#include "vector.hpp"
+#include "point.hpp"
+#include "color.hpp"
+#include "canvas.hpp"
 
 
 
- 
+ //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST (TuplePointVectorTests, TupleCreationTest_IsVector) {
     Tuple tuple(4.3, -4.2, 3.1, 0);
 
-    EXPECT_EQ(tuple.GetX(), (float)4.3);
-    EXPECT_EQ(tuple.GetY(), (float)-4.2);
-    EXPECT_EQ(tuple.GetZ(), (float)3.1);
-    EXPECT_EQ(tuple.IsPoint(), false);
+    EXPECT_FLOAT_EQ(tuple.GetX(), 4.3);
+    EXPECT_FLOAT_EQ(tuple.GetY(), -4.2);
+    EXPECT_FLOAT_EQ(tuple.GetZ(), 3.1);
+    EXPECT_FLOAT_EQ(tuple.IsPoint(), false);
 
 }
 
 TEST (TuplePointVectorTests, TupleCreationTest_IsPoint) {
     Tuple tuple(4.3, -4.2, 3.1, 1);
 
-    EXPECT_EQ(tuple.GetX(), (float)4.3);
-    EXPECT_EQ(tuple.GetY(), (float)-4.2);
-    EXPECT_EQ(tuple.GetZ(), (float)3.1);
-    EXPECT_EQ(tuple.IsPoint(), true);
+    EXPECT_FLOAT_EQ(tuple.GetX(), 4.3);
+    EXPECT_FLOAT_EQ(tuple.GetY(), -4.2);
+    EXPECT_FLOAT_EQ(tuple.GetZ(), 3.1);
+    EXPECT_FLOAT_EQ(tuple.IsPoint(), true);
 
 }
 
-TEST (TuplePointVectorTests, PointFactoryTest) {
-    Tuple factory;
-    Tuple point = factory.Point(4, -4, 3);
+TEST (TuplePointVectorTests, PointTest) {
+    Point point(4, -4, 3);
+    
 
     EXPECT_EQ(point.GetX(), 4);
     EXPECT_EQ(point.GetY(), -4);
@@ -39,8 +45,7 @@ TEST (TuplePointVectorTests, PointFactoryTest) {
 }
 
 TEST (TuplePointVectorTests, VectorFactoryTest) {
-    Tuple factory;
-    Tuple vector = factory.Vector(4, -4, 3);
+    Vector vector(4, -4, 3);
 
     EXPECT_EQ(vector.GetX(), 4);
     EXPECT_EQ(vector.GetY(), -4);
@@ -71,9 +76,8 @@ TEST (TuplePointVectorTests, AddOperatorTest) {
 
 TEST (TuplePointVectorTests, SubtractOperatorTest_PointFromPoint) {
     //subtracting two points result in a vector
-    Tuple factory;
-    Tuple p1 = factory.Point(3, 2, 1);
-    Tuple p2 = factory.Point(5, 6, 7);
+    Point p1(3, 2, 1);
+    Point p2(5,6,7);
     //solution Vector (-2, -4, -6);
     Tuple attempt = p1 - p2;
 
@@ -86,9 +90,8 @@ TEST (TuplePointVectorTests, SubtractOperatorTest_PointFromPoint) {
 
 TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromPoint) {
     //subtracting a vector from a point results in a point
-    Tuple factory;
-    Tuple p = factory.Point(3, 2, 1);
-    Tuple v = factory.Vector(5 , 6, 7);
+    Point p(3,2,1); 
+    Vector v(5,6,7);
     // solution Point (-2, -4, -6);
     Tuple attempt = p - v;
 
@@ -99,9 +102,8 @@ TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromPoint) {
 }
 
 TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromVec) {
-    Tuple factory;
-    Tuple v1 = factory.Vector(3 , 2, 1);
-    Tuple v2 = factory.Vector(5, 6, 7);
+    Vector v1(3, 2, 1);
+    Vector v2(5, 6, 7);
     //solution Vector (-2, -4, -6)
     Tuple attempt = v1 - v2;
 
@@ -113,9 +115,8 @@ TEST(TuplePointVectorTests, SubtractOperatorTest_VecFromVec) {
 }
 
 TEST(TuplePointVectorTests, SubtractOperatorTest_ZeroFromVec) {
-    Tuple factory;
-    Tuple zero = factory.Vector(0,0,0);
-    Tuple v = factory.Vector(1, -2, 3);
+    Vector zero(0, 0, 0);
+    Vector v(1, -2, 3);
     //solution Vector (-1, 2, -3);
     Tuple attempt = zero - v;
 
@@ -171,8 +172,7 @@ TEST(TuplePointVectorTests, ScalarDivisionTest) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_1) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1, 0, 0);
+    Vector vec(1, 0, 0);
 
     float attempt = vec.Magnitude();
     
@@ -180,8 +180,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_1) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_2) {
-    Tuple factory;
-    Tuple vec = factory.Vector(0, 1, 0);
+    Vector vec(0, 1, 0);
 
     float attempt = vec.Magnitude();
 
@@ -189,8 +188,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_2) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_3) {
-    Tuple factory;
-    Tuple vec = factory.Vector(0, 0, 1);
+    Vector vec(0, 0, 1);
 
     float attempt = vec.Magnitude();
 
@@ -198,8 +196,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_3) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_4) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1, 2, 3);
+    Vector vec(1, 2, 3);
 
     float attempt = vec.Magnitude();
 
@@ -208,8 +205,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_4) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeTest_5) {
-    Tuple factory;
-    Tuple vec = factory.Vector(-1, -2, -3);
+    Vector vec(-1, -2, -3); 
 
     float attempt = vec.Magnitude();
 
@@ -220,8 +216,7 @@ TEST(TuplePointVectorTests, MagnitudeTest_5) {
 // Following tests do depend on w correctly holding vector / not vector values in w
 
 TEST(TuplePointVectorTests, NormalizeTest_1) {
-    Tuple factory;
-    Tuple vec = factory.Vector(4, 0, 0);
+    Vector vec(4, 0, 0);
 
     Tuple attempt = vec.Normalize();
 
@@ -232,8 +227,7 @@ TEST(TuplePointVectorTests, NormalizeTest_1) {
 }
 
 TEST(TuplePointVectorTests, NormalizeTest_2) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1,2,3) ;
+    Vector vec(1, 2, 3);
 
     Tuple attempt = vec.Normalize();
 
@@ -244,8 +238,7 @@ TEST(TuplePointVectorTests, NormalizeTest_2) {
 }
 
 TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
-    Tuple factory;
-    Tuple vec = factory.Vector(1,2,3);
+    Vector vec(1, 2, 3);
     Tuple normalized = vec.Normalize();
 
     float attempt = normalized.Magnitude();
@@ -254,9 +247,8 @@ TEST(TuplePointVectorTests, MagnitudeOfNormalizedTest) {
 }
 
 TEST(TuplePointVectorTests, DotProductTest) {
-    Tuple factory;
-    Tuple vecA = factory.Vector(1, 2, 3);
-    Tuple vecB = factory.Vector(2,3,4);
+    Vector vecA(1, 2, 3);
+    Vector vecB(2, 3, 4);
     
     // vector A * vector B
     float attempt = vecA.Dot(vecB);
@@ -265,10 +257,8 @@ TEST(TuplePointVectorTests, DotProductTest) {
 }
 
 TEST(TuplePointVectorTests, CrossProductTest) {
-    Tuple factory;
-    Tuple vecA = factory.Vector(1, 2, 3);
-    Tuple vecB = factory.Vector(2, 3, 4);
-
+    Vector vecA(1, 2, 3);
+    Vector vecB(2, 3, 4);
     //vectorA x vectorB
     Tuple attempt = vecA.Cross(vecB);
 
@@ -285,4 +275,184 @@ TEST(TuplePointVectorTests, CrossProductTest) {
     EXPECT_EQ(attempt2.GetZ(), 1);
     EXPECT_EQ(attempt2.IsPoint(), false);
 
+}
+
+// START OF COLOR TEST SUITE
+TEST(ColorCanvasTests, ColorCreationTest) {
+    Color color(-0.5, 0.4, 1.7);
+
+    EXPECT_FLOAT_EQ(color.GetRed(), -0.5);
+    EXPECT_FLOAT_EQ(color.GetGreen(), 0.4);
+    EXPECT_FLOAT_EQ(color.GetBlue(), 1.7);
+}
+
+TEST(ColorCanvasTests, AddingColorsTest) {
+    Color color1(0.9, 0.6, 0.75);
+    Color color2(0.7, 0.1, 0.25);
+
+    Tuple attempt = color1 + color2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 1.6);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.7);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 1.0);
+}
+
+TEST(ColorCanvasTests, SubtractingColorsTest) {
+    Color color1(0.9, 0.6, 0.75);
+    Color color2(0.7, 0.1, 0.25);
+
+    Color attempt = color1 - color2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 0.2);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.5);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 0.5);
+}
+
+TEST(ColorCanvasTests, MultplyColorScalarTest) {
+    Color color((float)0.2, (float)0.3, (float)0.4);
+
+    Tuple attempt = color * 2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 0.4);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.6);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 0.8);
+}
+
+TEST(ColorCanvasTests, MultiplyTwoColorsTest) {
+    Color color1(1, 0.2, 0.4);
+    Color color2(0.9, 1, 0.1);
+
+    Color attempt = color1 * color2;
+
+    EXPECT_FLOAT_EQ(attempt.GetX(), 0.9);
+    EXPECT_FLOAT_EQ(attempt.GetY(), 0.2);
+    EXPECT_FLOAT_EQ(attempt.GetZ(), 0.04);
+}
+
+TEST(ColorCanvasTests, CreateCanvasTest) {
+    Canvas canv(10, 20);
+    EXPECT_EQ(canv.GetWidth(), 10);
+    EXPECT_EQ(canv.GetHeight(), 20);
+
+    std::vector<std::vector<Color>> pixels = canv.GetPixels();
+
+    //iterate through each pixel make sure they are all rgb(0,0,0)
+    for(auto x : pixels)
+    {
+        for (auto y : x)
+        {
+            EXPECT_EQ(y.GetRed(), 0);
+            EXPECT_EQ(y.GetGreen(), 0);
+            EXPECT_EQ(y.GetBlue(), 0);
+        }
+    }
+}
+
+TEST(ColorCanvasTests, WriteToCanvas) {
+    Canvas canv(10, 20);
+    Color red(1,0,0);
+
+    canv.WritePixel(2, 3, red);
+
+    Color attempt = canv.PixelAt(2, 3);
+
+    EXPECT_EQ(red.GetRed(), attempt.GetRed());
+    EXPECT_EQ(red.GetGreen(), attempt.GetGreen());
+    EXPECT_EQ(red.GetBlue(), attempt.GetBlue());
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_HeaderTest)
+{
+    Canvas canv(5, 3);
+    
+    std::istringstream ppm_file{canv.CanvasToPPM()};
+
+    std::string line;
+
+    //first 3 lines is the header of the ppm file
+    //line 1
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "P3");
+    //line 2
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "5 3");
+    //line 3
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255");
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_BodyTest)
+{
+    Canvas canv(5,3);
+    Color c1(1.5, 0, 0);
+    Color c2(0, 0.5, 0);
+    Color c3(-0.5, 0, 1);
+
+    canv.WritePixel(0,0,c1);
+    canv.WritePixel(2,1,c2);
+    canv.WritePixel(4,2,c3);
+
+    std::istringstream ppm_file{canv.CanvasToPPM()};
+
+    std::string line;
+    //skip first 3 lines;
+    for (int i = 0; i < 3; i++)
+    {
+        std::getline(ppm_file, line);
+    }
+    //lines 4-6 is where the body of the file begins
+    //line 4
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
+    //line 5
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
+    //line 6
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_BodyLineLengthTest) {
+    //a line should be no more than 70 chars long
+
+    Canvas canv(10, 2);
+    Color fill(1, 0.8, 0.6);
+
+    for(int i = 0; i < 2; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            canv.WritePixel(j,i,fill);
+        }
+    }
+    //need to get to rows 4-7 of the ppm file now
+    std::istringstream ppm_file{canv.CanvasToPPM()};
+
+    std::string line;
+    //skip first 3 lines;
+    for (int i = 0; i < 3; i++)
+    {
+       std::getline(ppm_file, line);
+    }
+    //line 4
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
+    //line 5
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "153 255 204 153 255 204 153 255 204 153 255 204 153");
+    //line 6
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
+    //line 7
+    std::getline(ppm_file, line);
+    EXPECT_EQ(line, "153 255 204 153 255 204 153 255 204 153 255 204 153");
+}
+
+TEST(ColorCanvasTests, CanvasToPPM_EOF_NewLineTest) {
+    Canvas canv(5,3);
+    std::string ppm_file= canv.CanvasToPPM();
+
+    char attempt = ppm_file[ppm_file.length() - 1];
+
+    EXPECT_EQ(attempt, '\n');
 }

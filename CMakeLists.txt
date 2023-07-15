@@ -20,9 +20,15 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 set(Headers 
-        "include/tuple.h")
+        "include/tuple.hpp"
+        "include/canon.hpp"
+        "include/color.hpp"
+        "include/canvas.hpp")
 set(Sources 
-        "include/tuple.cpp")
+        "include/tuple.cpp"
+        "include/canon.cpp"
+        "include/color.cpp"
+        "include/canvas.cpp")
 
 add_library(RayLib STATIC ${Sources} ${Headers})
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "tuple.h"
+#include "tuple.hpp"
 
 // getters
 
@@ -56,18 +56,6 @@ bool Tuple::IsPoint()
         return true;
     }
     return false;
-}
-
-Tuple Tuple::Point(float x, float y, float z)
-{
-    Tuple tuple(x, y, z, 1);
-    return tuple;
-}
-
-Tuple Tuple::Vector(float x, float y, float z)
-{
-    Tuple tuple(x, y, z, 0);
-    return tuple;
 }
 
 bool Tuple::operator==(const Tuple &rhs)

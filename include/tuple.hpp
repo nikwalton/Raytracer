@@ -1,5 +1,8 @@
 #include <iostream>
 
+#ifndef TUPLE_HPP
+#define TUPLE_HPP
+
 class Tuple {
 public:
   Tuple(){}
@@ -23,11 +26,6 @@ public:
   void SetZ(float newZ);
   void SetW(float newW);
 
- 
-
-  Tuple Point(float x, float y, float z);
-  Tuple Vector(float x, float y, float z);
-
   bool IsPoint();
 
   //operators
@@ -48,3 +46,4 @@ private:
   float x, y, z;
   float w; // 1 is point 0 is vector
 };
+#endif
