@@ -331,8 +331,8 @@ TEST(ColorCanvasTests, MultiplyTwoColorsTest) {
 
 TEST(ColorCanvasTests, CreateCanvasTest) {
     Canvas canv(10, 20);
-    EXPECT_EQ(canv.GetHeight(), 10);
-    EXPECT_EQ(canv.GetWidth(), 20);
+    EXPECT_EQ(canv.GetWidth(), 10);
+    EXPECT_EQ(canv.GetHeight(), 20);
 
     std::vector<std::vector<Color>> pixels = canv.GetPixels();
 
@@ -414,21 +414,17 @@ TEST(ColorCanvasTests, CanvasToPPM_BodyTest)
 
 TEST(ColorCanvasTests, CanvasToPPM_BodyLineLengthTest) {
     //a line should be no more than 70 chars long
-    Canvas canv(10, 2);
-    Color fillColor(1, 0.8, 0.6);
 
-    std::vector<std::vector<Color>> canvasPixels = canv.GetPixels();
-    unsigned short int rowCord, colCord = 0;
-    for (auto row: canvasPixels)
+    Canvas canv(10, 2);
+    Color fill(1, 0.8, 0.6);
+
+    for(int i = 0; i < 2; i++)
     {
-        rowCord++;
-        for (auto col: row)
+        for(int j = 0; j < 10; j++)
         {
-            canv.WritePixel(rowCord, colCord, fillColor);
-            colCord++;
+            canv.WritePixel(j,i,fill);
         }
     }
-
     //need to get to rows 4-7 of the ppm file now
     std::istringstream ppm_file{canv.CanvasToPPM()};
 
@@ -436,7 +432,7 @@ TEST(ColorCanvasTests, CanvasToPPM_BodyLineLengthTest) {
     //skip first 3 lines;
     for (int i = 0; i < 3; i++)
     {
-        std::getline(ppm_file, line);
+       std::getline(ppm_file, line);
     }
     //line 4
     std::getline(ppm_file, line);
