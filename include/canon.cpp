@@ -1,6 +1,10 @@
 #include <iostream>
+#include <fstream>
 
 #include "canon.hpp"
+#include "canvas.hpp"
+#include "color.hpp"
+
 /// @brief Constructor for Environment that creates the object with a given gravity and wind vector
 /// @param gravity a vector Tuple representing the gravity direction
 /// @param wind a vector Tuple representing the wind direction
@@ -205,6 +209,9 @@ void Canon::ShootCanon()
 
     std::cout << "Canon Fired!\n";
 
+    Canvas canv(1000, 550);
+    Color lineColor(1, 0, 0);
+
     int tick_count = 0;
 
     while (this->projectile.GetPosition().GetY() > 0) 
@@ -213,6 +220,19 @@ void Canon::ShootCanon()
         std::cout << tick_count << ") Projectile Position: " << this->projectile.GetPosition().GetX() << ", " 
             << this->GetProjectile().GetPosition().GetY() << ", " 
             << this->GetProjectile().GetPosition().GetZ() << "\n";
+        
+        int y = (int)this->GetProjectile().GetPosition().GetY() ; 
+        int x = (int)this->GetProjectile().GetPosition().GetX();
+        if (x > 0 && y > 0)
+        {
+            canv.WritePixel(x, 550 - y, lineColor);
+        }
+        
         tick_count++;
     } 
+
+    std::ofstream file;
+    file.open("canon.ppm");
+    file << canv.CanvasToPPM();
+    file.close();
 }

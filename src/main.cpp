@@ -12,8 +12,8 @@ int main(int argc, char * argv[])
     Tuple factory;
 
     Point pos(0,1,0);
-    Vector vel(1,1,0);
-    Tuple normalizedVel = vel.Normalize();
+    Vector vel(1,1.8,0);
+    Tuple normalizedVel = vel.Normalize() * 11.5;
 
     Vector grav(0,-0.1,0);
     Vector wind(-0.01, 0, 0);
