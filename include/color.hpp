@@ -1,7 +1,6 @@
 #include "tuple.hpp"
 
-#ifndef COLOR_HPP
-#define COLOR_HPP
+#pragma once
 
 class Color : public Tuple
 {
@@ -24,4 +23,3 @@ public:
     Color operator*(const float rhs);
 };
 
-#endif

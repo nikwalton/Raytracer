@@ -1,7 +1,6 @@
 #include "tuple.hpp"
 
-#ifndef POINT_HPP
-#define POINT_HPP
+#pragma once
 
 class Point : public Tuple
 {
@@ -15,5 +14,3 @@ public:
         this->SetW(1);
     }
 };
-
-#endif

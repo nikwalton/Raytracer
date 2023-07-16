@@ -1,7 +1,6 @@
 #include <iostream>
 
-#ifndef TUPLE_HPP
-#define TUPLE_HPP
+#pragma once
 
 class Tuple {
 public:
@@ -46,4 +45,3 @@ private:
   float x, y, z;
   float w; // 1 is point 0 is vector
 };
-#endif

@@ -4,8 +4,7 @@
 #include <string>
 #include <cmath>
 
-#ifndef CANVAS_HPP
-#define CANVAS_HPP
+#pragma once
 
 class Canvas
 {
@@ -37,4 +36,3 @@ private:
 
     std::vector<std::vector<Color>> pixels;
 };
-#endif

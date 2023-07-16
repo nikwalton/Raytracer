@@ -23,12 +23,15 @@ set(Headers
         "include/tuple.hpp"
         "include/canon.hpp"
         "include/color.hpp"
-        "include/canvas.hpp")
+        "include/canvas.hpp"
+        "include/matrix2.hpp"
+        "include/matrix3.hpp"
+        "include/matrix4.hpp")
 set(Sources 
-        "include/tuple.cpp"
-        "include/canon.cpp"
-        "include/color.cpp"
-        "include/canvas.cpp")
+        "src/tuple.cpp"
+        "src/canon.cpp"
+        "src/color.cpp"
+        "src/canvas.cpp")
 
 add_library(RayLib STATIC ${Sources} ${Headers})
 
