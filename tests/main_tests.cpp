@@ -10,6 +10,7 @@
 #include "point.hpp"
 #include "color.hpp"
 #include "canvas.hpp"
+#include "matrix.hpp"
 
 
 
@@ -455,4 +456,132 @@ TEST(ColorCanvasTests, CanvasToPPM_EOF_NewLineTest) {
     char attempt = ppm_file[ppm_file.length() - 1];
 
     EXPECT_EQ(attempt, '\n');
+}
+
+
+//Creation tests more striaght forward since we want lean matrix classes with 
+//little barrier to entry
+TEST(MatrixOperationsTests, Matrix2_CreationTest) {
+    Matrix testMatrix;
+
+    //matrix to be created
+    // | -3 | 5 |
+    // | 1 | -2 |
+
+
+    testMatrix.matrix[0][0] = -3;  
+    testMatrix.matrix[0][1] = 5;
+    testMatrix.matrix[1][0] = 1;
+    testMatrix.matrix[1][1] = -2;
+
+    EXPECT_FLOAT_EQ(testMatrix.matrix[0][0], -3);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[0][1], 5);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[1][0], 1);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[1][1], -2);
+}
+
+TEST(MatrixOperationsTests, Matrix3_CreationTest) {
+    Matrix testMatrix;
+
+    //matrix to be created
+    // | -3 | 5 | 0 |
+    // | 1 | -2 | -7 |
+    // | 0 | 1 | 1 |
+
+    testMatrix.matrix[0][0] = -3;
+    testMatrix.matrix[0][1] = 5;
+    testMatrix.matrix[0][2] = 0;
+    testMatrix.matrix[1][0] = 1;
+    testMatrix.matrix[1][1] = -2;
+    testMatrix.matrix[1][2] = -7;
+    testMatrix.matrix[2][0] = 0;
+    testMatrix.matrix[2][1] = 1;
+    testMatrix.matrix[2][2] = 1;
+
+    EXPECT_FLOAT_EQ(testMatrix.matrix[0][0], -3);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[1][1], -2);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[2][2], 1);
+}
+
+TEST(MatrixOperationsTests, Matrix4_CreationTests) {
+    Matrix testMatrix;
+
+    // | 1|2|3|4|
+    // | 5.5|6.5|7.5|8.5|
+    // |10|11|12|13|
+    // |14.5|15.5|16.5|17.5|
+
+    testMatrix.matrix[0][0] = 1;
+    testMatrix.matrix[0][1] = 2;
+    testMatrix.matrix[0][2] = 3;
+    testMatrix.matrix[0][3] = 4;
+    testMatrix.matrix[1][0] = 5.5;
+    testMatrix.matrix[1][1] = 6.5;
+    testMatrix.matrix[1][2] = 7.5;
+    testMatrix.matrix[1][3] = 8.5;
+    testMatrix.matrix[2][0] = 10;
+    testMatrix.matrix[2][1] = 11;
+    testMatrix.matrix[2][2] = 12;
+    testMatrix.matrix[2][3] = 13;
+    testMatrix.matrix[3][0] = 14.5;
+    testMatrix.matrix[3][1] = 15.5;
+    testMatrix.matrix[3][2] = 16.5;
+    testMatrix.matrix[3][3] = 17.5;
+
+    EXPECT_EQ(testMatrix.matrix[0][0], 1);
+    EXPECT_EQ(testMatrix.matrix[0][3], 4);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[1][0], 5.5);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[1][2], 7.5);
+    EXPECT_EQ(testMatrix.matrix[2][2], 12);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[3][0], 14.5);
+    EXPECT_FLOAT_EQ(testMatrix.matrix[3][2], 16.5);
+}
+
+//the following only needs to be tested once per matrix as the source code
+//will be the same for Matrix3 and Matrix4
+TEST(MatrixOperationsTests, Matrix_EqualityTest)
+{
+    Matrix testMatrix;
+    testMatrix.matrix[0][0] = 1;
+    testMatrix.matrix[0][1] = 2;
+    testMatrix.matrix[0][2] = 3;
+    testMatrix.matrix[0][3] = 4;
+    testMatrix.matrix[1][0] = 5.5;
+    testMatrix.matrix[1][1] = 6.5;
+    testMatrix.matrix[1][2] = 7.5;
+    testMatrix.matrix[1][3] = 8.5;
+    testMatrix.matrix[2][0] = 10;
+    testMatrix.matrix[2][1] = 11;
+    testMatrix.matrix[2][2] = 12;
+    testMatrix.matrix[2][3] = 13;
+    testMatrix.matrix[3][0] = 14.5;
+    testMatrix.matrix[3][1] = 15.5;
+    testMatrix.matrix[3][2] = 16.5;
+    testMatrix.matrix[3][3] = 17.5;
+
+    Matrix otherMatrix;
+    otherMatrix.matrix[0][0] = 1;
+    otherMatrix.matrix[0][1] = 2;
+    otherMatrix.matrix[0][2] = 3;
+    otherMatrix.matrix[0][3] = 4;
+    otherMatrix.matrix[1][0] = 5.5;
+    otherMatrix.matrix[1][1] = 6.5;
+    otherMatrix.matrix[1][2] = 7.5;
+    otherMatrix.matrix[1][3] = 8.5;
+    otherMatrix.matrix[2][0] = 10;
+    otherMatrix.matrix[2][1] = 11;
+    otherMatrix.matrix[2][2] = 12;
+    otherMatrix.matrix[2][3] = 13;
+    otherMatrix.matrix[3][0] = 14.5;
+    otherMatrix.matrix[3][1] = 15.5;
+    otherMatrix.matrix[3][2] = 16.5;
+    otherMatrix.matrix[3][3] = 17.5;
+
+    EXPECT_EQ(testMatrix == otherMatrix, true);
+
+    //change other matrix to test false case
+
+    otherMatrix.matrix[2][2] = 0;
+
+    EXPECT_EQ(testMatrix == otherMatrix, false);
 }
