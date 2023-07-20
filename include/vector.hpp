@@ -1,6 +1,5 @@
 #include "tuple.hpp"
-#ifndef VECTOR_HPP
-#define VECTOR_HPP
+#pragma once
 
 class Vector : public Tuple
 {
@@ -13,5 +12,3 @@ public:
         this->SetZ(z);
     }
 };
-
-#endif

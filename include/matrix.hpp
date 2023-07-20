@@ -9,12 +9,12 @@ public:
     Matrix(){}
 
     bool operator== (const Matrix rhs);
-    bool operator* (const Matrix rhs);
-    bool operator* (const Tuple rhs);
+    Matrix operator* (const Matrix rhs);
+    Tuple operator* (const Tuple rhs);
 
-    void identity();
-    void transpose();
-    void determinant();
+    Matrix identity();
+    Matrix transpose();
+    Matrix determinant();
     
  
 //we want these matrixes to be fast

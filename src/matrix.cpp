@@ -1,6 +1,6 @@
 #include "matrix.hpp"
 
-bool Matrix::operator==(const Matrix rhs)
+bool Matrix::operator== (const Matrix rhs)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -17,4 +17,34 @@ bool Matrix::operator==(const Matrix rhs)
         }
     }
     return true;
+}
+
+Matrix Matrix::operator* (const Matrix rhs)
+{
+    Matrix result;
+    return result;
+}
+
+Tuple Matrix::operator* (const Tuple rhs)
+{
+    Tuple result;
+    return result;
+}
+
+Matrix Matrix::identity()
+{
+    Matrix result;
+    return result;
+}
+
+Matrix Matrix::transpose()
+{
+    Matrix result;
+    return result;
+}
+
+Matrix Matrix::determinant()
+{
+    Matrix result;
+    return result;
 }

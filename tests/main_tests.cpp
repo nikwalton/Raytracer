@@ -468,7 +468,6 @@ TEST(MatrixOperationsTests, Matrix2_CreationTest) {
     // | -3 | 5 |
     // | 1 | -2 |
 
-
     testMatrix.matrix[0][0] = -3;  
     testMatrix.matrix[0][1] = 5;
     testMatrix.matrix[1][0] = 1;
@@ -584,4 +583,96 @@ TEST(MatrixOperationsTests, Matrix_EqualityTest)
     otherMatrix.matrix[2][2] = 0;
 
     EXPECT_EQ(testMatrix == otherMatrix, false);
+}
+
+TEST(MatrixOperationsTests, MatrixtMultiplicationTest)
+{
+    Matrix matrixA;
+    
+    matrixA.matrix[0][0] = 1;
+    matrixA.matrix[0][1] = 2;
+    matrixA.matrix[0][2] = 3;
+    matrixA.matrix[0][3] = 4;
+    matrixA.matrix[1][0] = 5;
+    matrixA.matrix[1][1] = 6;
+    matrixA.matrix[1][2] = 7;
+    matrixA.matrix[1][3] = 8;
+    matrixA.matrix[2][0] = 9;
+    matrixA.matrix[2][1] = 8;
+    matrixA.matrix[2][2] = 7;
+    matrixA.matrix[2][3] = 6;
+    matrixA.matrix[3][0] = 5;
+    matrixA.matrix[3][1] = 4;
+    matrixA.matrix[3][2] = 3;
+    matrixA.matrix[3][3] = 2;
+
+    Matrix matrixB;
+
+    matrixB.matrix[0][0] = -2;
+    matrixB.matrix[0][1] = 1;
+    matrixB.matrix[0][2] = 2;
+    matrixB.matrix[0][3] = 3;
+    matrixB.matrix[1][0] = 3;
+    matrixB.matrix[1][1] = 2;
+    matrixB.matrix[1][2] = 1;
+    matrixB.matrix[1][3] = -1;
+    matrixB.matrix[2][0] = 4;
+    matrixB.matrix[2][1] = 3;
+    matrixB.matrix[2][2] = 6;
+    matrixB.matrix[2][3] = 5;
+    matrixB.matrix[3][0] = 1;
+    matrixB.matrix[3][1] = 2;
+    matrixB.matrix[3][2] = 7;
+    matrixB.matrix[3][3] = 8;
+
+    Matrix attempt = matrixA * matrixB;
+
+    EXPECT_EQ(attempt.matrix[0][0],20);
+    EXPECT_EQ(attempt.matrix[0][1],22);
+    EXPECT_EQ(attempt.matrix[0][2],50);
+    EXPECT_EQ(attempt.matrix[0][3],48);
+    EXPECT_EQ(attempt.matrix[1][0],44);
+    EXPECT_EQ(attempt.matrix[1][1],54);
+    EXPECT_EQ(attempt.matrix[1][2],114);
+    EXPECT_EQ(attempt.matrix[1][3],108);
+    EXPECT_EQ(attempt.matrix[2][0],40);
+    EXPECT_EQ(attempt.matrix[2][1],58);
+    EXPECT_EQ(attempt.matrix[2][2],110);
+    EXPECT_EQ(attempt.matrix[2][3],102);
+    EXPECT_EQ(attempt.matrix[3][0],16);
+    EXPECT_EQ(attempt.matrix[3][1],26);
+    EXPECT_EQ(attempt.matrix[3][2],46);
+    EXPECT_EQ(attempt.matrix[3][3],42);
+}
+
+
+TEST(MatrixOperationsTests, TupleMultiplicationTest)
+{
+    Matrix testMatrix;
+
+    testMatrix.matrix[0][0] = 1;
+    testMatrix.matrix[0][1] = 2;
+    testMatrix.matrix[0][2] = 3;
+    testMatrix.matrix[0][3] = 4;
+    testMatrix.matrix[1][0] = 2;
+    testMatrix.matrix[1][1] = 4;
+    testMatrix.matrix[1][2] = 4;
+    testMatrix.matrix[1][3] = 2;
+    testMatrix.matrix[2][0] = 8;
+    testMatrix.matrix[2][1] = 6;
+    testMatrix.matrix[2][2] = 4;
+    testMatrix.matrix[2][3] = 1;
+    testMatrix.matrix[3][0] = 0;
+    testMatrix.matrix[3][1] = 0;
+    testMatrix.matrix[3][2] = 0;
+    testMatrix.matrix[3][3] = 1;
+
+    Tuple tuple(1, 2, 3, 1);
+
+    Tuple attempt = testMatrix * tuple;
+
+    EXPECT_EQ(attempt.GetX(), 18);
+    EXPECT_EQ(attempt.GetY(), 24);
+    EXPECT_EQ(attempt.GetZ(), 33);
+    EXPECT_EQ(attempt.GetW(), 1);
 }
