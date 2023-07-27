@@ -10,7 +10,7 @@ public:
 
     bool operator== (const Matrix rhs);
     Matrix operator* (const Matrix rhs);
-    Tuple operator* (const Tuple rhs);
+    Tuple operator* (Tuple rhs);
 
     Matrix identity();
     Matrix transpose();
