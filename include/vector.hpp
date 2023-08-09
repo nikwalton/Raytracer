@@ -10,5 +10,6 @@ public:
         this->SetX(x);
         this->SetY(y);
         this->SetZ(z);
+        this->SetW(0);
     }
 };

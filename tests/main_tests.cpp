@@ -676,3 +676,52 @@ TEST(MatrixOperationsTests, TupleMultiplicationTest)
     EXPECT_EQ(attempt.GetZ(), 33);
     EXPECT_EQ(attempt.GetW(), 1);
 }
+
+TEST(MatrixOperationTests, IdentityMatrixTest)
+{
+  //multiplying a matrix A by an identity matrix should equal the same matrix
+
+  Matrix A;
+  A.matrix[0][0] = 0;
+  A.matrix[0][1] = 1;
+  A.matrix[0][2] = 2;
+  A.matrix[0][3] = 4;
+
+  A.matrix[1][0] = 1;
+  A.matrix[1][1] = 2;
+  A.matrix[1][2] = 4;
+  A.matrix[1][3] = 8;
+
+  A.matrix[2][0] = 2;
+  A.matrix[2][1] = 4;
+  A.matrix[2][2] = 8;
+  A.matrix[2][3] = 32;
+
+  A.matrix[3][0] = 4;
+  A.matrix[3][1] = 8;
+  A.matrix[3][2] = 16;
+  A.matrix[3][3] = 32;
+
+  Matrix result = A * A.identity();
+
+  //check if both matricies have the same value 
+  EXPECT_EQ(result.matrix[0][0], A.matrix[0][0]);
+  EXPECT_EQ(result.matrix[0][1], A.matrix[0][1]);
+  EXPECT_EQ(result.matrix[0][2], A.matrix[0][2]);
+  EXPECT_EQ(result.matrix[0][3], A.matrix[0][3]);
+
+  EXPECT_EQ(result.matrix[1][0], A.matrix[1][0]);
+  EXPECT_EQ(result.matrix[1][1], A.matrix[1][1]);
+  EXPECT_EQ(result.matrix[1][2], A.matrix[1][2]);
+  EXPECT_EQ(result.matrix[1][3], A.matrix[1][3]);
+
+  EXPECT_EQ(result.matrix[2][0], A.matrix[2][0]);
+  EXPECT_EQ(result.matrix[2][1], A.matrix[2][1]);
+  EXPECT_EQ(result.matrix[2][2], A.matrix[2][2]);
+  EXPECT_EQ(result.matrix[2][3], A.matrix[2][3]);
+
+  EXPECT_EQ(result.matrix[3][0], A.matrix[3][0]);
+  EXPECT_EQ(result.matrix[3][1], A.matrix[3][1]);
+  EXPECT_EQ(result.matrix[3][2], A.matrix[3][2]);
+  EXPECT_EQ(result.matrix[3][3], A.matrix[3][3]);
+}

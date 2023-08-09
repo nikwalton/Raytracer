@@ -71,6 +71,27 @@ Tuple Matrix::operator* (Tuple rhs)
 Matrix Matrix::identity()
 {
     Matrix result;
+    //return a 4x4 identiy matrix
+    result.matrix[0][0] = 1;
+    result.matrix[0][1] = 0;
+    result.matrix[0][2] = 0;
+    result.matrix[0][3] = 0;
+    
+    result.matrix[1][0] = 0;
+    result.matrix[1][1] = 1;
+    result.matrix[1][2] = 0;
+    result.matrix[1][3] = 0;
+
+    result.matrix[2][0] = 0;
+    result.matrix[2][1] = 0;
+    result.matrix[2][2] = 1;
+    result.matrix[2][3] = 0;
+
+    result.matrix[3][0] = 0;
+    result.matrix[3][1] = 0;
+    result.matrix[3][2] = 0;
+    result.matrix[3][3] = 1;
+    
     return result;
 }
 
