@@ -811,7 +811,7 @@ TEST(MatrixOperationsTest, 2x2DetTest)
   A.matrix[1][0] = -3;
   A.matrix[1][1] = 2;
 
-  float result = A.determinant(2);
+  float result = A.determinant();
 
   EXPECT_EQ(result, 17);
 }

@@ -14,7 +14,7 @@ public:
 
     Matrix identity();
     Matrix transpose();
-    float determinant(int N);
+    float determinant();
     
  
 //we want these matrixes to be fast
