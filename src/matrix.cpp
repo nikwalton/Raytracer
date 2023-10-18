@@ -134,3 +134,39 @@ float Matrix::determinant()
 {
   return this->matrix[0][0] * this->matrix[1][1] - this->matrix[0][1] * this->matrix[1][0];
 }
+
+Matrix Matrix::submatrix(int row, int col)
+{
+  Matrix result;
+  int subRow = 0;
+  int subCol = 0;
+
+  for (int i = 0; i < 4; i++)
+  {
+    if (i == row)
+      continue;
+
+    for (int j = 0; j < 4; j++)
+    {
+      if (j == col && j + 1 < 4)
+      {
+        j++;
+      }
+      else if (j == col)
+      {
+        break;
+      }
+       
+        
+      result.matrix[subRow][subCol] = this->matrix[i][j];
+      subCol++;
+    }
+
+    if (subCol != 0)
+    {
+      subRow++;
+      subCol = 0;
+    }
+  }
+  return result;
+}

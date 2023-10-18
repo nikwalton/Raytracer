@@ -772,7 +772,7 @@ TEST(MatrixOperationsTests, TransposeMatrixTest)
   EXPECT_EQ(result.matrix[3][3], 8);
 }
 
-TEST(MatrixOperationsTest, TransposeIdentityTest)
+TEST(MatrixOperationsTests, TransposeIdentityTest)
 {
   Matrix A;
 
@@ -802,7 +802,7 @@ TEST(MatrixOperationsTest, TransposeIdentityTest)
   EXPECT_EQ(result.matrix[3][3], ident.matrix[3][3]);
 }
 
-TEST(MatrixOperationsTest, 2x2DetTest)
+TEST(MatrixOperationsTests, 2x2DetTest)
 {
   Matrix A;
 
@@ -814,4 +814,66 @@ TEST(MatrixOperationsTest, 2x2DetTest)
   float result = A.determinant();
 
   EXPECT_EQ(result, 17);
+}
+
+TEST(MatrixOperationsTests, 2x2SubmatrixTest)
+{
+  Matrix A;
+
+  A.matrix[0][0] = 1;
+  A.matrix[0][1] = 5;
+  A.matrix[0][2] = 0;
+
+  A.matrix[1][0] = -3;
+  A.matrix[1][1] = 2;
+  A.matrix[1][2] = 7;
+
+  A.matrix[2][0] = 0;
+  A.matrix[2][1] = 6;
+  A.matrix[2][2] = -3;
+
+  Matrix result = A.submatrix(0, 2);
+
+  EXPECT_EQ(result.matrix[0][0], -3);
+  EXPECT_EQ(result.matrix[0][1], 2);
+  EXPECT_EQ(result.matrix[1][0], 0);
+  EXPECT_EQ(result.matrix[1][1], 6);
+}
+
+TEST(MatrixOperationsTests, 3x3SubmatrixTest)
+{
+  Matrix A;
+  A.matrix[0][0] = -6;
+  A.matrix[0][1] = 1;
+  A.matrix[0][2] = 1;
+  A.matrix[0][3] = 6;
+
+  A.matrix[1][0] = -8;
+  A.matrix[1][1] = 5;
+  A.matrix[1][2] = 8;
+  A.matrix[1][3] = 6;
+
+  A.matrix[2][0] = -1;
+  A.matrix[2][1] = 0;
+  A.matrix[2][2] = 8;
+  A.matrix[2][3] = 2;
+
+  A.matrix[3][0] = -7;
+  A.matrix[3][1] = 1;
+  A.matrix[3][2] = -1;
+  A.matrix[3][3] = 1;
+
+  Matrix result = A.submatrix(2, 1);
+
+  EXPECT_EQ(result.matrix[0][0], -6);
+  EXPECT_EQ(result.matrix[0][1], 1);
+  EXPECT_EQ(result.matrix[0][2], 6);
+
+  EXPECT_EQ(result.matrix[1][0], -8);
+  EXPECT_EQ(result.matrix[1][1], 8);
+  EXPECT_EQ(result.matrix[1][2], 6);
+
+  EXPECT_EQ(result.matrix[2][0], -7);
+  EXPECT_EQ(result.matrix[2][1], -1);
+  EXPECT_EQ(result.matrix[2][2], 1);
 }

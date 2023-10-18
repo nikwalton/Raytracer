@@ -14,6 +14,8 @@ public:
 
     Matrix identity();
     Matrix transpose();
+    Matrix submatrix(int row, int col);
+
     float determinant();
     
  
