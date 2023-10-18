@@ -677,7 +677,7 @@ TEST(MatrixOperationsTests, TupleMultiplicationTest)
     EXPECT_EQ(attempt.GetW(), 1);
 }
 
-TEST(MatrixOperationTests, IdentityMatrixTest)
+TEST(MatrixOperationsTests, IdentityMatrixTest)
 {
   //multiplying a matrix A by an identity matrix should equal the same matrix
 
@@ -724,4 +724,94 @@ TEST(MatrixOperationTests, IdentityMatrixTest)
   EXPECT_EQ(result.matrix[3][1], A.matrix[3][1]);
   EXPECT_EQ(result.matrix[3][2], A.matrix[3][2]);
   EXPECT_EQ(result.matrix[3][3], A.matrix[3][3]);
+}
+
+TEST(MatrixOperationsTests, TransposeMatrixTest)
+{
+  Matrix A;
+  A.matrix[0][0] = 0;
+  A.matrix[0][1] = 9;
+  A.matrix[0][2] = 3;
+  A.matrix[0][3] = 0;
+
+  A.matrix[1][0] = 9;
+  A.matrix[1][1] = 8;
+  A.matrix[1][2] = 0;
+  A.matrix[1][3] = 8;
+
+  A.matrix[2][0] = 1;
+  A.matrix[2][1] = 8;
+  A.matrix[2][2] = 5;
+  A.matrix[2][3] = 3;
+
+  A.matrix[3][0] = 0;
+  A.matrix[3][1] = 0;
+  A.matrix[3][2] = 5;
+  A.matrix[3][3] = 8;
+
+  Matrix result = A.transpose();
+
+  EXPECT_EQ(result.matrix[0][0], 0);
+  EXPECT_EQ(result.matrix[0][1], 9);
+  EXPECT_EQ(result.matrix[0][2], 1);
+  EXPECT_EQ(result.matrix[0][3], 0);
+
+  EXPECT_EQ(result.matrix[1][0], 9);
+  EXPECT_EQ(result.matrix[1][1], 8);
+  EXPECT_EQ(result.matrix[1][2], 8);
+  EXPECT_EQ(result.matrix[1][3], 0);
+
+  EXPECT_EQ(result.matrix[2][0], 3);
+  EXPECT_EQ(result.matrix[2][1], 0);
+  EXPECT_EQ(result.matrix[2][2], 5);
+  EXPECT_EQ(result.matrix[2][3], 5);
+
+  EXPECT_EQ(result.matrix[3][0], 0);
+  EXPECT_EQ(result.matrix[3][1], 8);
+  EXPECT_EQ(result.matrix[3][2], 3);
+  EXPECT_EQ(result.matrix[3][3], 8);
+}
+
+TEST(MatrixOperationsTest, TransposeIdentityTest)
+{
+  Matrix A;
+
+  //lazy way to ge an identity matrix, probably should do a better way later
+  Matrix ident= A.identity();
+
+  Matrix result = ident.transpose();
+
+  EXPECT_EQ(result.matrix[0][0], ident.matrix[0][0]);
+  EXPECT_EQ(result.matrix[0][1], ident.matrix[0][1]);
+  EXPECT_EQ(result.matrix[0][2], ident.matrix[0][2]);
+  EXPECT_EQ(result.matrix[0][3], ident.matrix[0][3]);
+
+  EXPECT_EQ(result.matrix[1][0], ident.matrix[1][0]);
+  EXPECT_EQ(result.matrix[1][1], ident.matrix[1][1]);
+  EXPECT_EQ(result.matrix[1][2], ident.matrix[1][2]);
+  EXPECT_EQ(result.matrix[1][3], ident.matrix[1][3]);
+
+  EXPECT_EQ(result.matrix[2][0], ident.matrix[2][0]);
+  EXPECT_EQ(result.matrix[2][1], ident.matrix[2][1]);
+  EXPECT_EQ(result.matrix[2][2], ident.matrix[2][2]);
+  EXPECT_EQ(result.matrix[2][3], ident.matrix[2][3]);
+
+  EXPECT_EQ(result.matrix[3][0], ident.matrix[3][0]);
+  EXPECT_EQ(result.matrix[3][1], ident.matrix[3][1]);
+  EXPECT_EQ(result.matrix[3][2], ident.matrix[3][2]);
+  EXPECT_EQ(result.matrix[3][3], ident.matrix[3][3]);
+}
+
+TEST(MatrixOperationsTest, 2x2DetTest)
+{
+  Matrix A;
+
+  A.matrix[0][0] = 1;
+  A.matrix[0][1] = 5;
+  A.matrix[1][0] = -3;
+  A.matrix[1][1] = 2;
+
+  float result = A.determinant(2);
+
+  EXPECT_EQ(result, 17);
 }

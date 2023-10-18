@@ -95,14 +95,69 @@ Matrix Matrix::identity()
     return result;
 }
 
+/// <summary>
+/// Tansposes the matrix by replacing rows with respective columns, and columns with respective rows
+/// </summary>
+/// <returns>Transposed matrix</returns>
 Matrix Matrix::transpose()
 {
-    Matrix result;
-    return result;
+  Matrix result;
+  //row to column, columns to rows
+
+  result.matrix[0][0] = this->matrix[0][0];
+  result.matrix[0][1] = this->matrix[1][0];
+  result.matrix[0][2] = this->matrix[2][0];
+  result.matrix[0][3] = this->matrix[3][0];
+  
+  result.matrix[1][0] = this->matrix[0][1];
+  result.matrix[1][1] = this->matrix[1][1];
+  result.matrix[1][2] = this->matrix[2][1];
+  result.matrix[1][3] = this->matrix[3][1];
+
+  result.matrix[2][0] = this->matrix[0][2];
+  result.matrix[2][1] = this->matrix[1][2];
+  result.matrix[2][2] = this->matrix[2][2];
+  result.matrix[2][3] = this->matrix[3][2];
+
+  result.matrix[3][0] = this->matrix[0][3];
+  result.matrix[3][1] = this->matrix[1][3];
+  result.matrix[3][2] = this->matrix[2][3];
+  result.matrix[3][3] = this->matrix[3][3];
+
+  return result;
 }
 
-Matrix Matrix::determinant()
+/// <summary>
+/// Calculates the determinant for  NxN matrix
+/// </summary>
+/// <param name="N">the N to be used in NxN</param>
+/// <returns>Float value of the determinant</returns>
+float Matrix::determinant(int N)
 {
-    Matrix result;
-    return result;
+  float mult, result = 1;
+  
+  float (*A)[4] = this->matrix;
+
+  //rows
+  for (int i = 0; i < N; i++)
+  {
+    //rows below the above row
+    for (int k = i + 1; k < N; k++)
+    {
+      //multiplier
+      mult = A[k][i] / A[i][i];
+      //cols
+      for (int j = i; j < N; j++)
+      {
+        A[k][j] = A[k][j] - mult * A[i][j];
+      }
+    }
+  }
+  
+  for (int i = 0; i < N; i++)
+  {
+    result *= A[i][i];
+  }
+
+  return result;
 }
