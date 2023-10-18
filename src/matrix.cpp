@@ -2,21 +2,21 @@
 
 bool Matrix::operator== (const Matrix rhs)
 {
-    for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; i++)
+  {
+    for (int j = 0; j < 4; j++)
     {
-        for (int j = 0; j < 4; j++)
-        {
-            if (this->matrix[i][j] == rhs.matrix[i][j])
-            {
-                continue;
-            }
-            else
-            {
-                return false;
-            }
-        }
+      if (this->matrix[i][j] == rhs.matrix[i][j])
+      {
+        continue;
+      }
+      else
+      {
+        return false;
+      }
     }
-    return true;
+  }
+  return true;
 }
 
 // Kinda bad implementation
@@ -27,72 +27,72 @@ bool Matrix::operator== (const Matrix rhs)
 /// @return a new matrix of the result
 Matrix Matrix::operator* (const Matrix rhs)
 {
-      Matrix result;
+  Matrix result;
 
-    for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; i++)
+  {
+    for (int j = 0; j < 4; j++)
     {
-        for (int j = 0; j < 4; j++)
-        {
-            result.matrix[i][j] = this->matrix[i][0] * rhs.matrix[0][j] +
-                                  this->matrix[i][1] * rhs.matrix[1][j] +
-                                  this->matrix[i][2] * rhs.matrix[2][j] +
-                                  this->matrix[i][3] * rhs.matrix[3][j];
-        }
+      result.matrix[i][j] = this->matrix[i][0] * rhs.matrix[0][j] +
+        this->matrix[i][1] * rhs.matrix[1][j] +
+        this->matrix[i][2] * rhs.matrix[2][j] +
+        this->matrix[i][3] * rhs.matrix[3][j];
     }
+  }
 
-    return result;
+  return result;
 }
 
 Tuple Matrix::operator* (Tuple rhs)
 {
-    Tuple result;
-    float x, y, z, w;
+  Tuple result;
+  float x, y, z, w;
 
-    x = this->matrix[0][0] * rhs.GetX() + this->matrix[0][1] * rhs.GetY() + 
-        this->matrix[0][2] * rhs.GetZ() + this->matrix[0][3] * rhs.GetW();
+  x = this->matrix[0][0] * rhs.GetX() + this->matrix[0][1] * rhs.GetY() +
+    this->matrix[0][2] * rhs.GetZ() + this->matrix[0][3] * rhs.GetW();
 
-    y = this->matrix[1][0] * rhs.GetX() + this->matrix[1][1] * rhs.GetY() + 
-        this->matrix[1][2] * rhs.GetZ() + this->matrix[1][3] * rhs.GetW();
+  y = this->matrix[1][0] * rhs.GetX() + this->matrix[1][1] * rhs.GetY() +
+    this->matrix[1][2] * rhs.GetZ() + this->matrix[1][3] * rhs.GetW();
 
-    z = this->matrix[2][0] * rhs.GetX() + this->matrix[2][1] * rhs.GetY() + 
-        this->matrix[2][2] * rhs.GetZ() + this->matrix[2][3] * rhs.GetW();
+  z = this->matrix[2][0] * rhs.GetX() + this->matrix[2][1] * rhs.GetY() +
+    this->matrix[2][2] * rhs.GetZ() + this->matrix[2][3] * rhs.GetW();
 
-    w = this->matrix[3][0] * rhs.GetX() + this->matrix[3][1] * rhs.GetY() + 
-        this->matrix[3][2] * rhs.GetZ() + this->matrix[3][3] * rhs.GetW();
+  w = this->matrix[3][0] * rhs.GetX() + this->matrix[3][1] * rhs.GetY() +
+    this->matrix[3][2] * rhs.GetZ() + this->matrix[3][3] * rhs.GetW();
 
 
-    result.SetX(x);
-    result.SetY(y);
-    result.SetZ(z);
-    result.SetW(w);
-    return result;
+  result.SetX(x);
+  result.SetY(y);
+  result.SetZ(z);
+  result.SetW(w);
+  return result;
 }
 
 Matrix Matrix::identity()
 {
-    Matrix result;
-    //return a 4x4 identiy matrix
-    result.matrix[0][0] = 1;
-    result.matrix[0][1] = 0;
-    result.matrix[0][2] = 0;
-    result.matrix[0][3] = 0;
-    
-    result.matrix[1][0] = 0;
-    result.matrix[1][1] = 1;
-    result.matrix[1][2] = 0;
-    result.matrix[1][3] = 0;
+  Matrix result;
+  //return a 4x4 identiy matrix
+  result.matrix[0][0] = 1;
+  result.matrix[0][1] = 0;
+  result.matrix[0][2] = 0;
+  result.matrix[0][3] = 0;
 
-    result.matrix[2][0] = 0;
-    result.matrix[2][1] = 0;
-    result.matrix[2][2] = 1;
-    result.matrix[2][3] = 0;
+  result.matrix[1][0] = 0;
+  result.matrix[1][1] = 1;
+  result.matrix[1][2] = 0;
+  result.matrix[1][3] = 0;
 
-    result.matrix[3][0] = 0;
-    result.matrix[3][1] = 0;
-    result.matrix[3][2] = 0;
-    result.matrix[3][3] = 1;
-    
-    return result;
+  result.matrix[2][0] = 0;
+  result.matrix[2][1] = 0;
+  result.matrix[2][2] = 1;
+  result.matrix[2][3] = 0;
+
+  result.matrix[3][0] = 0;
+  result.matrix[3][1] = 0;
+  result.matrix[3][2] = 0;
+  result.matrix[3][3] = 1;
+
+  return result;
 }
 
 /// <summary>
@@ -108,7 +108,7 @@ Matrix Matrix::transpose()
   result.matrix[0][1] = this->matrix[1][0];
   result.matrix[0][2] = this->matrix[2][0];
   result.matrix[0][3] = this->matrix[3][0];
-  
+
   result.matrix[1][0] = this->matrix[0][1];
   result.matrix[1][1] = this->matrix[1][1];
   result.matrix[1][2] = this->matrix[2][1];
@@ -156,8 +156,8 @@ Matrix Matrix::submatrix(int row, int col)
       {
         break;
       }
-       
-        
+
+
       result.matrix[subRow][subCol] = this->matrix[i][j];
       subCol++;
     }
@@ -169,4 +169,16 @@ Matrix Matrix::submatrix(int row, int col)
     }
   }
   return result;
+}
+
+float Matrix::minor(int row, int col)
+{
+  float result = 0.0;
+  return result = 0.0;
+}
+
+float Matrix::cofactor(int row, int col)
+{
+  float result = 0.0;
+  return result = 0.0;
 }

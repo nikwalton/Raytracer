@@ -187,6 +187,7 @@ Projectile Canon::Tick(Environment enviornment, Projectile projectile)
     Tuple wind = environment.GetWind();
 
     pos = pos + vel;
+    pos.SetW(1);
     temp.SetPosition(pos);
     vel = vel + grav + wind;
     temp.SetVelocity(vel);

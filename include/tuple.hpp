@@ -4,7 +4,7 @@
 
 class Tuple {
 public:
-  Tuple(){}
+  Tuple() {}
   Tuple(float newX, float newY, float newZ, float newW) {
     this->x = newX;
     this->y = newY;

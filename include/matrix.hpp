@@ -15,8 +15,11 @@ public:
     Matrix identity();
     Matrix transpose();
     Matrix submatrix(int row, int col);
+    
 
     float determinant();
+    float minor(int row, int col);
+    float cofactor(int row, int col);
     
  
 //we want these matrixes to be fast
