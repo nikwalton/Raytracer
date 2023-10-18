@@ -173,12 +173,16 @@ Matrix Matrix::submatrix(int row, int col)
 
 float Matrix::minor(int row, int col)
 {
-  float result = 0.0;
-  return result = 0.0;
+  Matrix sub = this->submatrix(row, col);
+  float result = sub.determinant();
+  return result;
 }
 
 float Matrix::cofactor(int row, int col)
 {
-  float result = 0.0;
-  return result = 0.0;
+
+  Matrix sub = this->submatrix(row, col);
+
+  // if (row + col) is odd, negate
+  return (row + col) % 2 == 0 ? sub.determinant() : -1 * sub.determinant();
 }

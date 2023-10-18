@@ -891,7 +891,7 @@ TEST(MatrixOperationsTests, 3x3MinorTest)
 
   A.matrix[2][0] = 6;
   A.matrix[2][1] = -1;
-  A.matrix[2][2] = 6;
+  A.matrix[2][2] = 5;
 
   float result = A.minor(1, 0);
 
@@ -911,7 +911,7 @@ TEST(MatrixOperationsTests, 3x3CofactorTest)
 
   A.matrix[2][0] = 6;
   A.matrix[2][1] = -1;
-  A.matrix[2][2] = 6;
+  A.matrix[2][2] = 5;
 
   //gonna test two different row / col deletions to ensure it negates correctly
   float minorResult1 = A.minor(0, 0);
@@ -923,6 +923,6 @@ TEST(MatrixOperationsTests, 3x3CofactorTest)
   EXPECT_EQ(minorResult1, -12);
   EXPECT_EQ(cofactorResult1, -12);
 
-  EXPECT_EQ(minorResult1, 25);
-  EXPECT_EQ(cofactorResult1, -25);
+  EXPECT_EQ(minorResult2, 25);
+  EXPECT_EQ(cofactorResult2, -25);
 }
