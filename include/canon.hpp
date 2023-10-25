@@ -5,52 +5,52 @@
 
 class Environment {
 public:
-    Environment(){}
-    Environment(Tuple gravity, Tuple wind);
+  Environment() {}
+  Environment(Tuple gravity, Tuple wind);
 
 
-    Tuple GetGravity();
-    Tuple GetWind();
+  Tuple GetGravity();
+  Tuple GetWind();
 
-    void SetGravity(Tuple newGravity);
-    void SetWind(Tuple newWind);
+  void SetGravity(Tuple newGravity);
+  void SetWind(Tuple newWind);
 private:
-    Tuple gravity;
-    Tuple wind;
+  Tuple gravity;
+  Tuple wind;
 };
 
 class Projectile {
 public:
-    Projectile(){}
-    Projectile(Tuple position, Tuple velocity);
+  Projectile() {}
+  Projectile(Tuple position, Tuple velocity);
 
 
-    Tuple GetPosition();
-    Tuple GetVelocity();
+  Tuple GetPosition();
+  Tuple GetVelocity();
 
-    void SetPosition(Tuple newPositon);
-    void SetVelocity(Tuple newVelocity);
+  void SetPosition(Tuple newPositon);
+  void SetVelocity(Tuple newVelocity);
 private:
-    Tuple position;
-    Tuple velocity;
+  Tuple position;
+  Tuple velocity;
 };
 
 class Canon {
 public:
-    Canon(){}
-    Canon(Projectile projectile, Environment environment);
+  Canon() {}
+  Canon(Projectile projectile, Environment environment);
 
-    Projectile GetProjectile();
-    Environment GetEnvironment();
+  Projectile GetProjectile();
+  Environment GetEnvironment();
 
-    void SetProjectile(Projectile newProjectile);
-    void SetEnvrionment(Environment newEnvironment);
+  void SetProjectile(Projectile newProjectile);
+  void SetEnvrionment(Environment newEnvironment);
 
 
-    Projectile Tick(Environment environment, Projectile projectile);
-    void ShootCanon();
+  Projectile Tick(Environment environment, Projectile projectile);
+  void ShootCanon();
 
 private:
-    Projectile projectile;
-    Environment environment;
+  Projectile projectile;
+  Environment environment;
 };

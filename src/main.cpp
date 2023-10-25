@@ -19,8 +19,8 @@ int main(int argc, char * argv[])
     Vector wind(-0.01, 0, 0);
 
    Projectile proj(pos, normalizedVel);
-   Environment environ(grav,wind);
+   Environment enviro(grav,wind);
 
-   Canon canon(proj, environ);
+   Canon canon(proj, enviro);
    canon.ShootCanon();
 }

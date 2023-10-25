@@ -1,11 +1,10 @@
 #include <iostream>
 
-#ifndef TUPLE_HPP
-#define TUPLE_HPP
+#pragma once
 
 class Tuple {
 public:
-  Tuple(){}
+  Tuple() {}
   Tuple(float newX, float newY, float newZ, float newW) {
     this->x = newX;
     this->y = newY;
@@ -46,4 +45,3 @@ private:
   float x, y, z;
   float w; // 1 is point 0 is vector
 };
-#endif
