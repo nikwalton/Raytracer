@@ -926,3 +926,335 @@ TEST(MatrixOperationsTests, 3x3CofactorTest)
   EXPECT_EQ(minorResult2, 25);
   EXPECT_EQ(cofactorResult2, -25);
 }
+
+TEST(MatrixOperationsTests, 3x3DeterminantTest)
+{
+  Matrix A;
+  A.matrix[0][0] = 1;
+  A.matrix[0][1] = 2;
+  A.matrix[0][2] = 6;
+
+  A.matrix[1][0] = -5;
+  A.matrix[1][1] = 8;
+  A.matrix[1][2] = -4;
+
+  A.matrix[2][0] = 2;
+  A.matrix[2][1] = 6;
+  A.matrix[2][2] = 4;
+
+  float cofactor1 = A.cofactor(0, 0);
+  float cofactor2 = A.cofactor(0, 1);
+  float cofactor3 = A.cofactor(0, 2);
+  float det = A.determinant();
+
+  EXPECT_EQ(cofactor1, 56);
+  EXPECT_EQ(cofactor2, 12);
+  EXPECT_EQ(cofactor3, -46);
+  EXPECT_EQ(det, -196);
+}
+
+TEST(MatrixOperationsTests, 4x4DeterminantTest)
+{
+  Matrix A;
+  A.matrix[0][0] = -2;
+  A.matrix[0][1] = -8;
+  A.matrix[0][2] = 3;
+  A.matrix[0][3] = 5;
+
+  A.matrix[1][0] = -3;
+  A.matrix[1][1] = 1;
+  A.matrix[1][2] = 7;
+  A.matrix[1][3] = 3;
+
+  A.matrix[2][0] = 1;
+  A.matrix[2][1] = 2;
+  A.matrix[2][2] = -9;
+  A.matrix[2][3] = 6;
+
+  A.matrix[3][0] = -6;
+  A.matrix[3][1] = 7;
+  A.matrix[3][2] = 7;
+  A.matrix[3][3] = -9;
+
+  float cofactor1 = A.cofactor(0, 0);
+  float cofactor2 = A.cofactor(0, 1);
+  float cofactor3 = A.cofactor(0, 2);
+  float cofactor4 = A.cofactor(0, 3);
+  float det = A.determinant();
+
+  EXPECT_EQ(cofactor1, 690);
+  EXPECT_EQ(cofactor2, 447);
+  EXPECT_EQ(cofactor3, 210);
+  EXPECT_EQ(cofactor4, 51);
+  EXPECT_EQ(det, -4071);
+}
+
+TEST(MatrixOperationsTests, IntvertableTest1)
+{
+  Matrix A;
+  A.matrix[0][0] = 6;
+  A.matrix[0][1] = 4;
+  A.matrix[0][2] = 4;
+  A.matrix[0][3] = 4;
+
+  A.matrix[1][0] = 5;
+  A.matrix[1][1] = 5;
+  A.matrix[1][2] = 7;
+  A.matrix[1][3] = 6;
+
+  A.matrix[2][0] = 4;
+  A.matrix[2][1] = -9;
+  A.matrix[2][2] = 3;
+  A.matrix[2][3] = -7;
+
+  A.matrix[3][0] = 9;
+  A.matrix[3][1] = 1;
+  A.matrix[3][2] = 7;
+  A.matrix[3][3] = -6;
+
+  bool result = A.invertable();
+
+  EXPECT_EQ(result, true);
+}
+
+TEST(MatrixOperationsTests, InvertableTest2)
+{
+  Matrix A;
+  A.matrix[0][0] = -4;
+  A.matrix[0][1] = 2;
+  A.matrix[0][2] = -2;
+  A.matrix[0][3] = -3;
+
+  A.matrix[1][0] = 9;
+  A.matrix[1][1] = 6;
+  A.matrix[1][2] = 2;
+  A.matrix[1][3] = 6;
+
+  A.matrix[2][0] = 0;
+  A.matrix[2][1] = -5;
+  A.matrix[2][2] = 1;
+  A.matrix[2][3] = -5;
+
+  A.matrix[3][0] = 0;
+  A.matrix[3][1] = 0;
+  A.matrix[3][2] = 0;
+  A.matrix[3][3] = 0;
+
+  bool result = A.invertable();
+
+  EXPECT_EQ(result, false);
+}
+
+TEST(MatrixOperationsTests, InverseTest1)
+{
+  Matrix A;
+  A.matrix[0][0] = -5;
+  A.matrix[0][1] = 2;
+  A.matrix[0][2] = 6;
+  A.matrix[0][3] = -8;
+
+  A.matrix[1][0] = 1;
+  A.matrix[1][1] = -5;
+  A.matrix[1][2] = 1;
+  A.matrix[1][3] = 8;
+
+  A.matrix[2][0] = 7;
+  A.matrix[2][1] = 7;
+  A.matrix[2][2] = -6;
+  A.matrix[2][3] = -7;
+
+  A.matrix[3][0] = 1;
+  A.matrix[3][1] = -3;
+  A.matrix[3][2] = 7;
+  A.matrix[3][3] = 4;
+
+  Matrix result = A.inverse();
+
+  //float is more precise than the test numbers given are so need to use expect nears
+  EXPECT_NEAR(result.matrix[0][0], 0.21805, 0.00001);
+  EXPECT_NEAR(result.matrix[0][1], 0.45113, 0.00001);
+  EXPECT_NEAR(result.matrix[0][2], 0.24060, 0.00001);
+  EXPECT_NEAR(result.matrix[0][3], -0.04511, 0.0001);
+
+  EXPECT_NEAR(result.matrix[1][0], -0.80827, 0.00001);
+  EXPECT_NEAR(result.matrix[1][1], -1.45677, 0.00001);
+  EXPECT_NEAR(result.matrix[1][2], -0.44361, 0.00001);
+  EXPECT_NEAR(result.matrix[1][3], 0.52068, 0.00001);
+
+  EXPECT_NEAR(result.matrix[2][0], -0.07895, 0.00001);
+  EXPECT_NEAR(result.matrix[2][1], -0.22368, 0.00001);
+  EXPECT_NEAR(result.matrix[2][2], -0.05263, 0.00001);
+  EXPECT_NEAR(result.matrix[2][3], 0.19737, 0.00001);
+
+  EXPECT_NEAR(result.matrix[3][0], -0.52256, 0.00001);
+  EXPECT_NEAR(result.matrix[3][1], -0.81391, 0.00001);
+  EXPECT_NEAR(result.matrix[3][2], -0.30075, 0.00001);
+  EXPECT_NEAR(result.matrix[3][3], 0.30639, 0.00001);
+}
+
+TEST(MatrixOperationsTests, InverseTest2)
+{
+  Matrix A;
+  A.matrix[0][0] = 8;
+  A.matrix[0][1] = -5;
+  A.matrix[0][2] = 9;
+  A.matrix[0][3] = 2;
+
+  A.matrix[1][0] = 7;
+  A.matrix[1][1] = 5;
+  A.matrix[1][2] = 6;
+  A.matrix[1][3] = 1;
+
+  A.matrix[2][0] = -6;
+  A.matrix[2][1] = 0;
+  A.matrix[2][2] = 9;
+  A.matrix[2][3] = 6;
+
+  A.matrix[3][0] = -3;
+  A.matrix[3][1] = 0;
+  A.matrix[3][2] = -9;
+  A.matrix[3][3] = -4;
+
+  Matrix result = A.inverse();
+
+  //float is more precise than the test numbers given are so need to use expect nears
+  EXPECT_NEAR(result.matrix[0][0], -0.15385, 0.00001);
+  EXPECT_NEAR(result.matrix[0][1], -0.15385, 0.00001);
+  EXPECT_NEAR(result.matrix[0][2], -0.28205, 0.00001);
+  EXPECT_NEAR(result.matrix[0][3], -0.53846, 0.00001);
+
+  EXPECT_NEAR(result.matrix[1][0], -0.07692, 0.00001);
+  EXPECT_NEAR(result.matrix[1][1], 0.12308, 0.00001);
+  EXPECT_NEAR(result.matrix[1][2], 0.02564, 0.00001);
+  EXPECT_NEAR(result.matrix[1][3], 0.03077, 0.00001);
+
+  EXPECT_NEAR(result.matrix[2][0], 0.35897, 0.00001);
+  EXPECT_NEAR(result.matrix[2][1], 0.35897, 0.00001);
+  EXPECT_NEAR(result.matrix[2][2], 0.43590, 0.00001);
+  EXPECT_NEAR(result.matrix[2][3], 0.92308, 0.00001);
+  
+  EXPECT_NEAR(result.matrix[3][0], -0.69231, 0.00001);
+  EXPECT_NEAR(result.matrix[3][1], -0.69231, 0.00001);
+  EXPECT_NEAR(result.matrix[3][2], -0.76923, 0.00001);
+  EXPECT_NEAR(result.matrix[3][3], -1.92308, 0.00001);
+}
+
+TEST(MatrixOperationsTests, InverseTest3)
+{
+  Matrix A;
+  A.matrix[0][0] = 9;
+  A.matrix[0][1] = 3;
+  A.matrix[0][2] = 0;
+  A.matrix[0][3] = 9;
+
+  A.matrix[1][0] = -5;
+  A.matrix[1][1] = -2;
+  A.matrix[1][2] = -6;
+  A.matrix[1][3] = -3;
+
+  A.matrix[2][0] = -4;
+  A.matrix[2][1] = 9;
+  A.matrix[2][2] = 6;
+  A.matrix[2][3] = 4;
+
+  A.matrix[3][0] = -7;
+  A.matrix[3][1] = 6;
+  A.matrix[3][2] = 6;
+  A.matrix[3][3] = 2;
+
+  Matrix result = A.inverse();
+
+  //float is more precise than the test numbers given are so need to use expect nears
+  EXPECT_NEAR(result.matrix[0][0], -0.04074, 0.00001);
+  EXPECT_NEAR(result.matrix[0][1], -0.07778, 0.00001);
+  EXPECT_NEAR(result.matrix[0][2], 0.14444, 0.00001);
+  EXPECT_NEAR(result.matrix[0][3], -0.22222, 0.00001);
+
+  EXPECT_NEAR(result.matrix[1][0], -0.07778, 0.00001);
+  EXPECT_NEAR(result.matrix[1][1], 0.03333, 0.00001);
+  EXPECT_NEAR(result.matrix[1][2], 0.36667, 0.00001);
+  EXPECT_NEAR(result.matrix[1][3], -0.33333, 0.00001);
+
+  EXPECT_NEAR(result.matrix[2][0], -0.02901, 0.00001);
+  EXPECT_NEAR(result.matrix[2][1], -0.14630, 0.00001);
+  EXPECT_NEAR(result.matrix[2][2], -0.10926, 0.00001);
+  EXPECT_NEAR(result.matrix[2][3], 0.12963, 0.00001);
+
+  EXPECT_NEAR(result.matrix[3][0], 0.17778, 0.00001);
+  EXPECT_NEAR(result.matrix[3][1], 0.06667, 0.00001);
+  EXPECT_NEAR(result.matrix[3][2], -0.26667, 0.00001);
+  EXPECT_NEAR(result.matrix[3][3], 0.33333, 0.00001);
+}
+
+TEST(MatrixOperationsTests, InverseMultiplicationTest)
+{
+  Matrix A;
+  A.matrix[0][0] = 3;
+  A.matrix[0][1] = -9;
+  A.matrix[0][2] = 7;
+  A.matrix[0][3] = 3;
+
+  A.matrix[1][0] = 3;
+  A.matrix[1][1] = -8;
+  A.matrix[1][2] = 2;
+  A.matrix[1][3] = -9;
+
+  A.matrix[2][0] = -4;
+  A.matrix[2][1] = 4;
+  A.matrix[2][2] = 4;
+  A.matrix[2][3] = 1;
+
+  A.matrix[3][0] = -6;
+  A.matrix[3][1] = 5;
+  A.matrix[3][2] = -1;
+  A.matrix[3][3] = 1;
+
+  Matrix B;
+
+  B.matrix[0][0] = 8;
+  B.matrix[0][1] = 2;
+  B.matrix[0][2] = 2;
+  B.matrix[0][3] = 2;
+
+  B.matrix[1][0] = 3;
+  B.matrix[1][1] = -1;
+  B.matrix[1][2] = 7;
+  B.matrix[1][3] = 0;
+
+  B.matrix[2][0] = 7;
+  B.matrix[2][1] = 0;
+  B.matrix[2][2] = 5;
+  B.matrix[2][3] = 4;
+
+  B.matrix[3][0] = 6;
+  B.matrix[3][1] = -2;
+  B.matrix[3][2] = 0;
+  B.matrix[3][3] = 5;
+
+  Matrix C = A * B;
+
+  // should equal A
+  Matrix result = C * B.inverse();
+
+  
+  EXPECT_FLOAT_EQ(result.matrix[0][0], A.matrix[0][0]);
+  EXPECT_FLOAT_EQ(result.matrix[0][1], A.matrix[0][1]);
+  EXPECT_FLOAT_EQ(result.matrix[0][2], A.matrix[0][2]);
+  EXPECT_FLOAT_EQ(result.matrix[0][3], A.matrix[0][3]);
+
+  EXPECT_FLOAT_EQ(result.matrix[1][0], A.matrix[1][0]);
+  EXPECT_FLOAT_EQ(result.matrix[1][1], A.matrix[1][1]);
+  EXPECT_FLOAT_EQ(result.matrix[1][2], A.matrix[1][2]);
+  EXPECT_FLOAT_EQ(result.matrix[1][3], A.matrix[1][3]);
+
+  EXPECT_FLOAT_EQ(result.matrix[2][0], A.matrix[2][0]);
+  EXPECT_FLOAT_EQ(result.matrix[2][1], A.matrix[2][1]);
+  EXPECT_FLOAT_EQ(result.matrix[2][2], A.matrix[2][2]);
+  EXPECT_FLOAT_EQ(result.matrix[2][3], A.matrix[2][3]);
+
+  EXPECT_FLOAT_EQ(result.matrix[3][0], A.matrix[3][0]);
+  EXPECT_FLOAT_EQ(result.matrix[3][1], A.matrix[3][1]);
+  //assert below doesnt want to count -0.9999 as -1 for whatever reason when using EXPECT_FLOAT_EQ, not within 4 ULP's i guess
+  EXPECT_NEAR(result.matrix[3][2], A.matrix[3][2], 0.00001);
+  EXPECT_FLOAT_EQ(result.matrix[3][3], A.matrix[3][3]);
+}

@@ -2,7 +2,7 @@
 
 #pragma once
 
-/// @brief A implementation for a 4x4 matrix
+/// @brief A implementation for a 4x4 matrix that can be used as a 2x2 and 3x3 matrix
 class Matrix
 {
 public:
@@ -20,6 +20,9 @@ public:
     float determinant();
     float minor(int row, int col);
     float cofactor(int row, int col);
+
+    bool invertable();
+    Matrix inverse();
     
  
 //we want these matrixes to be fast
