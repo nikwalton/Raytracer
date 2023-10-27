@@ -1,10 +1,11 @@
+#pragma once
 #include "color.hpp"
 #include <vector>
 #include <sstream>
 #include <string>
 #include <cmath>
 
-#pragma once
+
 
 class Canvas
 {

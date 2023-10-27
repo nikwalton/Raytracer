@@ -1,5 +1,5 @@
-#include "tuple.hpp"
 #pragma once
+#include "tuple.hpp"
 
 class Vector : public Tuple
 {

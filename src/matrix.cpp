@@ -1,3 +1,4 @@
+
 #include "matrix.hpp"
 
 bool Matrix::operator== (const Matrix rhs)
@@ -72,7 +73,7 @@ Tuple Matrix::operator* (Tuple rhs)
 /// initalizes and returns a 4x4 identity matrix
 /// </summary>
 /// <returns>new 4x4 Matrix obj that is an identity matrix</returns>
-Matrix Matrix::identity()
+Matrix Matrix::Identity()
 {
   Matrix result;
   //return a 4x4 identiy matrix
@@ -103,7 +104,7 @@ Matrix Matrix::identity()
 /// Tansposes the matrix by replacing rows with respective columns, and columns with respective rows
 /// </summary>
 /// <returns>Transposed matrix as a new Matrix obj</returns>
-Matrix Matrix::transpose()
+Matrix Matrix::Transpose()
 {
   Matrix result;
   //row to column, columns to rows
@@ -134,7 +135,7 @@ Matrix Matrix::transpose()
 /// <summary>
 /// Calculates the determinant for 2x2, 3x3, or 4x4 matricies based on values in the current matrix
 /// </summary>
-float Matrix::determinant()
+float Matrix::Determinant()
 {
   float det = 0;
   // we *should* always have square matrices so just check if matrix[0][2] is initialized to see if its bigger than 2x2
@@ -146,7 +147,7 @@ float Matrix::determinant()
   {
     for (int col = 0; col < 3; col++)
     {
-       det = det + this->matrix[0][col] * this->cofactor(0, col);
+       det = det + this->matrix[0][col] * this->Cofactor(0, col);
     }
     return det;
   }
@@ -154,7 +155,7 @@ float Matrix::determinant()
   {
     for (int col = 0; col < 4; col++)
     {
-      det = det + this->matrix[0][col] * this->cofactor(0, col);
+      det = det + this->matrix[0][col] * this->Cofactor(0, col);
     }
     return det;
   }
@@ -166,7 +167,7 @@ float Matrix::determinant()
 /// <param name="row">the row to be deleted from the matrix</param>
 /// <param name="col">the column to be deleted from the matrix</param>
 /// <returns>the resulting submatrix in a new Matrix obj</returns>
-Matrix Matrix::submatrix(int row, int col)
+Matrix Matrix::Submatrix(int row, int col)
 {
   Matrix result;
   int subRow = 0;
@@ -202,10 +203,10 @@ Matrix Matrix::submatrix(int row, int col)
   return result;
 }
 
-float Matrix::minor(int row, int col)
+float Matrix::Minor(int row, int col)
 {
-  Matrix sub = this->submatrix(row, col);
-  float result = sub.determinant();
+  Matrix sub = this->Submatrix(row, col);
+  float result = sub.Determinant();
   return result;
 }
 /// <summary>
@@ -214,22 +215,22 @@ float Matrix::minor(int row, int col)
 /// <param name="row">the row to be deleted for the submatrix</param>
 /// <param name="col">the column to be deleted for the submatrix</param>
 /// <returns>A new Matrix obj with the cofactor result</returns>
-float Matrix::cofactor(int row, int col)
+float Matrix::Cofactor(int row, int col)
 {
 
-  Matrix sub = this->submatrix(row, col);
+  Matrix sub = this->Submatrix(row, col);
 
   // if (row + col) is odd, negate
-  return (row + col) % 2 == 0 ? sub.determinant() : -1 * sub.determinant();
+  return (row + col) % 2 == 0 ? sub.Determinant() : -1 * sub.Determinant();
 }
 
 /// <summary>
 /// Check to see if this matrix is invertable
 /// </summary>
 /// <returns>True - Invertable, False - Non-Invertable</returns>
-bool Matrix::invertable()
+bool Matrix::Invertable()
 {
-  float det = this->determinant();
+  float det = this->Determinant();
   return det != 0? true : false;
 }
 
@@ -237,12 +238,12 @@ bool Matrix::invertable()
 /// Calculates the inverse of this matrix
 /// </summary>
 /// <returns>The inverse of the current matrix as a new Matrix obj</returns>
-Matrix Matrix::inverse()
+Matrix Matrix::Inverse()
 {
   Matrix M2;
 
   try {
-    if (this->invertable() == false)
+    if (this->Invertable() == false)
     {
       throw(false);
     }
@@ -252,8 +253,8 @@ Matrix Matrix::inverse()
       {
         for (int col = 0; col < 4; col++)
         {
-          float c = this->cofactor(row, col);
-          M2.matrix[col][row] = c / this->determinant();
+          float c = this->Cofactor(row, col);
+          M2.matrix[col][row] = c / this->Determinant();
         }
       }
     }
@@ -263,4 +264,71 @@ Matrix Matrix::inverse()
     std::cout << "The matrix at " << this << "is not a invertable matrix\n";
   }
   return M2;
+}
+
+Matrix Matrix::Translation(float x, float y, float z)
+{
+  Matrix result = result.Identity();
+  result.matrix[0][3] = x;
+  result.matrix[1][3] = y;
+  result.matrix[2][3] = z;
+
+  return result;
+}
+
+Matrix Matrix::Scaling(float x, float y, float z)
+{
+  Matrix result = result.Identity();
+  result.matrix[0][0] = x;
+  result.matrix[1][1] = y;
+  result.matrix[2][2] = z;
+
+  return result;
+}
+
+Matrix Matrix::RotateX(float radians) 
+{
+  Matrix rotation = rotation.Identity();
+  rotation.matrix[1][1] = cos(radians);
+  rotation.matrix[1][2] = -sin(radians);
+  rotation.matrix[2][1] = sin(radians);
+  rotation.matrix[2][2] = cos(radians);
+
+  return rotation;
+}
+
+Matrix Matrix::RotateY(float radians)
+{
+  Matrix rotation = rotation.Identity();
+  rotation.matrix[0][0] = cos(radians);
+  rotation.matrix[0][2] = sin(radians);
+  rotation.matrix[2][0] = -sin(radians);
+  rotation.matrix[2][2] = cos(radians);
+
+  return rotation;
+}
+
+Matrix Matrix::RotateZ(float radians)
+{
+  Matrix rotation = rotation.Identity();
+  rotation.matrix[0][0] = cos(radians);
+  rotation.matrix[0][1] = -sin(radians);
+  rotation.matrix[1][0] = sin(radians);
+  rotation.matrix[1][1] = cos(radians);
+
+  return rotation;
+}
+
+Matrix Matrix::Shearing(float x_y, float x_z, float y_x, float y_z, float z_x, float z_y)
+{
+  Matrix shear = shear.Identity();
+
+  shear.matrix[0][1] = x_y;
+  shear.matrix[0][2] = x_z;
+  shear.matrix[1][0] = y_x;
+  shear.matrix[1][2] = y_z;
+  shear.matrix[2][0] = z_x;
+  shear.matrix[2][1] = z_y;
+
+  return shear;
 }

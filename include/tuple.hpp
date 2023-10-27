@@ -1,6 +1,5 @@
-#include <iostream>
-
 #pragma once
+#include <iostream>
 
 class Tuple {
 public:

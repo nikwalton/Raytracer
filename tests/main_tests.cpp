@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 
+
+#define _USE_MATH_DEFINES
+
 #include<math.h>
 #include<string>
 #include<sstream>
@@ -702,7 +705,7 @@ TEST(MatrixOperationsTests, IdentityMatrixTest)
   A.matrix[3][2] = 16;
   A.matrix[3][3] = 32;
 
-  Matrix result = A * A.identity();
+  Matrix result = A * A.Identity();
 
   //check if both matricies have the same value 
   EXPECT_EQ(result.matrix[0][0], A.matrix[0][0]);
@@ -749,7 +752,7 @@ TEST(MatrixOperationsTests, TransposeMatrixTest)
   A.matrix[3][2] = 5;
   A.matrix[3][3] = 8;
 
-  Matrix result = A.transpose();
+  Matrix result = A.Transpose();
 
   EXPECT_EQ(result.matrix[0][0], 0);
   EXPECT_EQ(result.matrix[0][1], 9);
@@ -777,9 +780,9 @@ TEST(MatrixOperationsTests, TransposeIdentityTest)
   Matrix A;
 
   //lazy way to ge an identity matrix, probably should do a better way later
-  Matrix ident = A.identity();
+  Matrix ident = A.Identity();
 
-  Matrix result = ident.transpose();
+  Matrix result = ident.Transpose();
 
   EXPECT_EQ(result.matrix[0][0], ident.matrix[0][0]);
   EXPECT_EQ(result.matrix[0][1], ident.matrix[0][1]);
@@ -811,7 +814,7 @@ TEST(MatrixOperationsTests, 2x2DetTest)
   A.matrix[1][0] = -3;
   A.matrix[1][1] = 2;
 
-  float result = A.determinant();
+  float result = A.Determinant();
 
   EXPECT_EQ(result, 17);
 }
@@ -832,7 +835,7 @@ TEST(MatrixOperationsTests, 2x2SubmatrixTest)
   A.matrix[2][1] = 6;
   A.matrix[2][2] = -3;
 
-  Matrix result = A.submatrix(0, 2);
+  Matrix result = A.Submatrix(0, 2);
 
   EXPECT_EQ(result.matrix[0][0], -3);
   EXPECT_EQ(result.matrix[0][1], 2);
@@ -863,7 +866,7 @@ TEST(MatrixOperationsTests, 3x3SubmatrixTest)
   A.matrix[3][2] = -1;
   A.matrix[3][3] = 1;
 
-  Matrix result = A.submatrix(2, 1);
+  Matrix result = A.Submatrix(2, 1);
 
   EXPECT_EQ(result.matrix[0][0], -6);
   EXPECT_EQ(result.matrix[0][1], 1);
@@ -893,7 +896,7 @@ TEST(MatrixOperationsTests, 3x3MinorTest)
   A.matrix[2][1] = -1;
   A.matrix[2][2] = 5;
 
-  float result = A.minor(1, 0);
+  float result = A.Minor(1, 0);
 
   EXPECT_EQ(result, 25);
 }
@@ -914,11 +917,11 @@ TEST(MatrixOperationsTests, 3x3CofactorTest)
   A.matrix[2][2] = 5;
 
   //gonna test two different row / col deletions to ensure it negates correctly
-  float minorResult1 = A.minor(0, 0);
-  float cofactorResult1 = A.cofactor(0, 0);
+  float minorResult1 = A.Minor(0, 0);
+  float cofactorResult1 = A.Cofactor(0, 0);
 
-  float minorResult2 = A.minor(1, 0);
-  float cofactorResult2 = A.cofactor(1, 0);
+  float minorResult2 = A.Minor(1, 0);
+  float cofactorResult2 = A.Cofactor(1, 0);
 
   EXPECT_EQ(minorResult1, -12);
   EXPECT_EQ(cofactorResult1, -12);
@@ -942,10 +945,10 @@ TEST(MatrixOperationsTests, 3x3DeterminantTest)
   A.matrix[2][1] = 6;
   A.matrix[2][2] = 4;
 
-  float cofactor1 = A.cofactor(0, 0);
-  float cofactor2 = A.cofactor(0, 1);
-  float cofactor3 = A.cofactor(0, 2);
-  float det = A.determinant();
+  float cofactor1 = A.Cofactor(0, 0);
+  float cofactor2 = A.Cofactor(0, 1);
+  float cofactor3 = A.Cofactor(0, 2);
+  float det = A.Determinant();
 
   EXPECT_EQ(cofactor1, 56);
   EXPECT_EQ(cofactor2, 12);
@@ -976,11 +979,11 @@ TEST(MatrixOperationsTests, 4x4DeterminantTest)
   A.matrix[3][2] = 7;
   A.matrix[3][3] = -9;
 
-  float cofactor1 = A.cofactor(0, 0);
-  float cofactor2 = A.cofactor(0, 1);
-  float cofactor3 = A.cofactor(0, 2);
-  float cofactor4 = A.cofactor(0, 3);
-  float det = A.determinant();
+  float cofactor1 = A.Cofactor(0, 0);
+  float cofactor2 = A.Cofactor(0, 1);
+  float cofactor3 = A.Cofactor(0, 2);
+  float cofactor4 = A.Cofactor(0, 3);
+  float det = A.Determinant();
 
   EXPECT_EQ(cofactor1, 690);
   EXPECT_EQ(cofactor2, 447);
@@ -1012,7 +1015,7 @@ TEST(MatrixOperationsTests, IntvertableTest1)
   A.matrix[3][2] = 7;
   A.matrix[3][3] = -6;
 
-  bool result = A.invertable();
+  bool result = A.Invertable();
 
   EXPECT_EQ(result, true);
 }
@@ -1040,7 +1043,7 @@ TEST(MatrixOperationsTests, InvertableTest2)
   A.matrix[3][2] = 0;
   A.matrix[3][3] = 0;
 
-  bool result = A.invertable();
+  bool result = A.Invertable();
 
   EXPECT_EQ(result, false);
 }
@@ -1068,7 +1071,7 @@ TEST(MatrixOperationsTests, InverseTest1)
   A.matrix[3][2] = 7;
   A.matrix[3][3] = 4;
 
-  Matrix result = A.inverse();
+  Matrix result = A.Inverse();
 
   //float is more precise than the test numbers given are so need to use expect nears
   EXPECT_NEAR(result.matrix[0][0], 0.21805, 0.00001);
@@ -1115,7 +1118,7 @@ TEST(MatrixOperationsTests, InverseTest2)
   A.matrix[3][2] = -9;
   A.matrix[3][3] = -4;
 
-  Matrix result = A.inverse();
+  Matrix result = A.Inverse();
 
   //float is more precise than the test numbers given are so need to use expect nears
   EXPECT_NEAR(result.matrix[0][0], -0.15385, 0.00001);
@@ -1162,7 +1165,7 @@ TEST(MatrixOperationsTests, InverseTest3)
   A.matrix[3][2] = 6;
   A.matrix[3][3] = 2;
 
-  Matrix result = A.inverse();
+  Matrix result = A.Inverse();
 
   //float is more precise than the test numbers given are so need to use expect nears
   EXPECT_NEAR(result.matrix[0][0], -0.04074, 0.00001);
@@ -1234,7 +1237,7 @@ TEST(MatrixOperationsTests, InverseMultiplicationTest)
   Matrix C = A * B;
 
   // should equal A
-  Matrix result = C * B.inverse();
+  Matrix result = C * B.Inverse();
 
   
   EXPECT_FLOAT_EQ(result.matrix[0][0], A.matrix[0][0]);
@@ -1257,4 +1260,258 @@ TEST(MatrixOperationsTests, InverseMultiplicationTest)
   //assert below doesnt want to count -0.9999 as -1 for whatever reason when using EXPECT_FLOAT_EQ, not within 4 ULP's i guess
   EXPECT_NEAR(result.matrix[3][2], A.matrix[3][2], 0.00001);
   EXPECT_FLOAT_EQ(result.matrix[3][3], A.matrix[3][3]);
+}
+
+TEST(MatrixTransformationsTests, PointTranslationTest)
+{
+  Matrix transform = transform.Translation(5, -3, 2);
+
+  Point p(-3, 4, 5);
+
+  Tuple result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 2);
+  EXPECT_EQ(result.GetY(), 1);
+  EXPECT_EQ(result.GetZ(), 7);
+  EXPECT_EQ(result.IsPoint(), true);
+}
+
+TEST(MatrixTransformationsTests, InverseTranslationTest)
+{
+  Matrix inv = inv.Translation(5, -3, 2).Inverse();
+
+  Point p(-3, 4, 5);
+
+  Tuple result = inv * p;
+
+  EXPECT_EQ(result.GetX(), -8);
+  EXPECT_EQ(result.GetY(), 7);
+  EXPECT_EQ(result.GetZ(), 3);
+  EXPECT_EQ(result.IsPoint(), true);
+}
+
+TEST(MatrixTransformationsTests, VectorTranslationTests)
+{
+  // vector should be unaffected by translations
+  Matrix transformation = transformation.Translation(5, -3, 2);
+  Vector vec(-3, 4, 5);
+
+  Tuple result = transformation * vec;
+
+  EXPECT_EQ(result.GetX(), vec.GetX());
+  EXPECT_EQ(result.GetY(), vec.GetY());
+  EXPECT_EQ(result.GetZ(), vec.GetZ());
+  EXPECT_EQ(result.GetW(), vec.GetW());
+}
+
+TEST(MatrixTransformationsTests, PointScalingTest)
+{
+  Matrix transform = transform.Scaling(2, 3, 4);
+  Point p(-4, 6, 8);
+
+  Tuple result = transform * p;
+
+  EXPECT_EQ(result.GetX(), -8);
+  EXPECT_EQ(result.GetY(), 18);
+  EXPECT_EQ(result.GetZ(), 32);
+  EXPECT_EQ(result.IsPoint(), true);
+}
+
+TEST(MatrixTransformationsTests, VectorScalingTest)
+{
+  // vectors SHOULD be able to scale
+  Matrix transform = transform.Scaling(2, 3, 4);
+  Vector v(-4, 6, 8);
+
+  Tuple result = transform * v;
+  
+  EXPECT_EQ(result.GetX(), -8);
+  EXPECT_EQ(result.GetY(), 18);
+  EXPECT_EQ(result.GetZ(), 32);
+  EXPECT_EQ(result.IsPoint(), false);
+}
+
+TEST(MatrixTransformationsTests, ReflectionTest)
+{
+  //reflection is scaling by a negative number
+  Matrix transform = transform.Scaling(-1, 1, 1);
+  Point p(2, 3, 4);
+
+  Tuple result = transform * p;
+
+  EXPECT_EQ(result.GetX(), -2);
+  EXPECT_EQ(result.GetY(), 3);
+  EXPECT_EQ(result.GetZ(), 4);
+  EXPECT_EQ(result.IsPoint(), true);
+}
+
+TEST(MatrixTransformationsTests, RotateXTest)
+{
+  Point p(0, 1, 0);
+
+  Matrix halfQuarterTurn = halfQuarterTurn.RotateX(M_PI_4);
+  Matrix fullQuarterTurn = fullQuarterTurn.RotateX(M_PI_2);
+
+  Tuple result = halfQuarterTurn * p;
+
+  EXPECT_EQ(result.GetX(), 0);
+  EXPECT_FLOAT_EQ(result.GetY(), (sqrt(2) / 2));
+  EXPECT_FLOAT_EQ(result.GetZ(), (sqrt(2) / 2));
+  
+  result = fullQuarterTurn * p;
+
+  EXPECT_EQ(result.GetX(), 0);
+  // this assert also got issues like above on 1261
+  EXPECT_NEAR(result.GetY(), 0, 0.0000001);
+  EXPECT_EQ(result.GetZ(), 1);
+}
+
+TEST(MatrixTransformationsTests, InverseRotateXTest)
+{
+  Point p(0, 1, 0);
+
+  Matrix halfQuarterTurn = halfQuarterTurn.RotateX(M_PI / 4);
+  Matrix inverse = halfQuarterTurn.Inverse();
+
+  Tuple result = inverse * p;
+
+  EXPECT_EQ(result.GetX(), 0);
+  EXPECT_FLOAT_EQ(result.GetY(), (sqrt(2) / 2));
+  EXPECT_FLOAT_EQ(result.GetZ(), -(sqrt(2) / 2));
+}
+
+TEST(MatrixTransformationsTests, RotateYTest)
+{
+  Point p(0, 0, 1);
+
+  Matrix halfQuarterTurn = halfQuarterTurn.RotateY(M_PI_4);
+  Matrix fullQuarterTurn = fullQuarterTurn.RotateY(M_PI_2);
+
+  Tuple result = halfQuarterTurn * p;
+
+  EXPECT_FLOAT_EQ(result.GetX(), (sqrt(2) / 2));
+  EXPECT_EQ(result.GetY(), 0);
+  EXPECT_FLOAT_EQ(result.GetZ(), (sqrt(2) / 2));
+
+  result = fullQuarterTurn * p;
+
+  EXPECT_EQ(result.GetX(), 1);
+  EXPECT_EQ(result.GetY(), 0);
+  EXPECT_NEAR(result.GetZ(), 0, 0.0000001);
+}
+
+TEST(MatrixTransformationsTests, RotateZTest)
+{
+  Point p(0, 1, 0);
+
+  Matrix halfQuaterTurn = halfQuaterTurn.RotateZ(M_PI_4);
+  Matrix fullQuarterTurn = fullQuarterTurn.RotateZ(M_PI_2);
+
+  Tuple result = halfQuaterTurn * p;
+
+  EXPECT_FLOAT_EQ(result.GetX(), -(sqrt(2) / 2));
+  EXPECT_FLOAT_EQ(result.GetY(), (sqrt(2) / 2));
+  EXPECT_EQ(result.GetZ(), 0);
+
+  result = fullQuarterTurn * p;
+
+  EXPECT_FLOAT_EQ(result.GetX(), -1);
+  EXPECT_NEAR(result.GetY(), 0, 0.0000001);
+  EXPECT_EQ(result.GetZ(), 0);
+}
+
+TEST(MatrixTransformationsTests, ShearingTest1)
+{
+  Matrix transform = transform.Shearing(1, 0, 0, 0, 0, 0);
+  Point p(2, 3, 4);
+
+  Tuple result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 5);
+  EXPECT_EQ(result.GetY(), 3);
+  EXPECT_EQ(result.GetZ(), 4);
+}
+
+TEST(MatrixTransformationsTests, ShearingTest2)
+{
+  Matrix transform = transform.Shearing(0, 1, 0, 0, 0, 0);
+  Point p(2, 3, 4);
+
+  Tuple result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 6);
+  EXPECT_EQ(result.GetY(), 3);
+  EXPECT_EQ(result.GetZ(), 4);
+
+  transform = transform.Shearing(0, 0, 1, 0, 0, 0);
+  result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 2);
+  EXPECT_EQ(result.GetY(), 5);
+  EXPECT_EQ(result.GetZ(), 4);
+
+  transform = transform.Shearing(0, 0, 0, 1, 0, 0);
+  result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 2);
+  EXPECT_EQ(result.GetY(), 7);
+  EXPECT_EQ(result.GetZ(), 4);
+
+  transform = transform.Shearing(0, 0, 0, 0, 1, 0);
+  result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 2);
+  EXPECT_EQ(result.GetY(), 3);
+  EXPECT_EQ(result.GetZ(), 6);
+
+  transform = transform.Shearing(0, 0, 0, 0, 0, 1);
+  result = transform * p;
+
+  EXPECT_EQ(result.GetX(), 2);
+  EXPECT_EQ(result.GetY(), 3);
+  EXPECT_EQ(result.GetZ(), 7);
+}
+
+TEST(MatrixTransformationsTests, ChainingTest)
+{
+  Point p(1, 0, 1);
+  Matrix A = A.RotateX(M_PI_2);
+  Matrix B = B.Scaling(5, 5, 5);
+  Matrix C = C.Translation(10, 5, 7);
+
+  //rotation
+  Tuple p2 = A * p;
+
+  EXPECT_FLOAT_EQ(p2.GetX(), 1);
+  EXPECT_FLOAT_EQ(p2.GetY(), -1);
+  EXPECT_NEAR(p2.GetZ(), 0, 0.00001);
+
+  //scaling
+  Tuple p3 = B * p2;
+
+  EXPECT_FLOAT_EQ(p3.GetX(), 5);
+  EXPECT_FLOAT_EQ(p3.GetY(), -5);
+  EXPECT_NEAR(p3.GetZ(), 0, 0.00001);
+
+  //translation
+  Tuple p4 = C * p3;
+  
+  EXPECT_FLOAT_EQ(p4.GetX(), 15);
+  EXPECT_NEAR(p4.GetY(), 0, 0.00001);
+  EXPECT_FLOAT_EQ(p4.GetZ(), 7);
+}
+
+TEST(MatrixTransformationsTests, ReverseChainTest)
+{
+  Point p(1, 0, 1);
+  Matrix A = A.RotateX(M_PI_2);
+  Matrix B = B.Scaling(5, 5, 5);
+  Matrix C = C.Translation(10, 5, 7);
+
+  Matrix T = C * B * A;
+  Tuple result = T * p;
+
+  EXPECT_FLOAT_EQ(result.GetX(), 15);
+  EXPECT_NEAR(result.GetY(), 0, 0.000001);
+  EXPECT_FLOAT_EQ(result.GetZ(), 7);
 }
