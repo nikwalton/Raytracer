@@ -1,6 +1,6 @@
+#pragma onces
 #include "tuple.hpp"
 
-#pragma once
 
 class Point : public Tuple
 {

@@ -1,10 +1,11 @@
+#pragma once
 #include "color.hpp"
 #include <vector>
 #include <sstream>
 #include <string>
 #include <cmath>
 
-#pragma once
+
 
 class Canvas
 {
@@ -23,7 +24,7 @@ public:
   void SetPixels(std::vector<std::vector<Color>> newPixels);
 
 
-  void WritePixel(unsigned short int y, unsigned short int x, Color pixel);
+  void WritePixel(unsigned short int x, unsigned short int y, Color pixel);
 
   std::string CanvasToPPM();
   int NormalizePixel(float value);
