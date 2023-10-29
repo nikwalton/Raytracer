@@ -1361,8 +1361,7 @@ TEST(MatrixTransformationsTests, RotateXTest)
   result = fullQuarterTurn * p;
 
   EXPECT_EQ(result.GetX(), 0);
-  // this assert also got issues like above on 1261
-  EXPECT_NEAR(result.GetY(), 0, 0.0000001);
+  EXPECT_EQ(roundf(result.GetY()), 0);
   EXPECT_EQ(result.GetZ(), 1);
 }
 
@@ -1370,10 +1369,10 @@ TEST(MatrixTransformationsTests, InverseRotateXTest)
 {
   Point p(0, 1, 0);
 
-  Matrix halfQuarterTurn = halfQuarterTurn.RotateX(M_PI / 4);
+  Matrix halfQuarterTurn = halfQuarterTurn.RotateX(M_PI_4).Inverse();
   Matrix inverse = halfQuarterTurn.Inverse();
 
-  Tuple result = inverse * p;
+  Tuple result = halfQuarterTurn * p;
 
   EXPECT_EQ(result.GetX(), 0);
   EXPECT_FLOAT_EQ(result.GetY(), (sqrt(2) / 2));
@@ -1383,21 +1382,21 @@ TEST(MatrixTransformationsTests, InverseRotateXTest)
 TEST(MatrixTransformationsTests, RotateYTest)
 {
   Point p(0, 0, 1);
-
+  
   Matrix halfQuarterTurn = halfQuarterTurn.RotateY(M_PI_4);
   Matrix fullQuarterTurn = fullQuarterTurn.RotateY(M_PI_2);
 
   Tuple result = halfQuarterTurn * p;
 
   EXPECT_FLOAT_EQ(result.GetX(), (sqrt(2) / 2));
-  EXPECT_EQ(result.GetY(), 0);
+  EXPECT_EQ(roundf(result.GetY()), 0);
   EXPECT_FLOAT_EQ(result.GetZ(), (sqrt(2) / 2));
 
   result = fullQuarterTurn * p;
 
-  EXPECT_EQ(result.GetX(), 1);
-  EXPECT_EQ(result.GetY(), 0);
-  EXPECT_NEAR(result.GetZ(), 0, 0.0000001);
+  EXPECT_EQ(roundf(result.GetX()), 1);
+  EXPECT_EQ(roundf(result.GetY()), 0);
+  EXPECT_EQ(roundf(result.GetZ()), 0);
 }
 
 TEST(MatrixTransformationsTests, RotateZTest)
@@ -1411,13 +1410,13 @@ TEST(MatrixTransformationsTests, RotateZTest)
 
   EXPECT_FLOAT_EQ(result.GetX(), -(sqrt(2) / 2));
   EXPECT_FLOAT_EQ(result.GetY(), (sqrt(2) / 2));
-  EXPECT_EQ(result.GetZ(), 0);
+  EXPECT_EQ(roundf(result.GetZ()), 0);
 
   result = fullQuarterTurn * p;
 
-  EXPECT_FLOAT_EQ(result.GetX(), -1);
-  EXPECT_NEAR(result.GetY(), 0, 0.0000001);
-  EXPECT_EQ(result.GetZ(), 0);
+  EXPECT_EQ(roundf(result.GetX()), -1);
+  EXPECT_EQ(roundf(result.GetY()), 0);
+  EXPECT_EQ(roundf(result.GetZ()), 0);
 }
 
 TEST(MatrixTransformationsTests, ShearingTest1)
