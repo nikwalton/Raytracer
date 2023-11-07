@@ -14,6 +14,7 @@
 #include "color.hpp"
 #include "canvas.hpp"
 #include "matrix.hpp"
+#include "ray.hpp"
 
 
 
@@ -1513,4 +1514,57 @@ TEST(MatrixTransformationsTests, ReverseChainTest)
   EXPECT_FLOAT_EQ(result.GetX(), 15);
   EXPECT_NEAR(result.GetY(), 0, 0.000001);
   EXPECT_FLOAT_EQ(result.GetZ(), 7);
+}
+
+TEST(RaySphereIntersectionTests, RayCreationTest)
+{
+  Point p(1, 2, 3);
+  Vector v(4, 5, 6);
+
+  Ray r(p, v);
+
+  Point rPoint = r.GetOrigin();
+  Vector rVec = r.GetDirection();
+
+  EXPECT_EQ(rPoint.GetX(), 1);
+  EXPECT_EQ(rPoint.GetY(), 2);
+  EXPECT_EQ(rPoint.GetZ(), 3);
+  EXPECT_EQ(rPoint.IsPoint(), true);
+
+  EXPECT_EQ(rVec.GetX(), 4);
+  EXPECT_EQ(rVec.GetY(), 5);
+  EXPECT_EQ(rVec.GetZ(), 6);
+  EXPECT_EQ(rVec.IsPoint(), false);
+}
+
+TEST(RaySphereIntersectionTests, RayPositionTest)
+{
+  Point p(2, 3, 4);
+  Vector v(1, 0, 0);
+
+  Ray r(p, v);
+
+  Tuple attempt = r.Position(0);
+
+  EXPECT_EQ(attempt.GetX(), 2);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+
+  attempt = r.Position(1);
+
+  EXPECT_EQ(attempt.GetX(), 3);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+
+  attempt = r.Position(-1);
+
+  EXPECT_EQ(attempt.GetX(), 1);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+
+  attempt = r.Position(2.5);
+
+  EXPECT_EQ(attempt.GetX(), 4.5);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
 }
