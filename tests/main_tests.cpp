@@ -15,6 +15,7 @@
 #include "canvas.hpp"
 #include "matrix.hpp"
 #include "ray.hpp"
+#include "sphere.hpp"
 
 
 
@@ -1567,4 +1568,107 @@ TEST(RaySphereIntersectionTests, RayPositionTest)
   EXPECT_EQ(attempt.GetX(), 4.5);
   EXPECT_EQ(attempt.GetY(), 3);
   EXPECT_EQ(attempt.GetZ(), 4);
+}
+
+TEST(RaySphereIntersectionTests, SphereIntersectionTest)
+{
+  // assume sphere is unit sphere
+  Point p(0, 0, -5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<float> intersections = s.intersects(s, r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0], (float)4.0);
+    EXPECT_FLOAT_EQ(intersections[1], (float)6.0);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, SphereTangentTest)
+{
+  Point p(0, 1, -5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<float> intersections = s.intersects(s, r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0], (float)5.0);
+    EXPECT_FLOAT_EQ(intersections[1], (float)5.0);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, SphereMissTest)
+{
+  Point p(0, 2, -5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<float> intersectons = s.intersects(s, r);
+
+  EXPECT_EQ(intersectons.size(), 0);
+}
+
+TEST(RaySphereIntersectionTests, RayInSphereTest)
+{
+  Point p(0, 0, 0);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<float> intersections = s.intersects(s, r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0], (float)-1);
+    EXPECT_FLOAT_EQ(intersections[1], (float)1);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, SphereBehindRayTest)
+{
+  Point p(0, 0, 5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<float> intersections = s.intersects(s, r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0], -6);
+    EXPECT_FLOAT_EQ(intersections[1], -4);
+  }
+  else
+  {
+    FAIL();
+  }
 }
