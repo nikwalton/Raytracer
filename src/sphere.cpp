@@ -1,9 +1,7 @@
 #include "sphere.hpp"
 
-std::vector<float> Sphere::intersects(Sphere s, Ray r)
+std::vector<Intersection> Sphere::intersect(Sphere s, Ray r)
 {
-  std::vector<float> result = {};
-
   Tuple sphereToRay = r.GetOrigin() - Point(0, 0, 0);
   
   float a = r.GetDirection().Dot(r.GetDirection());
@@ -20,9 +18,13 @@ std::vector<float> Sphere::intersects(Sphere s, Ray r)
   {
     float t1 = (-b - sqrt(discriminant)) / (2 * a);
     float t2 = (-b + sqrt(discriminant)) / (2 * a);
-    return { t1, t2 };
+
+    Intersection i1(t1, this);
+    Intersection i2(t2, this);
+
+    return { i1, i2 };
   }
-  return result;
+  return {};
 }
 
 

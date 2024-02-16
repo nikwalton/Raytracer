@@ -16,6 +16,7 @@
 #include "matrix.hpp"
 #include "ray.hpp"
 #include "sphere.hpp"
+#include "intersection.hpp"
 
 
 
@@ -1580,12 +1581,12 @@ TEST(RaySphereIntersectionTests, SphereIntersectionTest)
 
   Sphere s;
 
-  std::vector<float> intersections = s.intersects(s, r);
+  std::vector<Intersection> intersections = s.intersect(s, r);
 
   if (intersections.size() >= 2)
   {
-    EXPECT_FLOAT_EQ(intersections[0], (float)4.0);
-    EXPECT_FLOAT_EQ(intersections[1], (float)6.0);
+    EXPECT_FLOAT_EQ(intersections[0].t, (float)4.0);
+    EXPECT_FLOAT_EQ(intersections[1].t, (float)6.0);
   }
   else
   {
@@ -1602,12 +1603,12 @@ TEST(RaySphereIntersectionTests, SphereTangentTest)
 
   Sphere s;
 
-  std::vector<float> intersections = s.intersects(s, r);
+  std::vector<Intersection> intersections = s.intersect(s, r);
 
   if (intersections.size() >= 2)
   {
-    EXPECT_FLOAT_EQ(intersections[0], (float)5.0);
-    EXPECT_FLOAT_EQ(intersections[1], (float)5.0);
+    EXPECT_FLOAT_EQ(intersections[0].t, (float)5.0);
+    EXPECT_FLOAT_EQ(intersections[1].t, (float)5.0);
   }
   else
   {
@@ -1624,7 +1625,7 @@ TEST(RaySphereIntersectionTests, SphereMissTest)
 
   Sphere s;
 
-  std::vector<float> intersectons = s.intersects(s, r);
+  std::vector<Intersection> intersectons = s.intersect(s, r);
 
   EXPECT_EQ(intersectons.size(), 0);
 }
@@ -1638,12 +1639,12 @@ TEST(RaySphereIntersectionTests, RayInSphereTest)
 
   Sphere s;
 
-  std::vector<float> intersections = s.intersects(s, r);
+  std::vector<Intersection> intersections = s.intersect(s, r);
 
   if (intersections.size() >= 2)
   {
-    EXPECT_FLOAT_EQ(intersections[0], (float)-1);
-    EXPECT_FLOAT_EQ(intersections[1], (float)1);
+    EXPECT_FLOAT_EQ(intersections[0].t, (float)-1);
+    EXPECT_FLOAT_EQ(intersections[1].t, (float)1);
   }
   else
   {
@@ -1660,15 +1661,66 @@ TEST(RaySphereIntersectionTests, SphereBehindRayTest)
 
   Sphere s;
 
-  std::vector<float> intersections = s.intersects(s, r);
+  std::vector<Intersection> intersections = s.intersect(s, r);
 
   if (intersections.size() >= 2)
   {
-    EXPECT_FLOAT_EQ(intersections[0], -6);
-    EXPECT_FLOAT_EQ(intersections[1], -4);
+    EXPECT_FLOAT_EQ(intersections[0].t, -6);
+    EXPECT_FLOAT_EQ(intersections[1].t, -4);
   }
   else
   {
     FAIL();
   }
+}
+
+TEST(RaySphereIntersectionTests, IntersetionClassTest)
+{
+  Sphere s;
+
+  float t = 3.5;
+  Intersection i(t, &s);
+
+  EXPECT_FLOAT_EQ(i.t, (float)3.5);
+  EXPECT_EQ(i.obj, &s);
+}
+
+TEST(RaySphereIntersectionTests, IntersectionAggregationTest)
+{
+  Sphere s;
+  Intersection i1(1, &s);
+  Intersection i2(2, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+ 
+  if (xs.size() >= 2)
+  {
+    EXPECT_EQ(xs.size(), 2);
+    EXPECT_FLOAT_EQ(xs[0].t, 1);
+    EXPECT_FLOAT_EQ(xs[1].t, 2);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, IntersectObjectTest)
+{
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+
+  Sphere s;
+
+  std::vector<Intersection> xs = s.intersect(s, r);
+
+  if (xs.size() >= 2)
+  {
+    EXPECT_EQ(xs[0].obj, &s);
+    EXPECT_EQ(xs[1].obj, &s);
+  }
+  else
+  {
+    FAIL();
+  }
+
 }
