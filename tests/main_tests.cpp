@@ -1724,3 +1724,62 @@ TEST(RaySphereIntersectionTests, IntersectObjectTest)
   }
 
 }
+
+TEST(RaySphereIntersectionTests, AllPositiveHitTest)
+{
+  Sphere s;
+  Intersection i1(1, &s);
+  Intersection i2(2, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+  
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(i1.t, i.t);
+  EXPECT_EQ(i1.obj, i.obj);
+}
+
+TEST(RaySphereIntersectionTests, SomeNegativeHitTest)
+{
+  Sphere s;
+  Intersection i1(-1, &s);
+  Intersection i2(1, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(i2.t, i.t);
+  EXPECT_EQ(i2.obj, i.obj);
+ }
+
+TEST(RaySphereIntersectionTests, AllNegativeHitTest)
+{
+  Sphere s;
+
+  Intersection i1(-2, &s);
+  Intersection i2(-1, &s);
+
+  Intersection expected; // we expect a empty intersection
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(expected.t, i.t);
+  EXPECT_EQ(expected.obj, i.obj);
+}
+
+TEST(RaySphereIntersectionTests, LowestHitTest)
+{
+  Sphere s;
+
+  Intersection i1(5, &s);
+  Intersection i2(7, &s);
+  Intersection i3(-3, &s);
+  Intersection i4(2, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2, &i3, &i4);
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(i4.t, i.t);
+  EXPECT_EQ(i4.obj, i.obj);
+}
