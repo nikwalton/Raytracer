@@ -7,8 +7,7 @@
 
 float Tuple::GetX()
 {
-  return this->x;
-}
+  return this->x;}
 
 float Tuple::GetY()
 {

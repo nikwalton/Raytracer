@@ -21,16 +21,26 @@ enable_testing()
 
 set(Headers 
         "include/tuple.hpp"
+        "include/point.hpp"
+        "include/vector.hpp"
         "include/canon.hpp"
         "include/color.hpp"
         "include/canvas.hpp"  
-        "include/matrix.hpp")
+        "include/matrix.hpp"
+        "include/ray.hpp"
+        "include/intersection.hpp"
+        "include/sphere.hpp"
+        )
 set(Sources 
         "src/tuple.cpp"
         "src/canon.cpp"
         "src/color.cpp"
         "src/canvas.cpp"
-        "src/matrix.cpp")
+        "src/matrix.cpp"
+        "src/ray.cpp"
+        "src/intersection.cpp"
+        "src/sphere.cpp"
+        )
 
 add_library(RayLib STATIC ${Sources} ${Headers})
 

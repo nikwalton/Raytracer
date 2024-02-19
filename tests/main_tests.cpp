@@ -14,6 +14,9 @@
 #include "color.hpp"
 #include "canvas.hpp"
 #include "matrix.hpp"
+#include "ray.hpp"
+#include "sphere.hpp"
+#include "intersection.hpp"
 
 
 
@@ -1513,4 +1516,382 @@ TEST(MatrixTransformationsTests, ReverseChainTest)
   EXPECT_FLOAT_EQ(result.GetX(), 15);
   EXPECT_NEAR(result.GetY(), 0, 0.000001);
   EXPECT_FLOAT_EQ(result.GetZ(), 7);
+}
+
+TEST(RaySphereIntersectionTests, RayCreationTest)
+{
+  Point p(1, 2, 3);
+  Vector v(4, 5, 6);
+
+  Ray r(p, v);
+
+  Point rPoint = r.GetOrigin();
+  Vector rVec = r.GetDirection();
+
+  EXPECT_EQ(rPoint.GetX(), 1);
+  EXPECT_EQ(rPoint.GetY(), 2);
+  EXPECT_EQ(rPoint.GetZ(), 3);
+  EXPECT_EQ(rPoint.IsPoint(), true);
+
+  EXPECT_EQ(rVec.GetX(), 4);
+  EXPECT_EQ(rVec.GetY(), 5);
+  EXPECT_EQ(rVec.GetZ(), 6);
+  EXPECT_EQ(rVec.IsPoint(), false);
+}
+
+TEST(RaySphereIntersectionTests, RayPositionTest)
+{
+  Point p(2, 3, 4);
+  Vector v(1, 0, 0);
+
+  Ray r(p, v);
+
+  Tuple attempt = r.Position(0);
+
+  EXPECT_EQ(attempt.GetX(), 2);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+
+  attempt = r.Position(1);
+
+  EXPECT_EQ(attempt.GetX(), 3);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+
+  attempt = r.Position(-1);
+
+  EXPECT_EQ(attempt.GetX(), 1);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+
+  attempt = r.Position(2.5);
+
+  EXPECT_EQ(attempt.GetX(), 4.5);
+  EXPECT_EQ(attempt.GetY(), 3);
+  EXPECT_EQ(attempt.GetZ(), 4);
+}
+
+TEST(RaySphereIntersectionTests, SphereIntersectionTest)
+{
+  // assume sphere is unit sphere
+  Point p(0, 0, -5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<Intersection> intersections = s.intersect(r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0].t, (float)4.0);
+    EXPECT_FLOAT_EQ(intersections[1].t, (float)6.0);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, SphereTangentTest)
+{
+  Point p(0, 1, -5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<Intersection> intersections = s.intersect(r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0].t, (float)5.0);
+    EXPECT_FLOAT_EQ(intersections[1].t, (float)5.0);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, SphereMissTest)
+{
+  Point p(0, 2, -5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<Intersection> intersectons = s.intersect(r);
+
+  EXPECT_EQ(intersectons.size(), 0);
+}
+
+TEST(RaySphereIntersectionTests, RayInSphereTest)
+{
+  Point p(0, 0, 0);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<Intersection> intersections = s.intersect(r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0].t, (float)-1);
+    EXPECT_FLOAT_EQ(intersections[1].t, (float)1);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, SphereBehindRayTest)
+{
+  Point p(0, 0, 5);
+  Vector v(0, 0, 1);
+
+  Ray r(p, v);
+
+  Sphere s;
+
+  std::vector<Intersection> intersections = s.intersect(r);
+
+  if (intersections.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(intersections[0].t, -6);
+    EXPECT_FLOAT_EQ(intersections[1].t, -4);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, IntersetionClassTest)
+{
+  Sphere s;
+
+  float t = 3.5;
+  Intersection i(t, &s);
+
+  EXPECT_FLOAT_EQ(i.t, (float)3.5);
+  EXPECT_EQ(i.obj, &s);
+}
+
+TEST(RaySphereIntersectionTests, IntersectionAggregationTest)
+{
+  Sphere s;
+  Intersection i1(1, &s);
+  Intersection i2(2, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+ 
+  if (xs.size() >= 2)
+  {
+    EXPECT_EQ(xs.size(), 2);
+    EXPECT_FLOAT_EQ(xs[0].t, 1);
+    EXPECT_FLOAT_EQ(xs[1].t, 2);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, IntersectObjectTest)
+{
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+
+  Sphere s;
+
+  std::vector<Intersection> xs = s.intersect(r);
+
+  if (xs.size() >= 2)
+  {
+    EXPECT_EQ(xs[0].obj, &s);
+    EXPECT_EQ(xs[1].obj, &s);
+  }
+  else
+  {
+    FAIL();
+  }
+
+}
+
+TEST(RaySphereIntersectionTests, AllPositiveHitTest)
+{
+  Sphere s;
+  Intersection i1(1, &s);
+  Intersection i2(2, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+  
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(i1.t, i.t);
+  EXPECT_EQ(i1.obj, i.obj);
+}
+
+TEST(RaySphereIntersectionTests, SomeNegativeHitTest)
+{
+  Sphere s;
+  Intersection i1(-1, &s);
+  Intersection i2(1, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(i2.t, i.t);
+  EXPECT_EQ(i2.obj, i.obj);
+ }
+
+TEST(RaySphereIntersectionTests, AllNegativeHitTest)
+{
+  Sphere s;
+
+  Intersection i1(-2, &s);
+  Intersection i2(-1, &s);
+
+  Intersection expected; // we expect a empty intersection
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2);
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(expected.t, i.t);
+  EXPECT_EQ(expected.obj, i.obj);
+}
+
+TEST(RaySphereIntersectionTests, LowestHitTest)
+{
+  Sphere s;
+
+  Intersection i1(5, &s);
+  Intersection i2(7, &s);
+  Intersection i3(-3, &s);
+  Intersection i4(2, &s);
+
+  std::vector<Intersection> xs = Intersections(&i1, &i2, &i3, &i4);
+  Intersection i = Hit(xs);
+
+  EXPECT_EQ(i4.t, i.t);
+  EXPECT_EQ(i4.obj, i.obj);
+}
+
+TEST(RaySphereIntersectionTests, TranslatingRayTest)
+{
+  Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+  // translatiion matrix
+  Matrix m = m.Translation(3, 4, 5);
+
+  Ray r2 = r.Transform(m);
+
+  Point origin = r2.GetOrigin();
+  Vector direction = r2.GetDirection();
+
+  EXPECT_FLOAT_EQ(origin.GetX(), 4);
+  EXPECT_FLOAT_EQ(origin.GetY(), 6);
+  EXPECT_FLOAT_EQ(origin.GetZ(), 8);
+
+  EXPECT_FLOAT_EQ(direction.GetX(), 0);
+  EXPECT_FLOAT_EQ(direction.GetY(), 1);
+  EXPECT_FLOAT_EQ(direction.GetZ(), 0);
+}
+
+TEST(RaySphereIntersectionTests, ScalingRayTest)
+{
+  Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+  //scaling matrix
+  Matrix m = m.Scaling(2, 3, 4);
+
+  Ray r2 = r.Transform(m);
+
+  Point origin = r2.GetOrigin();
+  Vector direction = r2.GetDirection();
+
+  EXPECT_FLOAT_EQ(origin.GetX(), 2);
+  EXPECT_FLOAT_EQ(origin.GetY(), 6);
+  EXPECT_FLOAT_EQ(origin.GetZ(), 12);
+
+  EXPECT_FLOAT_EQ(direction.GetX(), 0);
+  EXPECT_FLOAT_EQ(direction.GetY(), 3);
+  EXPECT_FLOAT_EQ(direction.GetZ(), 0);
+}
+
+TEST(RaySphereIntersectionTests, SphereDefaultTransformationTest)
+{
+  Sphere s;
+
+  Matrix mx = mx.Identity();
+
+  Matrix sphereTransform = s.GetTransform();
+
+  if (mx == sphereTransform)
+  {
+    SUCCEED();
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, ChangeSphereTransformationTest)
+{
+  Sphere s;
+
+  Matrix mx = mx.Translation(2, 3, 4);
+  s.SetTransform(mx);
+
+  Matrix sphereTransform = s.GetTransform();
+
+  if (mx == sphereTransform)
+  {
+    SUCCEED();
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, IntersectingScaledSphereTest)
+{
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Sphere s;
+
+  Matrix mx = mx.Scaling(2, 2, 2);
+
+  s.SetTransform(mx);
+  std::vector<Intersection> xs = s.intersect(r);
+
+  if (xs.size() >= 2)
+  {
+    EXPECT_FLOAT_EQ(xs[0].t, 3);
+    EXPECT_FLOAT_EQ(xs[1].t, 7);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(RaySphereIntersectionTests, IntersectingTranslatedSphereTest)
+{
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Sphere s;
+
+  Matrix mx = mx.Translation(5, 0, 0);
+
+  s.SetTransform(mx.Translation(5, 0, 0));
+
+  std::vector<Intersection> xs = s.intersect(r);
+
+  EXPECT_EQ(xs.size(), 0);
 }
