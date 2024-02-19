@@ -9,36 +9,57 @@
 #include "matrix.hpp"
 #include "canvas.hpp"
 #include "canon.hpp"
+#include "sphere.hpp"
+#include "intersection.hpp"
+
 
 int main(int argc, char * argv[]) 
 {
-  Canvas canv(400, 400);
+  float wallSize = 7.0;
+  float canvasPixels = 100;
+  Canvas canv(canvasPixels, canvasPixels);
 
-  Tuple Center(0, 0, 0, 1);
-  Point middle(canv.GetHeight() / 2, canv.GetWidth() / 2, 0);
+  float pixelSize = wallSize / canvasPixels;
+  float half = wallSize / 2;
 
-  const float_t pi = atan(1) * 4;
-  Matrix r = r.RotateY(pi/ 6);
-  Point twelve(0, 0, 1);
-  Color dotColor(1, 0, 0);
+  float wallZ = 10;
+  Point rayOrigin(0, 0, -5);
 
-  unsigned short x = twelve.GetX() * 100;
-  unsigned short y = twelve.GetZ() * 100;
+  Color red(1, 0, 0);
+  Sphere s;
 
-  canv.WritePixel(x + 200, y + 200, dotColor);
-
-  Tuple currentHour = twelve;
-  for (int i = 0; i < 12; i++)
+  for (int y = 0; y < canvasPixels; y++)
   {
-    currentHour = r * currentHour;
-    x = currentHour.GetX() * 100;
-    y = currentHour.GetZ() * 100;
+    float worldY = half - pixelSize * y;
+    
+    for (int x = 0; x < canvasPixels; x++)
+    {
+      float worldX = -half + pixelSize * x;
 
-    canv.WritePixel(x + 200, y + 200, dotColor);
+      Point pos(worldX, worldY, wallZ);
+
+      Tuple temp = (pos - rayOrigin).Normalize();
+      Vector dir(temp.GetX(), temp.GetY(), temp.GetZ());
+
+      Ray r(rayOrigin, dir);
+
+      std::vector<Intersection> xs = s.intersect(r);
+
+      Intersection empty;
+      Intersection hit = Hit(xs);
+
+      if (hit.t != empty.t && hit.obj != empty.obj)
+      {
+        canv.WritePixel(x, y, red);
+      }
+
+    }
   }
 
+
+
   std::ofstream file;
-  file.open("clock.ppm");
+  file.open("sphere.ppm");
   file << canv.CanvasToPPM();
   file.close();
 }
