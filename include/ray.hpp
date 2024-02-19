@@ -2,6 +2,7 @@
 
 #include "vector.hpp"
 #include "point.hpp"
+#include "matrix.hpp"
 
 class Ray {
 public:
@@ -12,6 +13,7 @@ public:
   Vector GetDirection();
 
   Tuple Position(float t);
+  Ray Transform(Matrix mx);
 
 
   void SetOrigin(Point newOrigin);

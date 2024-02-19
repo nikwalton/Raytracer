@@ -1,11 +1,13 @@
 #include "sphere.hpp"
 
-std::vector<Intersection> Sphere::intersect(Sphere s, Ray r)
+std::vector<Intersection> Sphere::intersect(Ray r)
 {
-  Tuple sphereToRay = r.GetOrigin() - Point(0, 0, 0);
+  Ray r2 = r.Transform(transform.Inverse());
+
+  Tuple sphereToRay = r2.GetOrigin() - Point(0, 0, 0);
   
-  float a = r.GetDirection().Dot(r.GetDirection());
-  float b = 2 * r.GetDirection().Dot(sphereToRay);
+  float a = r2.GetDirection().Dot(r2.GetDirection());
+  float b = 2 * r2.GetDirection().Dot(sphereToRay);
   float c = sphereToRay.Dot(sphereToRay) - 1;
 
   float discriminant = pow(b, 2) - 4 * a * c;
@@ -28,12 +30,22 @@ std::vector<Intersection> Sphere::intersect(Sphere s, Ray r)
 }
 
 
-float Sphere::getRadius()
+float Sphere::GetRadius()
 {
   return this->radius;
 }
 
-void Sphere::setRadius(float newRadius)
+void Sphere::SetRadius(float newRadius)
 {
   this->radius = newRadius;
+}
+
+Matrix Sphere::GetTransform()
+{
+  return this->transform;
+}
+
+void Sphere::SetTransform(Matrix mx)
+{
+  this->transform = mx;
 }
