@@ -49,3 +49,10 @@ void Sphere::SetTransform(Matrix mx)
 {
   this->transform = mx;
 }
+
+Vector Sphere::NormalAt(Point p)
+{
+  Tuple v = (p - Point(0, 0, 0)).Normalize();
+  Vector n(v.GetX(), v.GetY(), v.GetZ());
+  return n;
+}

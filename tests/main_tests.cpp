@@ -1895,3 +1895,53 @@ TEST(RaySphereIntersectionTests, IntersectingTranslatedSphereTest)
 
   EXPECT_EQ(xs.size(), 0);
 }
+
+TEST(LightingShadingTests, SphereNormalXAxis)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point(1, 0, 0));
+
+  EXPECT_FLOAT_EQ(n.GetX(), 1);
+  EXPECT_FLOAT_EQ(n.GetY(), 0);
+  EXPECT_FLOAT_EQ(n.GetZ(), 0);
+}
+
+TEST(LightingShadingTests, SphereNormalYAxis)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point(0, 1, 0));
+
+  EXPECT_FLOAT_EQ(n.GetX(), 0);
+  EXPECT_FLOAT_EQ(n.GetY(), 1);
+  EXPECT_FLOAT_EQ(n.GetZ(), 0);
+}
+
+TEST(LightingShadingTests, SphereNormalZAxis)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point(0, 0, 1));
+}
+
+TEST(LightingShadingTests, SphereNormalNonAxialTest)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point((sqrt(3) / 3), (sqrt(3) / 3), (sqrt(3) / 3)));
+
+  EXPECT_FLOAT_EQ(n.GetX(), sqrt(3) / 3);
+  EXPECT_FLOAT_EQ(n.GetY(), sqrt(3) / 3);
+  EXPECT_FLOAT_EQ(n.GetZ(), sqrt(3) / 3);
+}
+
+// normal vectors are normalized, test that normal is always normalized
+TEST(LightingShadingTests, NormalNormalizedTest)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point((sqrt(3) / 3), (sqrt(3) / 3), (sqrt(3) / 3)));
+
+  Tuple normalized = n.Normalize();
+
+  EXPECT_EQ(normalized.GetX(), n.GetX());
+  EXPECT_EQ(normalized.GetY(), n.GetY());
+  EXPECT_EQ(normalized.GetZ(), n.GetZ());
+  
+}

@@ -20,6 +20,8 @@ public:
 
   Matrix GetTransform();
   void SetTransform(Matrix mx);
+
+  Vector NormalAt(Point p);
   
 private:
   float radius;
