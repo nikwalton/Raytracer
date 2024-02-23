@@ -21,7 +21,8 @@ public:
   Matrix GetTransform();
   void SetTransform(Matrix mx);
 
-  Vector NormalAt(Point p);
+ // Vector NormalAt(Point p);
+  Vector NormalAt(Point worldPoint);
   
 private:
   float radius;

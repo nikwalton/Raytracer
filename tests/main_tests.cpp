@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-
 #define _USE_MATH_DEFINES
 
 #include<math.h>
@@ -17,8 +16,6 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "intersection.hpp"
-
-
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -1943,5 +1940,34 @@ TEST(LightingShadingTests, NormalNormalizedTest)
   EXPECT_EQ(normalized.GetX(), n.GetX());
   EXPECT_EQ(normalized.GetY(), n.GetY());
   EXPECT_EQ(normalized.GetZ(), n.GetZ());
-  
+}
+
+TEST(LightingShadingTests, TranslatedSphereNormalTest)
+{
+  Sphere s;
+  Matrix mx = mx.Translation(0, 1, 0);
+
+  s.SetTransform(mx);
+
+  Vector n = s.NormalAt(Point(0, 1.70711, -0.70711));
+
+
+  EXPECT_FLOAT_EQ(n.GetX(), 0);
+  EXPECT_NEAR(n.GetY(), 0.70711, 0.00001);
+  EXPECT_NEAR(n.GetZ(), -0.70711, 0.00001);
+}
+
+TEST(LightingShadingTests, TransformedSphereNormalTest)
+{
+  Sphere s;
+  Matrix m = m.Scaling(1, 0.5, 1) * m.RotateZ(M_PI / 5);
+
+  s.SetTransform(m);
+
+  Vector n = s.NormalAt(Point(0, (sqrt(2) / 2), -(sqrt(2) / 2)));
+
+  // These once again all compute to smaller (more precise) numbers than what the test is asking for so EXPECT_NEAR should work fine
+  EXPECT_NEAR(n.GetX(), 0, 0.00001);
+  EXPECT_NEAR(n.GetY(), 0.97014, 0.00001);
+  EXPECT_NEAR(n.GetZ(), -0.24254, 0.00001);
 }

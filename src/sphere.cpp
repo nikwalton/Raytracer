@@ -50,9 +50,16 @@ void Sphere::SetTransform(Matrix mx)
   this->transform = mx;
 }
 
-Vector Sphere::NormalAt(Point p)
+Vector Sphere::NormalAt(Point WorldPoint)
 {
-  Tuple v = (p - Point(0, 0, 0)).Normalize();
-  Vector n(v.GetX(), v.GetY(), v.GetZ());
+  Tuple objPoint = this->transform.Inverse() * WorldPoint;
+  Tuple objNormal = objPoint - Point(0, 0, 0);
+
+  Tuple worldNormal = this->transform.Inverse().Transpose() * objNormal;
+  worldNormal.SetW(0);
+
+  Tuple normal = worldNormal.Normalize();
+
+  Vector n(normal.GetX(), normal.GetY(), normal.GetZ());
   return n;
 }
