@@ -1971,3 +1971,27 @@ TEST(LightingShadingTests, TransformedSphereNormalTest)
   EXPECT_NEAR(n.GetY(), 0.97014, 0.00001);
   EXPECT_NEAR(n.GetZ(), -0.24254, 0.00001);
 }
+
+TEST(LightingShadingTests, ReflectingVector45Deg)
+{
+  Vector v(1, -1, 0);
+  Vector n(0, 1, 0);
+
+  Tuple r = Reflect(v, n);
+
+  EXPECT_FLOAT_EQ(r.GetX(), 1);
+  EXPECT_FLOAT_EQ(r.GetY(), 1);
+  EXPECT_FLOAT_EQ(r.GetZ(), 0);
+}
+
+TEST(LightingShadingTests, ReflectingVectorOffSlantSurface)
+{
+  Vector v(0, -1, 0);
+  Vector n((sqrt(2) / 2), (sqrt(2) / 2), 0);
+
+  Tuple r = Reflect(v, n);
+
+  EXPECT_NEAR(r.GetX(), 1, 0.00001);
+  EXPECT_NEAR(r.GetY(), 0, 0.00001);
+  EXPECT_NEAR(r.GetZ(), 0, 0.00001);
+}

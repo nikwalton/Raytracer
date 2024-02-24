@@ -13,3 +13,5 @@ public:
     this->SetW(0);
   }
 };
+
+Tuple Reflect(Vector in, Vector Normal);

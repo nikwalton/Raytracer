@@ -33,6 +33,7 @@ set(Headers
         )
 set(Sources 
         "src/tuple.cpp"
+        "src/vector.cpp"
         "src/canon.cpp"
         "src/color.cpp"
         "src/canvas.cpp"
