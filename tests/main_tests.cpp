@@ -2050,3 +2050,87 @@ TEST(LightingShadingTests, SphereMaterialTest)
   EXPECT_EQ(result.GetSpecular(), m.GetSpecular());
   EXPECT_EQ(result.GetShininess(), m.GetShininess());
 }
+
+TEST(LightingShadingTests, LightingEyeBetweenLightSurface)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyevec(0, 0, -1);
+  Vector normal(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, -10));
+
+  Color result = m.Lighting(light, position, eyevec, normal);
+
+  EXPECT_FLOAT_EQ(result.GetRed(), 1.9);
+  EXPECT_FLOAT_EQ(result.GetBlue(), 1.9);
+  EXPECT_FLOAT_EQ(result.GetGreen(), 1.9);
+}
+
+TEST(LightingShadingTests, LightingEyeBetweenLightSurface45Deg)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeVec(0, (sqrt(2) / 2), -(sqrt(2) / 2));
+  Vector normal(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, -10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_FLOAT_EQ(result.GetRed(), 1.0);
+  EXPECT_FLOAT_EQ(result.GetBlue(), 1.0);
+  EXPECT_FLOAT_EQ(result.GetGreen(), 1.0);
+}
+
+TEST(LightingShadingTests, LightingEyeOppositeSurfaceLight45Deg)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeVec(0, 0, -1);
+  Vector normal(0, 0, -1);
+  PointLight light(Color(1, 1, 1), Point(0, 10, -10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_NEAR(result.GetRed(), 0.7364, 0.00001);
+  EXPECT_NEAR(result.GetBlue(), 0.7364, 0.00001);
+  EXPECT_NEAR(result.GetGreen(), 0.7364, 0.00001);
+}
+
+TEST(LightingShadingTests, LightingEyeInReflectPath)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeVec(0, -(sqrt(2) / 2), -(sqrt(2) / 2));
+  Vector normal(0, 0, -1);
+  
+  PointLight light(Color(1, 1, 1), Point(0, 10, -10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_NEAR(result.GetRed(), (float)1.6364, 0.0001);
+  EXPECT_NEAR(result.GetBlue(), (float)1.6364, 0.0001);
+  EXPECT_NEAR(result.GetGreen(), (float)1.6364, 0.0001);
+}
+
+TEST(LightingShadingTests, LightingEyeBehindSurfaec)
+{
+  Material m;
+  Point position(0, 0, 0);
+  
+  Vector eyeVec(0, 0, -1);
+  Vector normal(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, 10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_NEAR(result.GetRed(), 0.1, 0.00001);
+  EXPECT_NEAR(result.GetBlue(), 0.1, 0.00001);
+  EXPECT_NEAR(result.GetGreen(), 0.1, 0.00001);
+}

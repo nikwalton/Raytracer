@@ -1,6 +1,8 @@
 #pragma once
 
 #include "color.hpp"
+#include "lights.hpp"
+#include "vector.hpp"
 
 class Material
 {
@@ -34,6 +36,8 @@ public:
   void SetDiffuse(float diffuse);
   void SetSpecular(float specular);
   void SetShininess(float shininess);
+
+  Color Lighting(PointLight light, Point point, Vector eyevec, Vector normal);
 
 
 private:
