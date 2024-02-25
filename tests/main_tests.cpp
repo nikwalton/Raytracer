@@ -16,6 +16,8 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "intersection.hpp"
+#include "lights.hpp"
+#include "material.hpp"
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -1994,4 +1996,57 @@ TEST(LightingShadingTests, ReflectingVectorOffSlantSurface)
   EXPECT_NEAR(r.GetX(), 1, 0.00001);
   EXPECT_NEAR(r.GetY(), 0, 0.00001);
   EXPECT_NEAR(r.GetZ(), 0, 0.00001);
+}
+
+TEST(LightingShadingTests, LightCreationTest)
+{
+  Color intensity(1, 1, 1);
+  Point position(0, 0, 0);
+
+  PointLight light(intensity, position);
+
+  EXPECT_EQ(light.GetIntensity().GetX(), 1);
+  EXPECT_EQ(light.GetIntensity().GetY(), 1);
+  EXPECT_EQ(light.GetIntensity().GetZ(), 1);
+
+  EXPECT_EQ(light.GetPosition().GetX(), 0);
+  EXPECT_EQ(light.GetPosition().GetY(), 0);
+  EXPECT_EQ(light.GetPosition().GetZ(), 0);
+}
+
+TEST(LightingShadingTests, MaterialCreationtest)
+{
+  Material m;
+
+  EXPECT_EQ(m.GetColor().GetRed(), 1);
+  EXPECT_EQ(m.GetColor().GetGreen(), 1);
+  EXPECT_EQ(m.GetColor().GetBlue(), 1);
+
+  EXPECT_FLOAT_EQ(m.GetAmbient(), 0.1);
+  EXPECT_FLOAT_EQ(m.GetDiffuse(), 0.9);
+  EXPECT_FLOAT_EQ(m.GetSpecular(), 0.9);
+  EXPECT_FLOAT_EQ(m.GetShininess(), 200.0);
+}
+
+TEST(LightingShadingTests, SphereMaterialTest)
+{
+  Sphere s;
+  Material m;
+
+  m.SetAmbient(1);
+
+  s.SetMaterial(m);
+
+  Material result = s.GetMaterial();
+
+
+  EXPECT_EQ(result.GetColor().GetRed(), m.GetColor().GetRed());
+  EXPECT_EQ(result.GetColor().GetGreen(), m.GetColor().GetGreen());
+  EXPECT_EQ(result.GetColor().GetBlue(), m.GetColor().GetBlue());
+ 
+
+  EXPECT_EQ(result.GetAmbient(), m.GetAmbient());
+  EXPECT_EQ(result.GetDiffuse(), m.GetDiffuse());
+  EXPECT_EQ(result.GetSpecular(), m.GetSpecular());
+  EXPECT_EQ(result.GetShininess(), m.GetShininess());
 }

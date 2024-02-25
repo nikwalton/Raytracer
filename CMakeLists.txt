@@ -30,6 +30,8 @@ set(Headers
         "include/ray.hpp"
         "include/intersection.hpp"
         "include/sphere.hpp"
+        "include/lights.hpp"
+        "include/material.hpp"
         )
 set(Sources 
         "src/tuple.cpp"
@@ -41,6 +43,8 @@ set(Sources
         "src/ray.cpp"
         "src/intersection.cpp"
         "src/sphere.cpp"
+        "src/lights.cpp"
+        "src/material.cpp"
         )
 
 add_library(RayLib STATIC ${Sources} ${Headers})

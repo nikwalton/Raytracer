@@ -35,6 +35,16 @@ float Sphere::GetRadius()
   return this->radius;
 }
 
+Material Sphere::GetMaterial()
+{
+  return this->material;
+}
+
+void Sphere::SetMaterial(Material material)
+{
+  this->material = material;
+}
+
 void Sphere::SetRadius(float newRadius)
 {
   this->radius = newRadius;

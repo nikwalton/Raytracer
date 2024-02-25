@@ -8,7 +8,6 @@ class Intersection
 public:
   Intersection() {};
   Intersection(float t, Sphere* obj);
-  
  
   float t;
   // this needs to be generic object but looks like we are working with spheres for a bit
