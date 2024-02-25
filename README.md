@@ -30,3 +30,5 @@ _images are created in the ppm file format then exported to jpg using GIMP_
 ![a black background with red pixels spaced out radially at each hour of a clockface](images/Clock.jpg "")
 3) Printing a unlit, unshaded sphere in 3D space <br/>
 ![A black background with red pixels in the shape of a Sphere](images/sphere.jpg "")
+4) Printing a shaded, lit sphere using a basic Phong material <br/>
+![a black background with a purple sphere being lit behind and to the left of the viewer](images/sphereShaded.jpg "")
