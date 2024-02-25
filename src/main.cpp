@@ -11,12 +11,13 @@
 #include "canon.hpp"
 #include "sphere.hpp"
 #include "intersection.hpp"
-
+#include "material.hpp"
+#include "lights.hpp"
 
 int main(int argc, char * argv[]) 
 {
   float wallSize = 7.0;
-  float canvasPixels = 100;
+  float canvasPixels = 200;
   Canvas canv(canvasPixels, canvasPixels);
 
   float pixelSize = wallSize / canvasPixels;
@@ -27,6 +28,12 @@ int main(int argc, char * argv[])
 
   Color red(1, 0, 0);
   Sphere s;
+
+  Material m;
+  m.SetColor(Color(1, 0.2, 1));
+  s.SetMaterial(m);
+
+ PointLight light(Color(1, 1, 1), Point(-10, 10, -10));
 
   for (int y = 0; y < canvasPixels; y++)
   {
@@ -50,16 +57,25 @@ int main(int argc, char * argv[])
 
       if (hit.t != empty.t && hit.obj != empty.obj)
       {
-        canv.WritePixel(x, y, red);
-      }
+        Tuple hitTup = r.Position(hit.t);
+        //TODO: get rid of this conversion
+        Point hitPoint(hitTup.GetX(), hitTup.GetY(), hitTup.GetZ());
 
+        Vector normal = hit.obj->NormalAt(hitPoint);
+        //TODO: get rid of this conversion
+        Tuple eyeTup = -r.GetDirection();
+
+        Vector eye(eyeTup.GetX(), eyeTup.GetY(), eyeTup.GetZ());
+        Color color = m.Lighting(light, hitPoint, eye, normal);
+        canv.WritePixel(x, y, color);
+      }
     }
   }
 
 
 
   std::ofstream file;
-  file.open("sphere.ppm");
+  file.open("sphereShaded.ppm");
   file << canv.CanvasToPPM();
   file.close();
 }

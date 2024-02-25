@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-
 #define _USE_MATH_DEFINES
 
 #include<math.h>
@@ -17,8 +16,8 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "intersection.hpp"
-
-
+#include "lights.hpp"
+#include "material.hpp"
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -1894,4 +1893,244 @@ TEST(RaySphereIntersectionTests, IntersectingTranslatedSphereTest)
   std::vector<Intersection> xs = s.intersect(r);
 
   EXPECT_EQ(xs.size(), 0);
+}
+
+TEST(LightingShadingTests, SphereNormalXAxis)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point(1, 0, 0));
+
+  EXPECT_FLOAT_EQ(n.GetX(), 1);
+  EXPECT_FLOAT_EQ(n.GetY(), 0);
+  EXPECT_FLOAT_EQ(n.GetZ(), 0);
+}
+
+TEST(LightingShadingTests, SphereNormalYAxis)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point(0, 1, 0));
+
+  EXPECT_FLOAT_EQ(n.GetX(), 0);
+  EXPECT_FLOAT_EQ(n.GetY(), 1);
+  EXPECT_FLOAT_EQ(n.GetZ(), 0);
+}
+
+TEST(LightingShadingTests, SphereNormalZAxis)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point(0, 0, 1));
+}
+
+TEST(LightingShadingTests, SphereNormalNonAxialTest)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point((sqrt(3) / 3), (sqrt(3) / 3), (sqrt(3) / 3)));
+
+  EXPECT_FLOAT_EQ(n.GetX(), sqrt(3) / 3);
+  EXPECT_FLOAT_EQ(n.GetY(), sqrt(3) / 3);
+  EXPECT_FLOAT_EQ(n.GetZ(), sqrt(3) / 3);
+}
+
+// normal vectors are normalized, test that normal is always normalized
+TEST(LightingShadingTests, NormalNormalizedTest)
+{
+  Sphere s;
+  Vector n = s.NormalAt(Point((sqrt(3) / 3), (sqrt(3) / 3), (sqrt(3) / 3)));
+
+  Tuple normalized = n.Normalize();
+
+  EXPECT_EQ(normalized.GetX(), n.GetX());
+  EXPECT_EQ(normalized.GetY(), n.GetY());
+  EXPECT_EQ(normalized.GetZ(), n.GetZ());
+}
+
+TEST(LightingShadingTests, TranslatedSphereNormalTest)
+{
+  Sphere s;
+  Matrix mx = mx.Translation(0, 1, 0);
+
+  s.SetTransform(mx);
+
+  Vector n = s.NormalAt(Point(0, 1.70711, -0.70711));
+
+
+  EXPECT_FLOAT_EQ(n.GetX(), 0);
+  EXPECT_NEAR(n.GetY(), 0.70711, 0.00001);
+  EXPECT_NEAR(n.GetZ(), -0.70711, 0.00001);
+}
+
+TEST(LightingShadingTests, TransformedSphereNormalTest)
+{
+  Sphere s;
+  Matrix m = m.Scaling(1, 0.5, 1) * m.RotateZ(M_PI / 5);
+
+  s.SetTransform(m);
+
+  Vector n = s.NormalAt(Point(0, (sqrt(2) / 2), -(sqrt(2) / 2)));
+
+  // These once again all compute to smaller (more precise) numbers than what the test is asking for so EXPECT_NEAR should work fine
+  EXPECT_NEAR(n.GetX(), 0, 0.00001);
+  EXPECT_NEAR(n.GetY(), 0.97014, 0.00001);
+  EXPECT_NEAR(n.GetZ(), -0.24254, 0.00001);
+}
+
+TEST(LightingShadingTests, ReflectingVector45Deg)
+{
+  Vector v(1, -1, 0);
+  Vector n(0, 1, 0);
+
+  Tuple r = Reflect(v, n);
+
+  EXPECT_FLOAT_EQ(r.GetX(), 1);
+  EXPECT_FLOAT_EQ(r.GetY(), 1);
+  EXPECT_FLOAT_EQ(r.GetZ(), 0);
+}
+
+TEST(LightingShadingTests, ReflectingVectorOffSlantSurface)
+{
+  Vector v(0, -1, 0);
+  Vector n((sqrt(2) / 2), (sqrt(2) / 2), 0);
+
+  Tuple r = Reflect(v, n);
+
+  EXPECT_NEAR(r.GetX(), 1, 0.00001);
+  EXPECT_NEAR(r.GetY(), 0, 0.00001);
+  EXPECT_NEAR(r.GetZ(), 0, 0.00001);
+}
+
+TEST(LightingShadingTests, LightCreationTest)
+{
+  Color intensity(1, 1, 1);
+  Point position(0, 0, 0);
+
+  PointLight light(intensity, position);
+
+  EXPECT_EQ(light.GetIntensity().GetX(), 1);
+  EXPECT_EQ(light.GetIntensity().GetY(), 1);
+  EXPECT_EQ(light.GetIntensity().GetZ(), 1);
+
+  EXPECT_EQ(light.GetPosition().GetX(), 0);
+  EXPECT_EQ(light.GetPosition().GetY(), 0);
+  EXPECT_EQ(light.GetPosition().GetZ(), 0);
+}
+
+TEST(LightingShadingTests, MaterialCreationtest)
+{
+  Material m;
+
+  EXPECT_EQ(m.GetColor().GetRed(), 1);
+  EXPECT_EQ(m.GetColor().GetGreen(), 1);
+  EXPECT_EQ(m.GetColor().GetBlue(), 1);
+
+  EXPECT_FLOAT_EQ(m.GetAmbient(), 0.1);
+  EXPECT_FLOAT_EQ(m.GetDiffuse(), 0.9);
+  EXPECT_FLOAT_EQ(m.GetSpecular(), 0.9);
+  EXPECT_FLOAT_EQ(m.GetShininess(), 200.0);
+}
+
+TEST(LightingShadingTests, SphereMaterialTest)
+{
+  Sphere s;
+  Material m;
+
+  m.SetAmbient(1);
+
+  s.SetMaterial(m);
+
+  Material result = s.GetMaterial();
+
+
+  EXPECT_EQ(result.GetColor().GetRed(), m.GetColor().GetRed());
+  EXPECT_EQ(result.GetColor().GetGreen(), m.GetColor().GetGreen());
+  EXPECT_EQ(result.GetColor().GetBlue(), m.GetColor().GetBlue());
+ 
+
+  EXPECT_EQ(result.GetAmbient(), m.GetAmbient());
+  EXPECT_EQ(result.GetDiffuse(), m.GetDiffuse());
+  EXPECT_EQ(result.GetSpecular(), m.GetSpecular());
+  EXPECT_EQ(result.GetShininess(), m.GetShininess());
+}
+
+TEST(LightingShadingTests, LightingEyeBetweenLightSurface)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyevec(0, 0, -1);
+  Vector normal(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, -10));
+
+  Color result = m.Lighting(light, position, eyevec, normal);
+
+  EXPECT_FLOAT_EQ(result.GetRed(), 1.9);
+  EXPECT_FLOAT_EQ(result.GetBlue(), 1.9);
+  EXPECT_FLOAT_EQ(result.GetGreen(), 1.9);
+}
+
+TEST(LightingShadingTests, LightingEyeBetweenLightSurface45Deg)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeVec(0, (sqrt(2) / 2), -(sqrt(2) / 2));
+  Vector normal(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, -10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_FLOAT_EQ(result.GetRed(), 1.0);
+  EXPECT_FLOAT_EQ(result.GetBlue(), 1.0);
+  EXPECT_FLOAT_EQ(result.GetGreen(), 1.0);
+}
+
+TEST(LightingShadingTests, LightingEyeOppositeSurfaceLight45Deg)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeVec(0, 0, -1);
+  Vector normal(0, 0, -1);
+  PointLight light(Color(1, 1, 1), Point(0, 10, -10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_NEAR(result.GetRed(), 0.7364, 0.00001);
+  EXPECT_NEAR(result.GetBlue(), 0.7364, 0.00001);
+  EXPECT_NEAR(result.GetGreen(), 0.7364, 0.00001);
+}
+
+TEST(LightingShadingTests, LightingEyeInReflectPath)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeVec(0, -(sqrt(2) / 2), -(sqrt(2) / 2));
+  Vector normal(0, 0, -1);
+  
+  PointLight light(Color(1, 1, 1), Point(0, 10, -10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_NEAR(result.GetRed(), (float)1.6364, 0.0001);
+  EXPECT_NEAR(result.GetBlue(), (float)1.6364, 0.0001);
+  EXPECT_NEAR(result.GetGreen(), (float)1.6364, 0.0001);
+}
+
+TEST(LightingShadingTests, LightingEyeBehindSurfaec)
+{
+  Material m;
+  Point position(0, 0, 0);
+  
+  Vector eyeVec(0, 0, -1);
+  Vector normal(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, 10));
+
+  Color result = m.Lighting(light, position, eyeVec, normal);
+
+  EXPECT_NEAR(result.GetRed(), 0.1, 0.00001);
+  EXPECT_NEAR(result.GetBlue(), 0.1, 0.00001);
+  EXPECT_NEAR(result.GetGreen(), 0.1, 0.00001);
 }

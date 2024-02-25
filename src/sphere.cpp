@@ -35,6 +35,16 @@ float Sphere::GetRadius()
   return this->radius;
 }
 
+Material Sphere::GetMaterial()
+{
+  return this->material;
+}
+
+void Sphere::SetMaterial(Material material)
+{
+  this->material = material;
+}
+
 void Sphere::SetRadius(float newRadius)
 {
   this->radius = newRadius;
@@ -48,4 +58,18 @@ Matrix Sphere::GetTransform()
 void Sphere::SetTransform(Matrix mx)
 {
   this->transform = mx;
+}
+
+Vector Sphere::NormalAt(Point WorldPoint)
+{
+  Tuple objPoint = this->transform.Inverse() * WorldPoint;
+  Tuple objNormal = objPoint - Point(0, 0, 0);
+
+  Tuple worldNormal = this->transform.Inverse().Transpose() * objNormal;
+  worldNormal.SetW(0);
+
+  Tuple normal = worldNormal.Normalize();
+
+  Vector n(normal.GetX(), normal.GetY(), normal.GetZ());
+  return n;
 }

@@ -4,6 +4,7 @@
 class Tuple {
 public:
   Tuple() {}
+
   Tuple(float newX, float newY, float newZ, float newW) {
     this->x = newX;
     this->y = newY;
@@ -11,8 +12,7 @@ public:
     this->w = newW;
   }
 
-  ~Tuple() {
-  }
+  ~Tuple() {}
 
   float GetX();
   float GetY();
