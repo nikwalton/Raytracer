@@ -18,6 +18,7 @@
 #include "intersection.hpp"
 #include "lights.hpp"
 #include "material.hpp"
+#include "world.hpp"
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -2133,4 +2134,57 @@ TEST(LightingShadingTests, LightingEyeBehindSurfaec)
   EXPECT_NEAR(result.GetRed(), 0.1, 0.00001);
   EXPECT_NEAR(result.GetBlue(), 0.1, 0.00001);
   EXPECT_NEAR(result.GetGreen(), 0.1, 0.00001);
+}
+
+TEST(SceneTests, WorldCreationTest)
+{
+  World w;
+
+  std::vector<Object> objs = w.GetObjects();
+  std::vector<Light> lights = w.GetLights();
+
+  EXPECT_EQ(objs.size(), 0);
+  EXPECT_EQ(lights.size(), 0);
+}
+
+TEST(SceneTests, DefaultWorldTest)
+{
+  World w = w.DefaultWorld();
+
+  PointLight expectedLight(Color(1, 1, 1), Point(-10, 10, -10));
+
+  Material expectedM;
+  expectedM.SetColor(Color(0.8, 1.0, 0.6));
+  expectedM.SetDiffuse(0.7);
+  expectedM.SetSpecular(0.2);
+
+  Matrix mx;
+  mx = mx.Scaling(0.5, 0.5, 0.5);
+
+  std::vector<Light> worldLights = w.GetLights();
+  std::vector<Object> worldObjects = w.GetObjects();
+
+  //we only have one light
+  Color testedIntensity = worldLights[0].GetIntensity();
+  Point testedPosition = worldLights[0].GetPosition();
+
+  Color expectedIntensity = expectedLight.GetIntensity();
+  Point expectedPosition = expectedLight.GetPosition();
+
+  EXPECT_EQ(testedIntensity.GetRed(), expectedIntensity.GetRed());
+  EXPECT_EQ(testedIntensity.GetGreen(), expectedIntensity.GetGreen());
+  EXPECT_EQ(testedIntensity.GetBlue(), expectedIntensity.GetBlue());
+
+  // expecting the first object to have the material, second object to have the transform
+  // we shouldn't really need to sort our objects for now so just be the first two entries
+
+  Material testedMaterial = worldObjects[0].GetMaterial();
+  Matrix testedMx = worldObjects[1].GetTransform();
+
+  EXPECT_FLOAT_EQ(testedMaterial.GetColor().GetRed(), expectedM.GetColor().GetRed());
+  EXPECT_FLOAT_EQ(testedMaterial.GetColor().GetGreen(), expectedM.GetColor().GetGreen());
+  EXPECT_FLOAT_EQ(testedMaterial.GetColor().GetBlue(), expectedM.GetColor().GetBlue());
+  
+  EXPECT_FLOAT_EQ(testedMaterial.GetDiffuse(), expectedM.GetDiffuse());
+  EXPECT_FLOAT_EQ(testedMaterial.GetSpecular(), expectedM.GetSpecular());
 }

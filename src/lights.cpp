@@ -1,22 +1,21 @@
 #include "lights.hpp"
 
-
-Color PointLight::GetIntensity()
+Color Light::GetIntensity()
 {
-  return this->intensitiy;
+  return this->intensity;
 }
 
-Point PointLight::GetPosition()
+Point Light::GetPosition()
 {
   return this->position;
 }
 
-void PointLight::SetIntensity(Color c)
+void Light::SetIntensity(Color c)
 {
-  this->intensitiy = c;
+  this->intensity = c;
 }
 
-void PointLight::SetPosition(Point p)
+void Light::SetPosition(Point p)
 {
   this->position = p;
 }
