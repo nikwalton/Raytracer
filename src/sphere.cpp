@@ -1,6 +1,6 @@
 #include "sphere.hpp"
 
-std::vector<Intersection> Sphere::intersect(Ray r)
+std::vector<Intersection> Sphere::Intersect(Ray r) 
 {
   Ray r2 = r.Transform(GetTransform().Inverse());
 
@@ -34,7 +34,7 @@ void Sphere::SetRadius(float newRadius)
   this->radius = newRadius;
 }
 
-Vector Sphere::NormalAt(Point WorldPoint)
+Vector Sphere::NormalAt(Tuple WorldPoint)
 {
   Tuple objPoint = this->GetTransform().Inverse() * WorldPoint;
   Tuple objNormal = objPoint - Point(0, 0, 0);

@@ -22,4 +22,3 @@ Material Object::GetMaterial()
   return this->material;
 }
 
-

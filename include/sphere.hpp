@@ -18,14 +18,12 @@ public:
     this->SetMaterial(Material());
   }
 
-  std::vector<Intersection> intersect(Ray r);
+  virtual std::vector<Intersection> Intersect(Ray r) override;
 
   void SetRadius(float newRadius);
 
-  Vector NormalAt(Point worldPoint);
+  virtual Vector NormalAt(Tuple worldPoint) override;
   
 private:
   float radius;
-
-  
 };

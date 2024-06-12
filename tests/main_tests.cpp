@@ -19,6 +19,7 @@
 #include "lights.hpp"
 #include "material.hpp"
 #include "world.hpp"
+#include "computation.hpp"
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -464,6 +465,7 @@ TEST(ColorCanvasTests, CanvasToPPM_EOF_NewLineTest) {
   EXPECT_EQ(attempt, '\n');
 }
 
+// START OF MATRIX OPERATIONS TEST SUITE
 
 //Creation tests more striaght forward since we want lean matrix classes with 
 //little barrier to entry
@@ -1518,6 +1520,8 @@ TEST(MatrixTransformationsTests, ReverseChainTest)
   EXPECT_FLOAT_EQ(result.GetZ(), 7);
 }
 
+// START OF RAY SPHERE INTERSECTION TEST SUITE
+
 TEST(RaySphereIntersectionTests, RayCreationTest)
 {
   Point p(1, 2, 3);
@@ -1581,7 +1585,7 @@ TEST(RaySphereIntersectionTests, SphereIntersectionTest)
 
   Sphere s;
 
-  std::vector<Intersection> intersections = s.intersect(r);
+  std::vector<Intersection> intersections = s.Intersect(r);
 
   if (intersections.size() >= 2)
   {
@@ -1603,7 +1607,7 @@ TEST(RaySphereIntersectionTests, SphereTangentTest)
 
   Sphere s;
 
-  std::vector<Intersection> intersections = s.intersect(r);
+  std::vector<Intersection> intersections = s.Intersect(r);
 
   if (intersections.size() >= 2)
   {
@@ -1625,7 +1629,7 @@ TEST(RaySphereIntersectionTests, SphereMissTest)
 
   Sphere s;
 
-  std::vector<Intersection> intersectons = s.intersect(r);
+  std::vector<Intersection> intersectons = s.Intersect(r);
 
   EXPECT_EQ(intersectons.size(), 0);
 }
@@ -1639,7 +1643,7 @@ TEST(RaySphereIntersectionTests, RayInSphereTest)
 
   Sphere s;
 
-  std::vector<Intersection> intersections = s.intersect(r);
+  std::vector<Intersection> intersections = s.Intersect(r);
 
   if (intersections.size() >= 2)
   {
@@ -1661,7 +1665,7 @@ TEST(RaySphereIntersectionTests, SphereBehindRayTest)
 
   Sphere s;
 
-  std::vector<Intersection> intersections = s.intersect(r);
+  std::vector<Intersection> intersections = s.Intersect(r);
 
   if (intersections.size() >= 2)
   {
@@ -1711,7 +1715,7 @@ TEST(RaySphereIntersectionTests, IntersectObjectTest)
 
   Sphere s;
 
-  std::vector<Intersection> xs = s.intersect(r);
+  std::vector<Intersection> xs = s.Intersect(r);
 
   if (xs.size() >= 2)
   {
@@ -1869,7 +1873,7 @@ TEST(RaySphereIntersectionTests, IntersectingScaledSphereTest)
   Matrix mx = mx.Scaling(2, 2, 2);
 
   s.SetTransform(mx);
-  std::vector<Intersection> xs = s.intersect(r);
+  std::vector<Intersection> xs = s.Intersect(r);
 
   if (xs.size() >= 2)
   {
@@ -1891,10 +1895,12 @@ TEST(RaySphereIntersectionTests, IntersectingTranslatedSphereTest)
 
   s.SetTransform(mx.Translation(5, 0, 0));
 
-  std::vector<Intersection> xs = s.intersect(r);
+  std::vector<Intersection> xs = s.Intersect(r);
 
   EXPECT_EQ(xs.size(), 0);
 }
+
+// START OF LIGHTING AND SHADING TEST SUITE
 
 TEST(LightingShadingTests, SphereNormalXAxis)
 {
@@ -1916,7 +1922,7 @@ TEST(LightingShadingTests, SphereNormalYAxis)
   EXPECT_FLOAT_EQ(n.GetZ(), 0);
 }
 
-TEST(LightingShadingTests, SphereNormalZAxis)
+TEST(LightingShadingTests, SphereNormalZAxisTest)
 {
   Sphere s;
   Vector n = s.NormalAt(Point(0, 0, 1));
@@ -1975,7 +1981,7 @@ TEST(LightingShadingTests, TransformedSphereNormalTest)
   EXPECT_NEAR(n.GetZ(), -0.24254, 0.00001);
 }
 
-TEST(LightingShadingTests, ReflectingVector45Deg)
+TEST(LightingShadingTests, ReflectingVector45DegTest)
 {
   Vector v(1, -1, 0);
   Vector n(0, 1, 0);
@@ -1987,7 +1993,7 @@ TEST(LightingShadingTests, ReflectingVector45Deg)
   EXPECT_FLOAT_EQ(r.GetZ(), 0);
 }
 
-TEST(LightingShadingTests, ReflectingVectorOffSlantSurface)
+TEST(LightingShadingTests, ReflectingVectorOffSlantSurfaceTest)
 {
   Vector v(0, -1, 0);
   Vector n((sqrt(2) / 2), (sqrt(2) / 2), 0);
@@ -2015,7 +2021,7 @@ TEST(LightingShadingTests, LightCreationTest)
   EXPECT_EQ(light.GetPosition().GetZ(), 0);
 }
 
-TEST(LightingShadingTests, MaterialCreationtest)
+TEST(LightingShadingTests, MaterialCreationTest)
 {
   Material m;
 
@@ -2052,7 +2058,7 @@ TEST(LightingShadingTests, SphereMaterialTest)
   EXPECT_EQ(result.GetShininess(), m.GetShininess());
 }
 
-TEST(LightingShadingTests, LightingEyeBetweenLightSurface)
+TEST(LightingShadingTests, LightingEyeBetweenLightSurfaceTest)
 {
   Material m;
   Point position(0, 0, 0);
@@ -2069,7 +2075,7 @@ TEST(LightingShadingTests, LightingEyeBetweenLightSurface)
   EXPECT_FLOAT_EQ(result.GetGreen(), 1.9);
 }
 
-TEST(LightingShadingTests, LightingEyeBetweenLightSurface45Deg)
+TEST(LightingShadingTests, LightingEyeBetweenLightSurface45DegTest)
 {
   Material m;
   Point position(0, 0, 0);
@@ -2086,7 +2092,7 @@ TEST(LightingShadingTests, LightingEyeBetweenLightSurface45Deg)
   EXPECT_FLOAT_EQ(result.GetGreen(), 1.0);
 }
 
-TEST(LightingShadingTests, LightingEyeOppositeSurfaceLight45Deg)
+TEST(LightingShadingTests, LightingEyeOppositeSurfaceLight45DegTest)
 {
   Material m;
   Point position(0, 0, 0);
@@ -2102,7 +2108,7 @@ TEST(LightingShadingTests, LightingEyeOppositeSurfaceLight45Deg)
   EXPECT_NEAR(result.GetGreen(), 0.7364, 0.00001);
 }
 
-TEST(LightingShadingTests, LightingEyeInReflectPath)
+TEST(LightingShadingTests, LightingEyeInReflectPathTest)
 {
   Material m;
   Point position(0, 0, 0);
@@ -2119,7 +2125,7 @@ TEST(LightingShadingTests, LightingEyeInReflectPath)
   EXPECT_NEAR(result.GetGreen(), (float)1.6364, 0.0001);
 }
 
-TEST(LightingShadingTests, LightingEyeBehindSurfaec)
+TEST(LightingShadingTests, LightingEyeBehindSurfaceTest)
 {
   Material m;
   Point position(0, 0, 0);
@@ -2136,11 +2142,13 @@ TEST(LightingShadingTests, LightingEyeBehindSurfaec)
   EXPECT_NEAR(result.GetGreen(), 0.1, 0.00001);
 }
 
+// START OF SCENE TEST SUITE
+
 TEST(SceneTests, WorldCreationTest)
 {
   World w;
 
-  std::vector<Object> objs = w.GetObjects();
+  std::vector<Object*> objs = w.GetObjects();
   std::vector<Light> lights = w.GetLights();
 
   EXPECT_EQ(objs.size(), 0);
@@ -2162,7 +2170,7 @@ TEST(SceneTests, DefaultWorldTest)
   mx = mx.Scaling(0.5, 0.5, 0.5);
 
   std::vector<Light> worldLights = w.GetLights();
-  std::vector<Object> worldObjects = w.GetObjects();
+  std::vector<Object*> worldObjects = w.GetObjects();
 
   //we only have one light
   Color testedIntensity = worldLights[0].GetIntensity();
@@ -2178,8 +2186,8 @@ TEST(SceneTests, DefaultWorldTest)
   // expecting the first object to have the material, second object to have the transform
   // we shouldn't really need to sort our objects for now so just be the first two entries
 
-  Material testedMaterial = worldObjects[0].GetMaterial();
-  Matrix testedMx = worldObjects[1].GetTransform();
+  Material testedMaterial = worldObjects[0]->GetMaterial();
+ // Matrix testedMx = worldObjects[1]->GetTransform();
 
   EXPECT_FLOAT_EQ(testedMaterial.GetColor().GetRed(), expectedM.GetColor().GetRed());
   EXPECT_FLOAT_EQ(testedMaterial.GetColor().GetGreen(), expectedM.GetColor().GetGreen());
@@ -2187,4 +2195,57 @@ TEST(SceneTests, DefaultWorldTest)
   
   EXPECT_FLOAT_EQ(testedMaterial.GetDiffuse(), expectedM.GetDiffuse());
   EXPECT_FLOAT_EQ(testedMaterial.GetSpecular(), expectedM.GetSpecular());
+}
+
+TEST(SceneTests, IntersectWorldTest)
+{
+  World w = w.DefaultWorld(); 
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+
+  std::vector<Intersection> xs = w.IntersectWorld(r);
+  
+  if (xs.size() >= 4)
+  {
+    EXPECT_EQ(xs.size(), 4);
+    EXPECT_EQ(xs[0].t, 4);
+    EXPECT_FLOAT_EQ(xs[1].t, 4.5);
+    EXPECT_FLOAT_EQ(xs[2].t, 5.5);
+    EXPECT_EQ(xs[3].t, 6);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(SceneTests, PrecomputeIntersectionStateTest)
+{
+  Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+
+  Object* shape = new Sphere;
+  Intersection xs(4, shape);
+
+  Computations comps = PrepareComputations(xs, r);
+
+
+  Point expectedPoint = Point(0, 0, -1);
+  // both vectors (the eye vector pointing to the camera and the normal) should be -1
+  Vector expectedVec = Vector(0, 0, -1);
+
+  EXPECT_EQ(comps.obj, shape);
+
+  EXPECT_EQ(comps.point.GetX(), expectedPoint.GetX());
+  EXPECT_EQ(comps.point.GetY(), expectedPoint.GetY());
+  EXPECT_EQ(comps.point.GetZ(), expectedPoint.GetZ());
+  EXPECT_EQ(comps.point.GetW(), expectedPoint.GetW());
+
+  EXPECT_EQ(comps.eyev.GetX(), expectedVec.GetX());
+  EXPECT_EQ(comps.eyev.GetY(), expectedVec.GetY());
+  EXPECT_EQ(comps.eyev.GetZ(), expectedVec.GetZ());
+  EXPECT_EQ(comps.eyev.GetW(), expectedVec.GetW());
+
+  EXPECT_EQ(comps.normalv.GetX(), expectedVec.GetX());
+  EXPECT_EQ(comps.normalv.GetY(), expectedVec.GetY());
+  EXPECT_EQ(comps.normalv.GetZ(), expectedVec.GetZ());
+  EXPECT_EQ(comps.normalv.GetW(), expectedVec.GetW());
 }

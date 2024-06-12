@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
 
       Ray r(rayOrigin, dir);
 
-      std::vector<Intersection> xs = s.intersect(r);
+      std::vector<Intersection> xs = s.Intersect(r);
 
       Intersection empty;
       Intersection hit = Hit(xs);

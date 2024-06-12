@@ -33,6 +33,7 @@ set(Headers
         "include/lights.hpp"
         "include/material.hpp"
         "include/world.hpp"
+        "include/computation.hpp"
         )
 set(Sources 
         "src/tuple.cpp"
