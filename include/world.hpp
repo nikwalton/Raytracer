@@ -5,6 +5,7 @@
 
 #include "object.hpp"
 #include "lights.hpp"
+#include "color.hpp"
 #include "intersection.hpp"
 #include "ray.hpp"
 

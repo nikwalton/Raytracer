@@ -2227,7 +2227,6 @@ TEST(SceneTests, PrecomputeIntersectionStateTest)
 
   Computations comps = PrepareComputations(xs, r);
 
-
   Point expectedPoint = Point(0, 0, -1);
   // both vectors (the eye vector pointing to the camera and the normal) should be -1
   Vector expectedVec = Vector(0, 0, -1);
@@ -2249,3 +2248,53 @@ TEST(SceneTests, PrecomputeIntersectionStateTest)
   EXPECT_EQ(comps.normalv.GetZ(), expectedVec.GetZ());
   EXPECT_EQ(comps.normalv.GetW(), expectedVec.GetW());
 }
+
+//TEST(SceneTests, HitOutsideObjectTest)
+//{
+//  Ray r(Point(0, 0, 0 - 5), Vector(0, 0, 1));
+//  Object *shape = new Sphere();
+//
+//  Intersection i((float)4, shape);
+//
+//  Computations comps = PrepareComputations(i, r);
+//
+//  EXPECT_EQ(comps.inside, false);
+//}
+//
+//TEST(SceneTests, HitInsideObjectTest) 
+//{
+//  Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+//  Object* shape = new Sphere();
+//  
+//  Intersection i((float)1, shape);
+//  
+//  Computations comps = PrepareComputations(i, r);
+//
+//  Point expectedPoint(0, 0, 1);
+//  Vector expectedVec(0, 0, -1);
+//
+//  EXPECT_EQ(comps.point.GetX(), expectedPoint.GetX());
+//  EXPECT_EQ(comps.point.GetY(), expectedPoint.GetY());
+//  EXPECT_EQ(comps.point.GetZ(), expectedPoint.GetZ());
+//  EXPECT_EQ(comps.point.GetW(), expectedPoint.GetW());
+//
+//  EXPECT_EQ(comps.eyev.GetX(), expectedVec.GetX());
+//  EXPECT_EQ(comps.eyev.GetY(), expectedVec.GetY());
+//  EXPECT_EQ(comps.eyev.GetZ(), expectedVec.GetZ());
+//  EXPECT_EQ(comps.eyev.GetW(), expectedVec.GetW());
+//
+//  EXPECT_EQ(comps.inside, true);
+//}
+//
+//TEST(SceneTests, ShadingIntersectionTest)
+//{
+//  World w = w.DefaultWorld();
+//  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+//  
+//  std::vector<Object*> shapes = w.GetObjects();
+//
+//  if (shapes.size() > 0)
+//  {
+//  }
+//  FAIL()
+//}
