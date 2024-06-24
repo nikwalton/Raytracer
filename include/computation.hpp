@@ -17,17 +17,4 @@ public:
 };
 
 //global helper functions
-Computations PrepareComputations(Intersection xs, Ray r)
-{
-  Computations comps;
-
-  comps.t = xs.t;
-  comps.obj = xs.obj;
-  comps.point = r.Position(comps.t);
-  // TODO: Hacky, fix later, should just use Point / Vector
-  Tuple dir = r.GetDirection();
-  comps.eyev = -dir;
-  comps.normalv = comps.obj->NormalAt(comps.point);
-  
-  return comps;
-} 
+Computations PrepareComputations(Intersection xs, Ray r);

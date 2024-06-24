@@ -6,6 +6,7 @@
 #include "object.hpp"
 #include "lights.hpp"
 #include "color.hpp"
+#include "computation.hpp"
 #include "intersection.hpp"
 #include "ray.hpp"
 
@@ -22,7 +23,13 @@ public:
   void AddLight(Light newLight);
   void AddObject(Object* newObj);
 
+  void clearLights();
+  void clearObjects();
+
   std::vector<Intersection> IntersectWorld(Ray r);
+
+  Color ShadeHit(Computations comps);
+  Color ColorAt(Ray r);
 
 private:
   std::vector<Object*> objs;

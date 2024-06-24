@@ -28,6 +28,16 @@ void World::AddObject(Object *newObj)
   this->objs.push_back(newObj);
 }
 
+void World::clearLights()
+{
+  this->lights = {};
+}
+
+void World::clearObjects()
+{
+  this->objs = {};
+}
+
 World World::DefaultWorld() {
   PointLight p;
   p.SetIntensity(Color(1.0, 1.0, 1.0));
@@ -76,4 +86,38 @@ std::vector<Intersection> World::IntersectWorld(Ray r)
   sort(list.begin(), list.end(), LesserCompare);
 
   return list;
+}
+
+
+Color World::ShadeHit(Computations comps)
+{
+  Object* o = comps.obj;
+
+  Material m = o->GetMaterial();
+  
+  Color c(0, 0, 0);
+
+  for (Light l : this->lights)
+  {
+    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv);
+    c = c + temp;
+  }
+  return c;
+}
+
+Color World::ColorAt(Ray r)
+{
+  Color c(0, 0, 0);
+  std::vector<Intersection> xs = this->IntersectWorld(r);
+  Intersection hit = Hit(xs);
+  Intersection empty; // TODO: get rid of this, kinda hacky should be able to just check if its empty 
+
+  if (hit.t != empty.t && hit.obj != empty.obj)
+  {
+    Computations comps = PrepareComputations(hit, r);
+    c = this->ShadeHit(comps);
+    return c;
+  }
+
+  return c;
 }

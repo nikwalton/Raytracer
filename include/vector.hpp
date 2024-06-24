@@ -14,4 +14,4 @@ public:
   }
 };
 
-Tuple Reflect(Vector in, Vector Normal);
+Tuple Reflect(Tuple in, Tuple Normal);

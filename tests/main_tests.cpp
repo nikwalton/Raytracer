@@ -2249,52 +2249,155 @@ TEST(SceneTests, PrecomputeIntersectionStateTest)
   EXPECT_EQ(comps.normalv.GetW(), expectedVec.GetW());
 }
 
-//TEST(SceneTests, HitOutsideObjectTest)
-//{
-//  Ray r(Point(0, 0, 0 - 5), Vector(0, 0, 1));
-//  Object *shape = new Sphere();
-//
-//  Intersection i((float)4, shape);
-//
-//  Computations comps = PrepareComputations(i, r);
-//
-//  EXPECT_EQ(comps.inside, false);
-//}
-//
-//TEST(SceneTests, HitInsideObjectTest) 
-//{
-//  Ray r(Point(0, 0, 0), Vector(0, 0, 1));
-//  Object* shape = new Sphere();
-//  
-//  Intersection i((float)1, shape);
-//  
-//  Computations comps = PrepareComputations(i, r);
-//
-//  Point expectedPoint(0, 0, 1);
-//  Vector expectedVec(0, 0, -1);
-//
-//  EXPECT_EQ(comps.point.GetX(), expectedPoint.GetX());
-//  EXPECT_EQ(comps.point.GetY(), expectedPoint.GetY());
-//  EXPECT_EQ(comps.point.GetZ(), expectedPoint.GetZ());
-//  EXPECT_EQ(comps.point.GetW(), expectedPoint.GetW());
-//
-//  EXPECT_EQ(comps.eyev.GetX(), expectedVec.GetX());
-//  EXPECT_EQ(comps.eyev.GetY(), expectedVec.GetY());
-//  EXPECT_EQ(comps.eyev.GetZ(), expectedVec.GetZ());
-//  EXPECT_EQ(comps.eyev.GetW(), expectedVec.GetW());
-//
-//  EXPECT_EQ(comps.inside, true);
-//}
-//
-//TEST(SceneTests, ShadingIntersectionTest)
-//{
-//  World w = w.DefaultWorld();
-//  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-//  
-//  std::vector<Object*> shapes = w.GetObjects();
-//
-//  if (shapes.size() > 0)
-//  {
-//  }
-//  FAIL()
-//}
+TEST(SceneTests, HitOutsideObjectTest)
+{
+  Ray r(Point(0, 0, 0 - 5), Vector(0, 0, 1));
+  Object *shape = new Sphere();
+
+  Intersection i((float)4, shape);
+
+  Computations comps = PrepareComputations(i, r);
+
+  EXPECT_EQ(comps.inside, false);
+}
+
+TEST(SceneTests, HitInsideObjectTest) 
+{
+  Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+  Object* shape = new Sphere();
+  
+  Intersection i((float)1, shape);
+  
+  Computations comps = PrepareComputations(i, r);
+
+  Point expectedPoint(0, 0, 1);
+  Vector expectedVec(0, 0, -1);
+
+  EXPECT_EQ(comps.point.GetX(), expectedPoint.GetX());
+  EXPECT_EQ(comps.point.GetY(), expectedPoint.GetY());
+  EXPECT_EQ(comps.point.GetZ(), expectedPoint.GetZ());
+  EXPECT_EQ(comps.point.GetW(), expectedPoint.GetW());
+
+  EXPECT_EQ(comps.eyev.GetX(), expectedVec.GetX());
+  EXPECT_EQ(comps.eyev.GetY(), expectedVec.GetY());
+  EXPECT_EQ(comps.eyev.GetZ(), expectedVec.GetZ());
+  EXPECT_EQ(comps.eyev.GetW(), expectedVec.GetW());
+
+  EXPECT_EQ(comps.inside, true);
+}
+
+TEST(SceneTests, ShadingIntersectionTest)
+{
+  World w = w.DefaultWorld();
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  
+  std::vector<Object*> shapes = w.GetObjects();
+
+  if (shapes.size() > 0)
+  {
+    Intersection i(4, shapes[0]);
+    Computations comps = PrepareComputations(i, r);
+
+    Color testColor = w.ShadeHit(comps);
+
+    EXPECT_NEAR(testColor.GetRed(), 0.38066, 0.00001);
+    EXPECT_NEAR(testColor.GetGreen(), 0.47583, 0.00001);
+    EXPECT_NEAR(testColor.GetBlue(), 0.2855, 0.00001);
+  }
+  else
+  {
+    FAIL();
+  }
+
+}
+
+TEST(SceneTests, ShadingIntersectionInsideTest)
+{
+  World w = w.DefaultWorld();
+
+  Light l = PointLight(Color(1, 1, 1), Point(0, 0.25, 0));
+
+  w.clearLights();
+  w.AddLight(l);
+
+  Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+
+  std::vector<Object*> shapes = w.GetObjects();
+
+  if (shapes.size() >= 2)
+  {
+    Intersection i(0.5, shapes[1]);
+    Computations comps = PrepareComputations(i, r);
+
+    Color testColor = w.ShadeHit(comps);
+
+    EXPECT_NEAR(testColor.GetRed(), 0.90498, 0.00001);
+    EXPECT_NEAR(testColor.GetGreen(), 0.90498, 0.00001);
+    EXPECT_NEAR(testColor.GetBlue(), 0.90498, 0.00001);
+  }
+  else
+  {
+    FAIL();
+  }
+}
+
+TEST(SceneTests, ColorAtMissTest)
+{
+  World w = w.DefaultWorld();
+  Ray r(Point(0, 0, -5), Vector(0, 1, 0));
+
+  Color c = w.ColorAt(r);
+
+  EXPECT_EQ(c.GetRed(), 0);
+  EXPECT_EQ(c.GetGreen(), 0);
+  EXPECT_EQ(c.GetBlue(), 0);
+}
+
+TEST(SceneTests, ColorAtHitTest)
+{
+  World w = w.DefaultWorld();
+
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+
+  Color testColor = w.ColorAt(r);
+
+  EXPECT_NEAR(testColor.GetRed(), 0.38066, 0.00001);
+  EXPECT_NEAR(testColor.GetGreen(), 0.47583, 0.00001);
+  EXPECT_NEAR(testColor.GetBlue(), 0.2855, 0.00001);
+}
+
+TEST(SceneTests, ColorIntersectionBehindRayTest)
+{
+  World w = w.DefaultWorld();
+
+  std::vector<Object*> objects = w.GetObjects();
+
+  if (objects.size() >= 2)
+  {
+    Object* outer = objects[0];
+
+    Material temp = outer->GetMaterial();
+    temp.SetAmbient(1);
+    outer->SetMaterial(temp);
+
+    Object* inner = objects[1];
+
+    temp = inner->GetMaterial();
+    temp.SetAmbient(1);
+    inner->SetMaterial(temp);
+
+    Ray r(Point(0, 0, 0.75), Vector(0, 0, -1));
+
+    Color testColor = w.ColorAt(r);
+    Color innerColor = inner->GetMaterial().GetColor();
+
+
+    EXPECT_EQ(innerColor.GetRed(), testColor.GetRed());
+    EXPECT_EQ(innerColor.GetGreen(), testColor.GetGreen());
+    EXPECT_EQ(innerColor.GetBlue(), testColor.GetBlue());
+  }
+  else
+  {
+    FAIL();
+  }
+}

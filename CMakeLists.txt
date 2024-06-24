@@ -49,6 +49,7 @@ set(Sources
         "src/material.cpp"
         "src/world.cpp"
         "src/object.cpp"
+        "src/computation.cpp"
         )
 
 add_library(RayLib STATIC ${Sources} ${Headers})
