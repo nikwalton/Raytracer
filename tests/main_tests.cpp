@@ -2401,3 +2401,144 @@ TEST(SceneTests, ColorIntersectionBehindRayTest)
     FAIL();
   }
 }
+
+TEST(SceneTests, DefaultViewTransformationTest)
+{
+  Point from(0, 0, 0);
+  Point to(0, 0, -1);
+  Vector up(0, 1, 0);
+
+  Matrix testMatrix = testMatrix.ViewTransform(from, to, up);
+  Matrix identity = identity.Identity();
+
+  EXPECT_EQ(testMatrix.matrix[0][0], identity.matrix[0][0]);
+  EXPECT_EQ(testMatrix.matrix[0][1], identity.matrix[0][1]);
+  EXPECT_EQ(testMatrix.matrix[0][2], identity.matrix[0][2]);
+  EXPECT_EQ(testMatrix.matrix[0][3], identity.matrix[0][3]);
+
+  EXPECT_EQ(testMatrix.matrix[1][0], identity.matrix[1][0]);
+  EXPECT_EQ(testMatrix.matrix[1][1], identity.matrix[1][1]);
+  EXPECT_EQ(testMatrix.matrix[1][2], identity.matrix[1][2]);
+  EXPECT_EQ(testMatrix.matrix[1][3], identity.matrix[1][3]);
+
+  EXPECT_EQ(testMatrix.matrix[2][0], identity.matrix[2][0]);
+  EXPECT_EQ(testMatrix.matrix[2][1], identity.matrix[2][1]);
+  EXPECT_EQ(testMatrix.matrix[2][2], identity.matrix[2][2]);
+  EXPECT_EQ(testMatrix.matrix[2][3], identity.matrix[2][3]);
+
+  EXPECT_EQ(testMatrix.matrix[3][0], identity.matrix[3][0]);
+  EXPECT_EQ(testMatrix.matrix[3][1], identity.matrix[3][1]);
+  EXPECT_EQ(testMatrix.matrix[3][2], identity.matrix[3][2]);
+  EXPECT_EQ(testMatrix.matrix[3][3], identity.matrix[3][3]);
+}
+
+TEST(SceneTests, PostiveZViewTransformTest)
+{
+  Point from(0, 0, 0);
+  Point to(0, 0, 1);
+  Vector up(0, 1, 0);
+
+  Matrix testMatrix = testMatrix.ViewTransform(from, to, up);
+  Matrix expectedMatrix = expectedMatrix.Scaling(-1, 1, -1);
+
+  EXPECT_EQ(testMatrix.matrix[0][0], expectedMatrix.matrix[0][0]);
+  EXPECT_EQ(testMatrix.matrix[0][1], expectedMatrix.matrix[0][1]);
+  EXPECT_EQ(testMatrix.matrix[0][2], expectedMatrix.matrix[0][2]);
+  EXPECT_EQ(testMatrix.matrix[0][3], expectedMatrix.matrix[0][3]);
+
+  EXPECT_EQ(testMatrix.matrix[1][0], expectedMatrix.matrix[1][0]);
+  EXPECT_EQ(testMatrix.matrix[1][1], expectedMatrix.matrix[1][1]);
+  EXPECT_EQ(testMatrix.matrix[1][2], expectedMatrix.matrix[1][2]);
+  EXPECT_EQ(testMatrix.matrix[1][3], expectedMatrix.matrix[1][3]);
+
+  EXPECT_EQ(testMatrix.matrix[2][0], expectedMatrix.matrix[2][0]);
+  EXPECT_EQ(testMatrix.matrix[2][1], expectedMatrix.matrix[2][1]);
+  EXPECT_EQ(testMatrix.matrix[2][2], expectedMatrix.matrix[2][2]);
+  EXPECT_EQ(testMatrix.matrix[2][3], expectedMatrix.matrix[2][3]);
+
+  EXPECT_EQ(testMatrix.matrix[3][0], expectedMatrix.matrix[3][0]);
+  EXPECT_EQ(testMatrix.matrix[3][1], expectedMatrix.matrix[3][1]);
+  EXPECT_EQ(testMatrix.matrix[3][2], expectedMatrix.matrix[3][2]);
+  EXPECT_EQ(testMatrix.matrix[3][3], expectedMatrix.matrix[3][3]);
+}
+
+TEST(SceneTests, WorldViewTransformation)
+{
+  Point from(0, 0, 8);
+  Point to(0, 0, 0);
+  Vector up(0, 1, 0);
+
+  Matrix testMatrix = testMatrix.ViewTransform(from, to, up);
+  Matrix expectedMatrix = expectedMatrix.Translation(0, 0, -8);
+
+  EXPECT_EQ(testMatrix.matrix[0][0], expectedMatrix.matrix[0][0]);
+  EXPECT_EQ(testMatrix.matrix[0][1], expectedMatrix.matrix[0][1]);
+  EXPECT_EQ(testMatrix.matrix[0][2], expectedMatrix.matrix[0][2]);
+  EXPECT_EQ(testMatrix.matrix[0][3], expectedMatrix.matrix[0][3]);
+
+  EXPECT_EQ(testMatrix.matrix[1][0], expectedMatrix.matrix[1][0]);
+  EXPECT_EQ(testMatrix.matrix[1][1], expectedMatrix.matrix[1][1]);
+  EXPECT_EQ(testMatrix.matrix[1][2], expectedMatrix.matrix[1][2]);
+  EXPECT_EQ(testMatrix.matrix[1][3], expectedMatrix.matrix[1][3]);
+
+  EXPECT_EQ(testMatrix.matrix[2][0], expectedMatrix.matrix[2][0]);
+  EXPECT_EQ(testMatrix.matrix[2][1], expectedMatrix.matrix[2][1]);
+  EXPECT_EQ(testMatrix.matrix[2][2], expectedMatrix.matrix[2][2]);
+  EXPECT_EQ(testMatrix.matrix[2][3], expectedMatrix.matrix[2][3]);
+
+  EXPECT_EQ(testMatrix.matrix[3][0], expectedMatrix.matrix[3][0]);
+  EXPECT_EQ(testMatrix.matrix[3][1], expectedMatrix.matrix[3][1]);
+  EXPECT_EQ(testMatrix.matrix[3][2], expectedMatrix.matrix[3][2]);
+  EXPECT_EQ(testMatrix.matrix[3][3], expectedMatrix.matrix[3][3]);
+}
+
+TEST(SceneTests, ArbitraryViewTransformationTest)
+{
+  Point from(1, 3, 2);
+  Point to(4, -2, 8);
+  Vector up(1, 1, 0);
+
+  Matrix testMatrix = testMatrix.ViewTransform(from, to, up);
+  Matrix expectedMatrix;
+
+  //we have the expected 4x4 matrix outbook from the book
+  expectedMatrix.matrix[0][0] = -0.50709;
+  expectedMatrix.matrix[0][1] = 0.50709;
+  expectedMatrix.matrix[0][2] = 0.67612;
+  expectedMatrix.matrix[0][3] = -2.36643;
+
+  expectedMatrix.matrix[1][0] = 0.76772;
+  expectedMatrix.matrix[1][1] = 0.60609;
+  expectedMatrix.matrix[1][2] = 0.12122;
+  expectedMatrix.matrix[1][3] = -2.82843;
+
+  expectedMatrix.matrix[2][0] = -0.35857;
+  expectedMatrix.matrix[2][1] = 0.59761;
+  expectedMatrix.matrix[2][2] = -0.71714;
+  expectedMatrix.matrix[2][3] = 0.00000;
+
+  expectedMatrix.matrix[3][0] = 0.00000;
+  expectedMatrix.matrix[3][1] = 0.00000;
+  expectedMatrix.matrix[3][2] = 0.00000;
+  expectedMatrix.matrix[3][3] = 1.00000;
+
+  EXPECT_NEAR(testMatrix.matrix[0][0], expectedMatrix.matrix[0][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[0][1], expectedMatrix.matrix[0][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[0][2], expectedMatrix.matrix[0][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[0][3], expectedMatrix.matrix[0][3], 0.00001);
+
+  EXPECT_NEAR(testMatrix.matrix[1][0], expectedMatrix.matrix[1][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[1][1], expectedMatrix.matrix[1][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[1][2], expectedMatrix.matrix[1][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[1][3], expectedMatrix.matrix[1][3], 0.00001);
+
+  EXPECT_NEAR(testMatrix.matrix[2][0], expectedMatrix.matrix[2][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[2][1], expectedMatrix.matrix[2][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[2][2], expectedMatrix.matrix[2][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[2][3], expectedMatrix.matrix[2][3], 0.00001);
+
+  EXPECT_NEAR(testMatrix.matrix[3][0], expectedMatrix.matrix[3][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[3][1], expectedMatrix.matrix[3][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[3][2], expectedMatrix.matrix[3][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[3][3], expectedMatrix.matrix[3][3], 0.00001);
+}

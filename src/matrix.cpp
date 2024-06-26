@@ -286,6 +286,20 @@ Matrix Matrix::Scaling(float x, float y, float z)
   return result;
 }
 
+Matrix Matrix::Shearing(float x_y, float x_z, float y_x, float y_z, float z_x, float z_y)
+{
+  Matrix shear = shear.Identity();
+
+  shear.matrix[0][1] = x_y;
+  shear.matrix[0][2] = x_z;
+  shear.matrix[1][0] = y_x;
+  shear.matrix[1][2] = y_z;
+  shear.matrix[2][0] = z_x;
+  shear.matrix[2][1] = z_y;
+
+  return shear;
+}
+
 Matrix Matrix::RotateX(float radians) 
 {
   Matrix rotation = rotation.Identity();
@@ -319,16 +333,49 @@ Matrix Matrix::RotateZ(float radians)
   return rotation;
 }
 
-Matrix Matrix::Shearing(float x_y, float x_z, float y_x, float y_z, float z_x, float z_y)
+/// <summary>
+/// Provides a transformation matrix using the given diretional inputs
+/// </summary>
+/// <param name="from">A Point which is the point you wish to have the "eye" in the scene</param>
+/// <param name="to">A Point which is the point you wish to look at</param>
+/// <param name="up">A Vector that indicates which way is up</param>
+/// <returns></returns>
+Matrix Matrix::ViewTransform(Tuple from, Tuple to, Tuple up)
 {
-  Matrix shear = shear.Identity();
+  Matrix orientation;
 
-  shear.matrix[0][1] = x_y;
-  shear.matrix[0][2] = x_z;
-  shear.matrix[1][0] = y_x;
-  shear.matrix[1][2] = y_z;
-  shear.matrix[2][0] = z_x;
-  shear.matrix[2][1] = z_y;
+  Tuple forward = (to - from).Normalize();
 
-  return shear;
+  Tuple normalizedUp = up.Normalize();
+
+  Tuple left = forward.Cross(normalizedUp);
+
+  //allows original up be approximate. Better for framing.
+  Tuple trueUp = left.Cross(forward);
+
+  //constructing final matrix
+  orientation.matrix[0][0] = left.GetX();
+  orientation.matrix[0][1] = left.GetY();
+  orientation.matrix[0][2] = left.GetZ();
+  orientation.matrix[0][3] = 0;
+
+  orientation.matrix[1][0] = trueUp.GetX();
+  orientation.matrix[1][1] = trueUp.GetY();
+  orientation.matrix[1][2] = trueUp.GetZ();
+  orientation.matrix[1][3] = 0;
+
+  orientation.matrix[2][0] = -forward.GetX();
+  orientation.matrix[2][1] = -forward.GetY();
+  orientation.matrix[2][2] = -forward.GetZ();
+  orientation.matrix[2][3] = 0;
+
+  orientation.matrix[3][0] = 0;
+  orientation.matrix[3][1] = 0;
+  orientation.matrix[3][2] = 0;
+  orientation.matrix[3][3] = 1;
+
+  //we need to appened the translation to this orientation to move the scene before orientating it in the way described above
+  Matrix move = move.Translation(-from.GetX(), -from.GetY(), -from.GetZ());
+
+  return orientation * move;
 }
