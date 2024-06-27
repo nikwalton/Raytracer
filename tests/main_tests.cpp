@@ -20,6 +20,7 @@
 #include "material.hpp"
 #include "world.hpp"
 #include "computation.hpp"
+#include "camera.hpp"
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -2541,4 +2542,110 @@ TEST(SceneTests, ArbitraryViewTransformationTest)
   EXPECT_NEAR(testMatrix.matrix[3][1], expectedMatrix.matrix[3][1], 0.00001);
   EXPECT_NEAR(testMatrix.matrix[3][2], expectedMatrix.matrix[3][2], 0.00001);
   EXPECT_NEAR(testMatrix.matrix[3][3], expectedMatrix.matrix[3][3], 0.00001);
+}
+
+TEST(SceneTests, CameraCreationTest)
+{
+  Camera testCamera(160, 120, M_PI_2);
+
+  Matrix expectedMatrix = expectedMatrix.Identity();
+  Matrix testMatrix = testCamera.GetTransform();
+
+  EXPECT_EQ(testCamera.GetHSize(), 160);
+  EXPECT_EQ(testCamera.GetVSize(), 120);
+  EXPECT_FLOAT_EQ(testCamera.GetFOV(), M_PI_2);
+
+  EXPECT_NEAR(testMatrix.matrix[0][0], expectedMatrix.matrix[0][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[0][1], expectedMatrix.matrix[0][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[0][2], expectedMatrix.matrix[0][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[0][3], expectedMatrix.matrix[0][3], 0.00001);
+
+  EXPECT_NEAR(testMatrix.matrix[1][0], expectedMatrix.matrix[1][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[1][1], expectedMatrix.matrix[1][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[1][2], expectedMatrix.matrix[1][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[1][3], expectedMatrix.matrix[1][3], 0.00001);
+
+  EXPECT_NEAR(testMatrix.matrix[2][0], expectedMatrix.matrix[2][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[2][1], expectedMatrix.matrix[2][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[2][2], expectedMatrix.matrix[2][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[2][3], expectedMatrix.matrix[2][3], 0.00001);
+
+  EXPECT_NEAR(testMatrix.matrix[3][0], expectedMatrix.matrix[3][0], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[3][1], expectedMatrix.matrix[3][1], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[3][2], expectedMatrix.matrix[3][2], 0.00001);
+  EXPECT_NEAR(testMatrix.matrix[3][3], expectedMatrix.matrix[3][3], 0.00001);
+}
+
+TEST(SceneTests, HorizontalCanvasPixelSizeTest)
+{
+  Camera testCamera(200, 125, M_PI_2);
+
+  EXPECT_NEAR(testCamera.GetPixelSize(), 0.01, 0.000001);
+}
+
+TEST(SceneTests, VerticalCanvasPixelSizetest)
+{
+  Camera testCamera(125, 200, M_PI_2);
+
+  EXPECT_NEAR(testCamera.GetPixelSize(), 0.01, 0.000001);
+}
+
+TEST(SceneTests, RayThroughCenterCameraTest)
+{
+  Camera testCamera(201, 101, M_PI_2);
+
+  Ray testRay = testCamera.RayForPixel(100, 50);
+
+  // the origin point should be 0, 0, 0. We havent moved the camera to point at something
+  Vector expectedDirection(0, 0, -1);
+
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetX(), 0);
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetY(), 0);
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetZ(), 0);
+
+
+  EXPECT_NEAR(testRay.GetDirection().GetX(), expectedDirection.GetX(), 0.00001);
+  EXPECT_NEAR(testRay.GetDirection().GetY(), expectedDirection.GetY(), 0.00001);
+  EXPECT_NEAR(testRay.GetDirection().GetZ(), expectedDirection.GetZ(), 0.00001);
+}
+
+TEST(SceneTests, RayThroughCornerCameraTest)
+{
+  Camera testCamera(201, 101, M_PI_2);
+  
+  // Recall 0, 0 is the last pixel in the corner for the canvas, not dead center
+  Ray testRay = testCamera.RayForPixel(0, 0);
+
+  // the origin point should be 0, 0, 0. We havent moved the camera to point at something
+  Vector expectedDirection(0.66519, 0.33259, -0.66851);
+
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetX(), 0);
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetY(), 0);
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetZ(), 0);
+
+  EXPECT_NEAR(testRay.GetDirection().GetX(), expectedDirection.GetX(), 0.00001);
+  EXPECT_NEAR(testRay.GetDirection().GetY(), expectedDirection.GetY(), 0.00001);
+  EXPECT_NEAR(testRay.GetDirection().GetZ(), expectedDirection.GetZ(), 0.00001);
+}
+
+TEST(SceneTests, RayWhenCameraTransformedTest)
+{
+  Camera testCamera(201, 101, M_PI_2);
+
+  Matrix transformation = transformation.RotateY(M_PI_4) * transformation.Translation(0, -2, 5);
+
+  testCamera.SetTransform(transformation);
+
+  Ray testRay = testCamera.RayForPixel(100, 50);
+  
+  Vector expectedDirection((sqrt(2) / 2), 0, -(sqrt(2) / 2));
+
+  // We moved the camera so we are expecting a different point this time
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetX(), 0);
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetY(), 2);
+  EXPECT_FLOAT_EQ(testRay.GetOrigin().GetZ(), -5);
+
+  EXPECT_NEAR(testRay.GetDirection().GetX(), (sqrt(2) / 2), 0.00001);
+  EXPECT_NEAR(testRay.GetDirection().GetY(), 0, 0.00001);
+  EXPECT_NEAR(testRay.GetDirection().GetZ(), -(sqrt(2) / 2), 0.00001);
 }

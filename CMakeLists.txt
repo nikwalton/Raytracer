@@ -34,6 +34,7 @@ set(Headers
         "include/material.hpp"
         "include/world.hpp"
         "include/computation.hpp"
+        "include/camera.hpp"
         )
 set(Sources 
         "src/tuple.cpp"
@@ -50,6 +51,7 @@ set(Sources
         "src/world.cpp"
         "src/object.cpp"
         "src/computation.cpp"
+        "src/camera.cpp"
         )
 
 add_library(RayLib STATIC ${Sources} ${Headers})
