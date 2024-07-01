@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <math.h>
+#define _USE_MATH_DEFINES
 #include <fstream>
 
 #include "tuple.hpp"
@@ -13,69 +14,89 @@
 #include "intersection.hpp"
 #include "material.hpp"
 #include "lights.hpp"
+#include "world.hpp"
+#include "camera.hpp"
 
-int main(int argc, char * argv[]) 
+int main(int argc, char* argv[])
 {
-  float wallSize = 7.0;
-  float canvasPixels = 200;
-  Canvas canv(canvasPixels, canvasPixels);
+  Matrix transformation;
+  Matrix clear;
+  Material mat;
 
-  float pixelSize = wallSize / canvasPixels;
-  float half = wallSize / 2;
+  World w;
 
-  float wallZ = 10;
-  Point rayOrigin(0, 0, -5);
+  Sphere* floor = new Sphere();
 
-  Color red(1, 0, 0);
-  Sphere s;
+  //make a big flat sphere
+  transformation = transformation.Scaling(10, 0.01, 10);
+  floor->SetTransform(transformation);
+  mat.SetColor(Color(1, 0.9, 0.9));
+  mat.SetSpecular(0);
+  floor->SetMaterial(mat);
 
-  Material m;
-  m.SetColor(Color(1, 0.2, 1));
-  s.SetMaterial(m);
+  w.AddObject(floor);
+  //same thing for walls but rotate it 
+  Sphere* leftWall = new Sphere();
+  transformation = clear;
+  transformation = transformation.Translation(0, 0, 5) * transformation.RotateY(-M_PI_4) * transformation.RotateX(M_PI_2) * transformation.Scaling(10, 0.01, 10);
+  leftWall->SetTransform(transformation);
+  leftWall->SetMaterial(mat);
 
- PointLight light(Color(1, 1, 1), Point(-10, 10, -10));
+  w.AddObject(leftWall);
 
-  for (int y = 0; y < canvasPixels; y++)
-  {
-    float worldY = half - pixelSize * y;
-    
-    for (int x = 0; x < canvasPixels; x++)
-    {
-      float worldX = -half + pixelSize * x;
+  Sphere* rightWall = new Sphere();
+  transformation = clear;
+  transformation = transformation.Translation(0, 0, 5) * transformation.RotateY(M_PI_4) * transformation.RotateX(M_PI_2) * transformation.Scaling(10, 0.01, 10);
+  rightWall->SetTransform(transformation);
+  rightWall->SetMaterial(mat);
 
-      Point pos(worldX, worldY, wallZ);
+  w.AddObject(rightWall);
 
-      Tuple temp = (pos - rayOrigin).Normalize();
-      Vector dir(temp.GetX(), temp.GetY(), temp.GetZ());
+  // stuff in the middle of the scene
+  Sphere* middle = new Sphere();
+  transformation = clear;
+  transformation = transformation.Translation(-0.5, 1, 0.5);
+  middle->SetTransform(transformation);
 
-      Ray r(rayOrigin, dir);
+  mat.SetColor(Color(0.1, 1, 0.5));
+  mat.SetDiffuse(0.7);
+  mat.SetSpecular(0.3);
+  middle->SetMaterial(mat);
 
-      std::vector<Intersection> xs = s.intersect(r);
+  w.AddObject(middle);
 
-      Intersection empty;
-      Intersection hit = Hit(xs);
+  Sphere* right = new Sphere();
 
-      if (hit.t != empty.t && hit.obj != empty.obj)
-      {
-        Tuple hitTup = r.Position(hit.t);
-        //TODO: get rid of this conversion
-        Point hitPoint(hitTup.GetX(), hitTup.GetY(), hitTup.GetZ());
+  transformation = clear;
+  transformation = transformation.Translation(1.5, 0.5, -0.5) * transformation.Scaling(0.5, 0.5, 0.5);
+  right->SetTransform(transformation);
 
-        Vector normal = hit.obj->NormalAt(hitPoint);
-        //TODO: get rid of this conversion
-        Tuple eyeTup = -r.GetDirection();
+  mat.SetColor(Color(0.5, 1, 0.1));
+  right->SetMaterial(mat);
 
-        Vector eye(eyeTup.GetX(), eyeTup.GetY(), eyeTup.GetZ());
-        Color color = m.Lighting(light, hitPoint, eye, normal);
-        canv.WritePixel(x, y, color);
-      }
-    }
-  }
+  w.AddObject(right);
 
+  Sphere* left = new Sphere();
+  transformation = clear;
+  transformation = transformation.Translation(-1.5, 0.33, -0.75) * transformation.Scaling(0.33, 0.33, 0.33);
+  left->SetTransform(transformation);
 
+  mat.SetColor(Color(1, 0.8, 0.1));
+  left->SetMaterial(mat);
 
+  w.AddObject(left);
+
+  PointLight light(Color(1, 1, 1), Point(-10, 10, -10));
+
+  w.AddLight(light);
+
+  Camera cam(300, 150, M_PI / 3);
+  Matrix viewTransform = viewTransform.ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0));
+  cam.SetTransform(viewTransform);
+  Canvas canvas = cam.Render(w);
+  
   std::ofstream file;
-  file.open("sphereShaded.ppm");
-  file << canv.CanvasToPPM();
+  file.open("Scene.ppm");
+  file << canvas.CanvasToPPM();
   file.close();
 }

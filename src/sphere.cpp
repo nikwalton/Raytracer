@@ -1,8 +1,8 @@
 #include "sphere.hpp"
 
-std::vector<Intersection> Sphere::intersect(Ray r)
+std::vector<Intersection> Sphere::Intersect(Ray r) 
 {
-  Ray r2 = r.Transform(transform.Inverse());
+  Ray r2 = r.Transform(GetTransform().Inverse());
 
   Tuple sphereToRay = r2.GetOrigin() - Point(0, 0, 0);
   
@@ -29,43 +29,17 @@ std::vector<Intersection> Sphere::intersect(Ray r)
   return {};
 }
 
-
-float Sphere::GetRadius()
-{
-  return this->radius;
-}
-
-Material Sphere::GetMaterial()
-{
-  return this->material;
-}
-
-void Sphere::SetMaterial(Material material)
-{
-  this->material = material;
-}
-
 void Sphere::SetRadius(float newRadius)
 {
   this->radius = newRadius;
 }
 
-Matrix Sphere::GetTransform()
+Vector Sphere::NormalAt(Tuple WorldPoint)
 {
-  return this->transform;
-}
-
-void Sphere::SetTransform(Matrix mx)
-{
-  this->transform = mx;
-}
-
-Vector Sphere::NormalAt(Point WorldPoint)
-{
-  Tuple objPoint = this->transform.Inverse() * WorldPoint;
+  Tuple objPoint = this->GetTransform().Inverse() * WorldPoint;
   Tuple objNormal = objPoint - Point(0, 0, 0);
 
-  Tuple worldNormal = this->transform.Inverse().Transpose() * objNormal;
+  Tuple worldNormal = this->GetTransform().Inverse().Transpose() * objNormal;
   worldNormal.SetW(0);
 
   Tuple normal = worldNormal.Normalize();

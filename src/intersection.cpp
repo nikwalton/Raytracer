@@ -1,12 +1,11 @@
 #include "intersection.hpp"
 #include <algorithm>
 
-Intersection::Intersection(float t, Sphere* obj)
+Intersection::Intersection(float t, Object* obj)
 {
   this->t = t;
   this->obj = obj;
 }
-
 
 std::vector<Intersection> Intersections(Intersection* i1, Intersection* i2, Intersection* i3, Intersection* i4)
 {
@@ -56,4 +55,15 @@ Intersection Hit(std::vector<Intersection> Intersections)
     }
   }
   return res;
+}
+
+/// <summary>
+/// Given two intersections, checkks if i1 is less than i2
+/// </summary>
+/// <param name="i1">left hand side of <</param>
+/// <param name="i2">right hand side of <</param>
+/// <returns></returns>
+bool LesserCompare(Intersection i1, Intersection i2)
+{
+  return (i1.t < i2.t);
 }

@@ -50,7 +50,7 @@ void Material::SetShininess(float shininess)
   this->shininess = shininess;
 }
 
-Color Material::Lighting(PointLight light, Point point, Vector eyeVec, Vector normal)
+Color Material::Lighting(Light light, Tuple point, Tuple eyeVec, Tuple normal)
 {
   Color c;
 

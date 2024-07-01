@@ -35,6 +35,8 @@ public:
     Matrix RotateX(float radians);
     Matrix RotateY(float radians);
     Matrix RotateZ(float radians);
+
+    Matrix ViewTransform(Tuple from, Tuple to, Tuple up);
  
 //we want these matrixes to be fast
 //making the data privated creates more abstraction we dont need and will introduce some slow down

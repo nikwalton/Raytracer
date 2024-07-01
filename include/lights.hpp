@@ -3,25 +3,34 @@
 #include "color.hpp"
 #include "point.hpp"
 
-class PointLight {
+class Light {
 public:
+  Light() {}
 
-  PointLight(){}
-
-  PointLight(Color intensity, Point position)
+  Light(Color intensity, Point position)
   {
-    this->intensitiy = intensity;
+    this->intensity = intensity;
     this->position = position;
   }
 
-  Color GetIntensity();
-  Point GetPosition();
+  virtual Color GetIntensity();
+  virtual Point GetPosition();
 
-  void SetIntensity(Color c);
-  void SetPosition(Point p);
-
+  virtual void SetIntensity(Color c);
+  virtual void SetPosition(Point p);
 private:
-  Color intensitiy;
+  Color intensity;
   Point position;
+};
 
+
+class PointLight : public Light {
+public:
+  PointLight () {}
+
+  PointLight(Color intensity, Point position)
+  {
+    this->SetIntensity(intensity);
+    this->SetPosition(position);
+  }
 };
