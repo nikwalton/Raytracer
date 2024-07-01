@@ -86,5 +86,40 @@ void Camera::CalculatePixelSize()
 Ray Camera::RayForPixel(unsigned short int x, unsigned short int y)
 {
   Ray r;
-  return r;
+
+  float xOffset = ((float)x + 0.5) * this->GetPixelSize();
+  float yOffset = ((float)y + 0.5) * this->GetPixelSize();
+
+  float worldX = this->GetHalfWidth() - xOffset;
+  float worldY = this->GetHalfHeight() - yOffset;
+
+  Tuple pixel = (this->GetTransform().Inverse() * Point(worldX, worldY, -1));
+  Tuple origin = (this->GetTransform().Inverse() * Point(0, 0, 0));
+  Tuple direction = (pixel - origin).Normalize();
+
+  // TODO: Get rid of the conversion below for the return
+  Point returnOrigin(origin.GetX(), origin.GetY(), origin.GetZ());
+  Vector returnVector(direction.GetX(), direction.GetY(), direction.GetZ());
+
+  return Ray(returnOrigin, returnVector);
+}
+
+Canvas Camera::Render(World world)
+{
+  int hSize = this->GetHSize();
+  int vSize = this->GetVSize();
+
+  Canvas image(hSize, vSize);
+
+  for (int y = 0; y <= vSize - 1; y++)
+  {
+    for (int x = 0; x <= hSize - 1; x++)
+    {
+      Ray ray = this->RayForPixel(x, y);
+      Color color = world.ColorAt(ray);
+      image.WritePixel(x, y, color);
+    }
+  }
+
+  return image;
 }

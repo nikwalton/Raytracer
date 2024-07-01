@@ -2,6 +2,8 @@
 
 #include "matrix.hpp"
 #include "ray.hpp"
+#include "canvas.hpp"
+#include "world.hpp"
 
 class Camera
 {
@@ -34,6 +36,8 @@ public:
   // so calculate it for them
   void CalculatePixelSize();
   Ray RayForPixel(unsigned short int x, unsigned short int y);
+
+  Canvas Render(World world);
 
 private:
   // unsigned shorts to match our canvas limits

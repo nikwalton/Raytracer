@@ -2649,3 +2649,23 @@ TEST(SceneTests, RayWhenCameraTransformedTest)
   EXPECT_NEAR(testRay.GetDirection().GetY(), 0, 0.00001);
   EXPECT_NEAR(testRay.GetDirection().GetZ(), -(sqrt(2) / 2), 0.00001);
 }
+
+TEST(SceneTests, RenderWorldWithCameraTest)
+{
+  World world = world.DefaultWorld();
+  Camera camera(11, 11, M_PI_2);
+  
+  Point from(0, 0, -5);
+  Point to(0, 0, 0);
+  Vector up(0, 1, 0);
+
+  Matrix viewTransform = viewTransform.ViewTransform(from, to, up);
+  camera.SetTransform(viewTransform);
+
+  Canvas image = camera.Render(world);
+  Color testPixel = image.PixelAt(5, 5);
+
+  EXPECT_NEAR(testPixel.GetRed(), 0.38066, 0.00001);
+  EXPECT_NEAR(testPixel.GetGreen(), 0.47583, 0.00001);
+  EXPECT_NEAR(testPixel.GetBlue(), 0.2855, 0.00001);
+}
