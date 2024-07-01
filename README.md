@@ -32,3 +32,5 @@ _images are created in the ppm file format then exported to jpg using GIMP_
 ![A black background with red pixels in the shape of a Sphere](images/sphere.jpg "")
 4) Printing a shaded, lit sphere using a basic Phong material <br/>
 ![a black background with a purple sphere being lit behind and to the left of the viewer](images/sphereShaded.jpg "")
+5) Printing a lit scene with no shadows <br/>
+![!three green spheres in a grey room. there is a light shining on the spheres above them and to the left of the viewer](images/Scene.jpg "")
