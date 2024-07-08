@@ -2670,7 +2670,9 @@ TEST(SceneTests, RenderWorldWithCameraTest)
   EXPECT_NEAR(testPixel.GetBlue(), 0.2855, 0.00001);
 }
 
-TEST(ShadowTests, LightingSurfaceInShadow)
+// BEGIN SHADOW TESTS
+
+TEST(ShadowTests, LightingSurfaceInShadowTest)
 {
   Material m;
   Point position(0, 0, 0);
@@ -2686,5 +2688,46 @@ TEST(ShadowTests, LightingSurfaceInShadow)
   EXPECT_FLOAT_EQ(result.GetRed(), 0.1);
   EXPECT_FLOAT_EQ(result.GetBlue(), 0.1);
   EXPECT_FLOAT_EQ(result.GetGreen(), 0.1);
+}
 
+TEST(ShadowTests, PointAboveObjectShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(0, 10, 0);
+
+  // no shadow when collinear with point and light
+  // Light --> Point 
+  //             |
+  //           Object
+  EXPECT_EQ(w.IsShadowed(testPoint), false);
+}
+
+TEST(ShadowTests, PointBehindOfObjectShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(10, -10, 10);
+
+  // Shadow when object is between point and light
+  // Light -- > Object --> Point
+  EXPECT_EQ(w.IsShadowed(testPoint), true);
+}
+
+TEST(ShadowTests, PointFrontOfLightShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(-20, 20, -20);
+
+  // No shadow when point is infront of the light
+  // Point --> Light --> Object
+  EXPECT_EQ(w.IsShadowed(testPoint), false);
+}
+
+TEST(ShadowTests, PointFrontOfObjectShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(-2, 2, -2);
+
+  //No shadow when point is between light and object
+  // Light --> Point --> Object
+  EXPECT_EQ(w.IsShadowed(testPoint), false);
 }

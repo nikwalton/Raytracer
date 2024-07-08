@@ -31,6 +31,8 @@ public:
   Color ShadeHit(Computations comps);
   Color ColorAt(Ray r);
 
+  bool IsShadowed(Point p);
+
 private:
   std::vector<Object*> objs;
   std::vector<Light> lights;

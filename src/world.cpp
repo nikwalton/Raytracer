@@ -121,3 +121,31 @@ Color World::ColorAt(Ray r)
 
   return c;
 }
+
+bool World::IsShadowed(Point p)
+{
+  for (Light l : this->GetLights())
+  {
+    Tuple v = l.GetPosition() - p;
+
+    float distance = v.Magnitude();
+    Tuple direction = v.Normalize();
+
+    // TODO: Get rid of conversion
+    Vector dir(direction.GetX(), direction.GetY(), direction.GetZ());
+
+    Ray r(p, dir);
+    std::vector<Intersection> xs  = this->IntersectWorld(r);
+
+    Intersection hit = Hit(xs);
+    Intersection empty;
+    if (hit.obj != empty.obj && hit.t < distance)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+}
