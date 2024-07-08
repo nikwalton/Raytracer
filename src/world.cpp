@@ -99,7 +99,7 @@ Color World::ShadeHit(Computations comps)
 
   for (Light l : this->lights)
   {
-    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv);
+    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv, false);
     c = c + temp;
   }
   return c;
