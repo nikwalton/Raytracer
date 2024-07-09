@@ -2069,7 +2069,7 @@ TEST(LightingShadingTests, LightingEyeBetweenLightSurfaceTest)
 
   PointLight light(Color(1, 1, 1), Point(0, 0, -10));
 
-  Color result = m.Lighting(light, position, eyevec, normal);
+  Color result = m.Lighting(light, position, eyevec, normal, false);
 
   EXPECT_FLOAT_EQ(result.GetRed(), 1.9);
   EXPECT_FLOAT_EQ(result.GetBlue(), 1.9);
@@ -2086,7 +2086,7 @@ TEST(LightingShadingTests, LightingEyeBetweenLightSurface45DegTest)
 
   PointLight light(Color(1, 1, 1), Point(0, 0, -10));
 
-  Color result = m.Lighting(light, position, eyeVec, normal);
+  Color result = m.Lighting(light, position, eyeVec, normal, false);
 
   EXPECT_FLOAT_EQ(result.GetRed(), 1.0);
   EXPECT_FLOAT_EQ(result.GetBlue(), 1.0);
@@ -2102,7 +2102,7 @@ TEST(LightingShadingTests, LightingEyeOppositeSurfaceLight45DegTest)
   Vector normal(0, 0, -1);
   PointLight light(Color(1, 1, 1), Point(0, 10, -10));
 
-  Color result = m.Lighting(light, position, eyeVec, normal);
+  Color result = m.Lighting(light, position, eyeVec, normal, false);
 
   EXPECT_NEAR(result.GetRed(), 0.7364, 0.00001);
   EXPECT_NEAR(result.GetBlue(), 0.7364, 0.00001);
@@ -2119,7 +2119,7 @@ TEST(LightingShadingTests, LightingEyeInReflectPathTest)
   
   PointLight light(Color(1, 1, 1), Point(0, 10, -10));
 
-  Color result = m.Lighting(light, position, eyeVec, normal);
+  Color result = m.Lighting(light, position, eyeVec, normal, false);
 
   EXPECT_NEAR(result.GetRed(), (float)1.6364, 0.0001);
   EXPECT_NEAR(result.GetBlue(), (float)1.6364, 0.0001);
@@ -2136,7 +2136,7 @@ TEST(LightingShadingTests, LightingEyeBehindSurfaceTest)
 
   PointLight light(Color(1, 1, 1), Point(0, 0, 10));
 
-  Color result = m.Lighting(light, position, eyeVec, normal);
+  Color result = m.Lighting(light, position, eyeVec, normal, false);
 
   EXPECT_NEAR(result.GetRed(), 0.1, 0.00001);
   EXPECT_NEAR(result.GetBlue(), 0.1, 0.00001);
@@ -2668,4 +2668,108 @@ TEST(SceneTests, RenderWorldWithCameraTest)
   EXPECT_NEAR(testPixel.GetRed(), 0.38066, 0.00001);
   EXPECT_NEAR(testPixel.GetGreen(), 0.47583, 0.00001);
   EXPECT_NEAR(testPixel.GetBlue(), 0.2855, 0.00001);
+}
+
+// BEGIN SHADOW TESTS
+
+TEST(ShadowTests, LightingSurfaceInShadowTest)
+{
+  Material m;
+  Point position(0, 0, 0);
+
+  Vector eyeV(0, 0, -1);
+  Vector normalV(0, 0, -1);
+
+  PointLight light(Color(1, 1, 1), Point(0, 0, -10));
+  bool inShadow = true;
+
+  Color result = m.Lighting(light, position, eyeV, normalV, inShadow);
+
+  EXPECT_FLOAT_EQ(result.GetRed(), 0.1);
+  EXPECT_FLOAT_EQ(result.GetBlue(), 0.1);
+  EXPECT_FLOAT_EQ(result.GetGreen(), 0.1);
+}
+
+TEST(ShadowTests, PointAboveObjectShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(0, 10, 0);
+
+  // no shadow when collinear with point and light
+  // Light --> Point 
+  //             |
+  //           Object
+  EXPECT_EQ(w.IsShadowed(testPoint), false);
+}
+
+TEST(ShadowTests, PointBehindOfObjectShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(10, -10, 10);
+
+  // Shadow when object is between point and light
+  // Light -- > Object --> Point
+  EXPECT_EQ(w.IsShadowed(testPoint), true);
+}
+
+TEST(ShadowTests, PointFrontOfLightShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(-20, 20, -20);
+
+  // No shadow when point is infront of the light
+  // Point --> Light --> Object
+  EXPECT_EQ(w.IsShadowed(testPoint), false);
+}
+
+TEST(ShadowTests, PointFrontOfObjectShadowTest)
+{
+  World w = w.DefaultWorld();
+  Point testPoint(-2, 2, -2);
+
+  //No shadow when point is between light and object
+  // Light --> Point --> Object
+  EXPECT_EQ(w.IsShadowed(testPoint), false);
+}
+
+TEST(ShadowTests, ShadingShadowTest)
+{
+  World w;
+
+  Light light(Color(1, 1, 1), Point(0, 0, -10));
+  w.AddLight(light);
+
+  Object* s1 = new Sphere;
+  w.AddObject(s1);
+
+  Object* s2 = new Sphere;
+  Matrix translate = translate.Translation(0, 0, 10);
+  s2->SetTransform(translate);
+  w.AddObject(s2);
+
+  Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+  Intersection i(4, s2);
+
+  Computations comps = PrepareComputations(i, r);
+  Color c = w.ShadeHit(comps);
+
+  EXPECT_FLOAT_EQ(c.GetRed(), 0.1);
+  EXPECT_FLOAT_EQ(c.GetGreen(), 0.1);
+  EXPECT_FLOAT_EQ(c.GetBlue(), 0.1);
+}
+
+TEST(ShadowTests, ShadowHitOffsetTest)
+{
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Object* shape = new Sphere;
+
+  Matrix translate = translate.Translation(0, 0, 1);
+  shape->SetTransform(translate);
+
+  Intersection i(5, shape);
+
+  Computations comps = PrepareComputations(i, r);
+
+  EXPECT_LT(comps.overPoint.GetZ(), -0.00001 / 2);
+  EXPECT_GT(comps.point.GetZ(), comps.overPoint.GetZ());
 }

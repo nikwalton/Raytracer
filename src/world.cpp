@@ -99,7 +99,11 @@ Color World::ShadeHit(Computations comps)
 
   for (Light l : this->lights)
   {
-    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv);
+    // TODO: Get rid of conversion on next line
+    Point op(comps.overPoint.GetX(), comps.overPoint.GetY(), comps.overPoint.GetZ());
+    
+    bool shadowCheck = this->IsShadowed(op);
+    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv, shadowCheck);
     c = c + temp;
   }
   return c;
@@ -120,4 +124,33 @@ Color World::ColorAt(Ray r)
   }
 
   return c;
+}
+
+bool World::IsShadowed(Point p)
+{
+ // for (Light l : this->GetLights())
+  //{
+  Light l = this->lights[0];
+    Tuple v = l.GetPosition() - p;
+
+    float distance = v.Magnitude();
+    Tuple direction = v.Normalize();
+
+    // TODO: Get rid of conversion
+    Vector dir(direction.GetX(), direction.GetY(), direction.GetZ());
+
+    Ray r(p, dir);
+    std::vector<Intersection> xs  = this->IntersectWorld(r);
+
+    Intersection hit = Hit(xs);
+    Intersection empty;
+    if (hit.obj != empty.obj && hit.t < distance)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  //}
 }

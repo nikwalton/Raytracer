@@ -50,7 +50,7 @@ void Material::SetShininess(float shininess)
   this->shininess = shininess;
 }
 
-Color Material::Lighting(Light light, Tuple point, Tuple eyeVec, Tuple normal)
+Color Material::Lighting(Light light, Tuple point, Tuple eyeVec, Tuple normal, bool inShadow)
 {
   Color c;
 
@@ -99,6 +99,11 @@ Color Material::Lighting(Light light, Tuple point, Tuple eyeVec, Tuple normal)
       float factor = pow(reflectDotEye, this->GetShininess());
       specularContribution = light.GetIntensity() * this->specular * factor;
     }
+  }
+
+  if (inShadow)
+  {
+    return ambientContribution;
   }
 
   return ambientContribution + diffuseContribution + specularContribution;

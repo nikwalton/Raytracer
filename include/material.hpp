@@ -37,7 +37,7 @@ public:
   void SetSpecular(float specular);
   void SetShininess(float shininess);
 
-  Color Lighting(Light light, Tuple point, Tuple eyevec, Tuple normal);
+  Color Lighting(Light light, Tuple point, Tuple eyevec, Tuple normal, bool inShadow);
 
 
 private:
