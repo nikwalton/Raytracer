@@ -2731,3 +2731,45 @@ TEST(ShadowTests, PointFrontOfObjectShadowTest)
   // Light --> Point --> Object
   EXPECT_EQ(w.IsShadowed(testPoint), false);
 }
+
+TEST(ShadowTests, ShadingShadowTest)
+{
+  World w;
+
+  Light light(Color(1, 1, 1), Point(0, 0, -10));
+  w.AddLight(light);
+
+  Object* s1 = new Sphere;
+  w.AddObject(s1);
+
+  Object* s2 = new Sphere;
+  Matrix translate = translate.Translation(0, 0, 10);
+  s2->SetTransform(translate);
+  w.AddObject(s2);
+
+  Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+  Intersection i(4, s2);
+
+  Computations comps = PrepareComputations(i, r);
+  Color c = w.ShadeHit(comps);
+
+  EXPECT_FLOAT_EQ(c.GetRed(), 0.1);
+  EXPECT_FLOAT_EQ(c.GetGreen(), 0.1);
+  EXPECT_FLOAT_EQ(c.GetBlue(), 0.1);
+}
+
+TEST(ShadowTests, ShadowHitOffsetTest)
+{
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Object* shape = new Sphere;
+
+  Matrix translate = translate.Translation(0, 0, 1);
+  shape->SetTransform(translate);
+
+  Intersection i(5, shape);
+
+  Computations comps = PrepareComputations(i, r);
+
+  EXPECT_LT(comps.overPoint.GetZ(), -0.00001 / 2);
+  EXPECT_GT(comps.point.GetZ(), comps.overPoint.GetZ());
+}

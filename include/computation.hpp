@@ -11,6 +11,7 @@ public:
   float t;
   Object* obj;
   Tuple point;
+  Tuple overPoint;
   Tuple eyev;
   Tuple normalv;
   bool inside;

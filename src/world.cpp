@@ -99,7 +99,11 @@ Color World::ShadeHit(Computations comps)
 
   for (Light l : this->lights)
   {
-    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv, false);
+    // TODO: Get rid of conversion on next line
+    Point op(comps.overPoint.GetX(), comps.overPoint.GetY(), comps.overPoint.GetZ());
+    
+    bool shadowCheck = this->IsShadowed(op);
+    Color temp = m.Lighting(l, comps.point, comps.eyev, comps.normalv, shadowCheck);
     c = c + temp;
   }
   return c;
@@ -124,8 +128,9 @@ Color World::ColorAt(Ray r)
 
 bool World::IsShadowed(Point p)
 {
-  for (Light l : this->GetLights())
-  {
+ // for (Light l : this->GetLights())
+  //{
+  Light l = this->lights[0];
     Tuple v = l.GetPosition() - p;
 
     float distance = v.Magnitude();
@@ -147,5 +152,5 @@ bool World::IsShadowed(Point p)
     {
       return false;
     }
-  }
+  //}
 }

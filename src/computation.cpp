@@ -16,10 +16,14 @@ Computations PrepareComputations(Intersection xs, Ray r)
   {
     comps.inside = true;
     comps.normalv = -comps.normalv;
+    // In the book 0.00001 is referenced as EPSILON, which is about how precise we really need to be for rendering context
+    // In rendering context, I render with "acne" at 0.00001 - 0.001 but none at 0.002
+    comps.overPoint = comps.point + comps.normalv * 0.002;
   }
   else
   {
     comps.inside = false;
+    comps.overPoint = comps.point + comps.normalv * 0.002;
   }
 
   return comps;
