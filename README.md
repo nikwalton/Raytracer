@@ -33,4 +33,6 @@ _images are created in the ppm file format then exported to jpg using GIMP_
 4) Printing a shaded, lit sphere using a basic Phong material <br/>
 ![a black background with a purple sphere being lit behind and to the left of the viewer](images/sphereShaded.jpg "")
 5) Printing a lit scene with no shadows <br/>
-![!three green spheres in a grey room. there is a light shining on the spheres above them and to the left of the viewer](images/Scene.jpg "")
+![!three green spheres in a grey room. there is a light shining on the spheres above them and to the left of the viewer. There is a noticable shadow on the spheres but not in the environment](images/Scene.jpg "")
+6) Printing a lit scene with shadows <br/>
+![three green spheres in a grey room. there is a light shining on the spheres above them and to the left of the viewer. There is a noticable shadow on the spheres and the spheres cast shadows in their environment](images/SceneShadowed.jpg "")
