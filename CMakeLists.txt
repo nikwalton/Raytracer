@@ -35,6 +35,7 @@ set(Headers
         "include/world.hpp"
         "include/computation.hpp"
         "include/camera.hpp"
+        "include/shape.hpp"
         )
 set(Sources 
         "src/tuple.cpp"
