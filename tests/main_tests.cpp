@@ -2780,7 +2780,7 @@ TEST(PlaneTests, DefaultShapeTest)
   Shape *s = &test_shape();
   Matrix mx = mx.Identity();
 
-  bool test = s->GetTransformation() == mx;
+  bool test = s->GetTransform() == mx;
 
   EXPECT_EQ(test, true);
 }
@@ -2790,9 +2790,9 @@ TEST(PlaneTests, TransformationAssignmentTest)
   Shape *s = &test_shape();
   Matrix mx = mx.Translation(2, 3, 4);
 
-  s->SetTransformation(mx);
-
-  bool test = s->GetTransformation() == mx;
+  s->SetTransform(mx);
+  
+  bool test = s->GetTransform() == mx;
 
   EXPECT_EQ(test, true);
 }

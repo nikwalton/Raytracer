@@ -5,6 +5,7 @@ Color::Color(float r, float g, float b)
   this->SetX(r);
   this->SetY(g);
   this->SetZ(b);
+  this->SetW(0);
 }
 
 float Color::GetRed()
