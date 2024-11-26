@@ -21,6 +21,7 @@
 #include "world.hpp"
 #include "computation.hpp"
 #include "camera.hpp"
+#include "shape.hpp"
 
  //START OF TUPLE, POINT, VECTOR TEST SUITE
 TEST(TuplePointVectorTests, TupleCreationTest_IsVector) {
@@ -2772,4 +2773,59 @@ TEST(ShadowTests, ShadowHitOffsetTest)
 
   EXPECT_LT(comps.overPoint.GetZ(), -0.00001 / 2);
   EXPECT_GT(comps.point.GetZ(), comps.overPoint.GetZ());
+}
+
+TEST(PlaneTests, DefaultShapeTest)
+{
+  Shape *s = &test_shape();
+  Matrix mx = mx.Identity();
+
+  bool test = s->GetTransform() == mx;
+
+  EXPECT_EQ(test, true);
+}
+
+TEST(PlaneTests, TransformationAssignmentTest)
+{
+  Shape *s = &test_shape();
+  Matrix mx = mx.Translation(2, 3, 4);
+
+  s->SetTransform(mx);
+  
+  bool test = s->GetTransform() == mx;
+
+  EXPECT_EQ(test, true);
+}
+
+TEST(PlaneTests, DefaultMaterialTest)
+{
+  Shape* s = &test_shape();
+  Material m;
+
+  EXPECT_EQ(s->GetMaterial().GetAmbient(), m.GetAmbient());
+  EXPECT_EQ(s->GetMaterial().GetDiffuse(), m.GetDiffuse());
+  EXPECT_EQ(s->GetMaterial().GetShininess(), m.GetShininess());
+  EXPECT_EQ(s->GetMaterial().GetSpecular(), m.GetSpecular());
+
+  bool colortest = s->GetMaterial().GetColor() == m.GetColor();
+
+  EXPECT_EQ(colortest, true);
+}
+
+TEST(PlaneTests, MaterialAssignmentTest)
+{
+  Shape* s = &test_shape();
+  Material m;
+  m.SetAmbient(1);
+
+  s->SetMaterial(m);
+
+  EXPECT_EQ(s->GetMaterial().GetAmbient(), m.GetAmbient());
+  EXPECT_EQ(s->GetMaterial().GetDiffuse(), m.GetDiffuse());
+  EXPECT_EQ(s->GetMaterial().GetShininess(), m.GetShininess());
+  EXPECT_EQ(s->GetMaterial().GetSpecular(), m.GetSpecular());
+
+  bool colortest = s->GetMaterial().GetColor() == m.GetColor();
+
+  EXPECT_EQ(colortest, true);
 }
